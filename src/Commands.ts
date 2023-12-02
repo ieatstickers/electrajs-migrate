@@ -107,6 +107,7 @@ export class Commands
     {
       // Log error
       console.log(chalk.redBright(`Failed to run migrations: ${e.message}`));
+      console.log(e.stack);
       
       const initialisedConnections = connections.getAllInitialised();
       
