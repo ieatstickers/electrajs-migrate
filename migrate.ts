@@ -1,4 +1,3 @@
-import application from "caporal";
 import { Container } from "./src/DI/Container";
 import { Commands } from "./src/Commands";
 import chalk from "chalk";
@@ -28,6 +27,8 @@ function dbAction(
 (async () => {
   
   await Container.loadConfig();
+  
+  const { default: application } = await import('caporal');
   
   try
   {
