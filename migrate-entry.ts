@@ -20,10 +20,10 @@ function isCommonJs(): boolean
   
   if (isCommonJs())
   {
-    __non_webpack_require__(`${dirName + '/cjs/migrate.min.js'}`);
+    __non_webpack_require__(`${dirName + '/cjs/migrate.cjs'}`);
   }
   else
   {
-    await import(/* webpackIgnore: true */ `${dirName + '/esm/migrate.min.js'}`);
+    await import(/* webpackIgnore: true */ `${dirName + '/esm/migrate.mjs'}`);
   }
 })();
