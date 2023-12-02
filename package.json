@@ -4,17 +4,9 @@
   "description": "Electra Migrate Library",
   "author": "Mike Burke",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.min.js",
-      "require": "./dist/cjs/index.min.js"
-    },
-    "./migrate.js": {
-      "import": "./dist/esm/migrate.min.js",
-      "require": "./dist/cjs/migrate.min.js"
-    }
+    "import": "./dist/esm/index.min.js",
+    "require": "./dist/cjs/index.min.js"
   },
   "types": "dist/index.d.ts",
   "files": [
@@ -23,6 +15,10 @@
   "scripts": {
     "build": "webpack",
     "test": "jest"
+  },
+  "bin": {
+    "migrate-esm": "./dist/esm/migrate.min.js",
+    "migrate-cjs": "./dist/cjs/migrate.min.js"
   },
   "dependencies": {
     "@electra/utility": "^1.6.0",
