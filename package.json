@@ -7,8 +7,14 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    ".": {
+      "import": "./dist/esm/index.min.js",
+      "require": "./dist/cjs/index.min.js"
+    },
+    "./migrate.js": {
+      "import": "./dist/esm/migrate.min.js",
+      "require": "./dist/cjs/migrate.min.js"
+    }
   },
   "types": "dist/index.d.ts",
   "files": [

@@ -19,7 +19,6 @@
   ],
   "include": [],
   "files": [
-    "migrate-entry.ts",
     "migrate.ts",
     "index.ts"
   ]

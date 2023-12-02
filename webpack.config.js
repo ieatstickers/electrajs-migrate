@@ -22,25 +22,25 @@ const baseConfig = {
 
 module.exports = [
   // migrate-entry.ts
-  Object.assign({}, baseConfig, {
-    entry: "./migrate-entry.ts",
-    // Output
-    output:  {
-      filename: "migrate.js",
-      path: `${__dirname}/dist`,
-      library:      {
-        type: "umd"
-      },
-      globalObject: "this"
-    },
-  }),
+  // Object.assign({}, baseConfig, {
+  //   entry: "./migrate-entry.ts",
+  //   // Output
+  //   output:  {
+  //     filename: "migrate.min.js",
+  //     path: `${__dirname}/dist`,
+  //     library:      {
+  //       type: "umd"
+  //     },
+  //     globalObject: "this"
+  //   },
+  // }),
   // migrate.ts (cjs)
   Object.assign({}, baseConfig, {
     // Entry
     entry: "./migrate.ts",
     // Output
     output:  {
-      filename: "migrate.js",
+      filename: "migrate.min.js",
       path: `${__dirname}/dist/cjs`,
       library:      {
         type: "commonjs2"
@@ -54,7 +54,7 @@ module.exports = [
     entry: "./migrate.ts",
     // Output
     output:  {
-      filename: "migrate.js",
+      filename: "migrate.min.js",
       path: `${__dirname}/dist/esm`,
       library:      {
         type: "module"
@@ -72,7 +72,7 @@ module.exports = [
     entry: "./index.ts",
     // Output
     output:  {
-      filename: "index.js",
+      filename: "index.min.js",
       path: `${__dirname}/dist/cjs`,
       library:      {
         type: "commonjs2"
@@ -86,7 +86,7 @@ module.exports = [
     entry: "./index.ts",
     // Output
     output:  {
-      filename: "index.js",
+      filename: "index.min.js",
       path: `${__dirname}/dist/esm`,
       library:      {
         type: "module"
