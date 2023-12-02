@@ -22,18 +22,18 @@ const baseConfig = {
 
 module.exports = [
   // migrate-entry.ts
-  // Object.assign({}, baseConfig, {
-  //   entry: "./migrate-entry.ts",
-  //   // Output
-  //   output:  {
-  //     filename: "migrate.min.js",
-  //     path: `${__dirname}/dist`,
-  //     library:      {
-  //       type: "umd"
-  //     },
-  //     globalObject: "this"
-  //   },
-  // }),
+  Object.assign({}, baseConfig, {
+    entry: "./migrate-entry.ts",
+    // Output
+    output:  {
+      filename: "migrate.min.js",
+      path: `${__dirname}/dist`,
+      library:      {
+        type: "umd"
+      },
+      globalObject: "this"
+    },
+  }),
   // migrate.ts (cjs)
   Object.assign({}, baseConfig, {
     // Entry

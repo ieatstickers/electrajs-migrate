@@ -16,10 +16,6 @@
     "build": "webpack",
     "test": "jest"
   },
-  "bin": {
-    "migrate-esm": "./dist/esm/migrate.min.js",
-    "migrate-cjs": "./dist/cjs/migrate.min.js"
-  },
   "dependencies": {
     "@electra/utility": "^1.6.0",
     "caporal": "^1.4.0",
