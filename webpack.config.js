@@ -2,7 +2,6 @@ const nodeExternals = require('webpack-node-externals');
 
 const baseConfig = {
   target: "node",
-  externals: [ nodeExternals() ],
   plugins: [],
   mode:    process.env.ENV === "dev" ? "development" : "production",
   resolve: {
@@ -21,21 +20,9 @@ const baseConfig = {
 };
 
 module.exports = [
-  // migrate-entry.ts
-  // Object.assign({}, baseConfig, {
-  //   entry: "./migrate-entry.ts",
-  //   // Output
-  //   output:  {
-  //     filename: "migrate.js",
-  //     path: `${__dirname}/dist`,
-  //     library:      {
-  //       type: "umd"
-  //     },
-  //     globalObject: "this"
-  //   },
-  // }),
-  // migrate.ts (cjs)
-  Object.assign({}, baseConfig, {
+  {
+    ...baseConfig,
+    externals: [ nodeExternals() ],
     // Entry
     entry: "./migrate.ts",
     // Output
@@ -46,9 +33,11 @@ module.exports = [
         type: "commonjs2"
       }
     },
-  }),
+  },
   // migrate.ts (esm)
-  Object.assign({}, baseConfig, {
+  {
+    ...baseConfig,
+    externals: [ nodeExternals({ importType: "module" }) ],
     // Entry
     entry: "./migrate.ts",
     // Output
@@ -63,9 +52,11 @@ module.exports = [
     experiments: {
       outputModule: true,
     },
-  }),
+  },
   // index.ts (cjs)
-  Object.assign({}, baseConfig, {
+  {
+    ...baseConfig,
+    externals: [ nodeExternals() ],
     // Entry
     entry: "./index.ts",
     // Output
@@ -76,9 +67,11 @@ module.exports = [
         type: "commonjs2"
       }
     },
-  }),
+  },
   // index.ts (esm)
-  Object.assign({}, baseConfig, {
+  {
+    ...baseConfig,
+    externals: [ nodeExternals({ importType: "module" }) ],
     // Entry
     entry: "./index.ts",
     // Output
@@ -93,5 +86,5 @@ module.exports = [
     experiments: {
       outputModule: true,
     },
-  }),
+  },
 ];
