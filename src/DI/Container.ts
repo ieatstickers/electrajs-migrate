@@ -62,7 +62,7 @@ export class Container
   {
     try
     {
-      this.config = await Modules.import(path.join(process.cwd(), "migrate.config.js"));
+      this.config = await Modules.import("default", path.join(process.cwd(), "migrate.config.js"));
     }
     catch (error)
     {
