@@ -5,10 +5,11 @@ export class Modules
   public static async import(...args: Array<any>): Promise<any>
   {
     const [ firstArg, secondArg ] = args;
-    const exportName = secondArg != null ? firstArg : 'default';
-    const path = secondArg || firstArg;
+    const exportName = secondArg != null ? firstArg : null;
+    const path = secondArg != null ? secondArg : firstArg;
     console.log(`Importing ${exportName} from ${path}`);
     const module = await import(/* webpackIgnore: true */ `${path}`);
-    return module[exportName];
+    if (exportName) return module[exportName];
+    return module;
   }
 }

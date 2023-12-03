@@ -219,30 +219,19 @@ export class Commands
     const importedMigrationModule = await Modules.import(migration.filepath);
     let migrationClass: any;
     
-    if (
-      typeof importedMigrationModule === 'function'
-      && importedMigrationModule.prototype
-      && importedMigrationModule.prototype.constructor
-    )
+    const migrationClassName = migration.name.split("_").pop();
+    
+    if (importedMigrationModule[migrationClassName])
     {
-      migrationClass = importedMigrationModule;
+      migrationClass = importedMigrationModule[migrationClassName];
+    }
+    else if (importedMigrationModule.default)
+    {
+      migrationClass = importedMigrationModule.default;
     }
     else
     {
-      const migrationClassName = migration.name.split('_').pop();
-      
-      if (importedMigrationModule[migrationClassName])
-      {
-        migrationClass = importedMigrationModule[migrationClassName];
-      }
-      else if (importedMigrationModule.default)
-      {
-        migrationClass = importedMigrationModule.default;
-      }
-      else
-      {
-        throw new Error(`Could not find migration class in ${migration.filepath}`);
-      }
+      throw new Error(`Could not find migration class in ${migration.filepath}`);
     }
     
     return new migrationClass();
