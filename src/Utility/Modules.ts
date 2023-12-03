@@ -5,15 +5,15 @@ export class Modules
 {
   public static async import(path: string): Promise<any>
   {
-    if (typeof require !== 'undefined')
-    {
-      console.log(`__non_webpack_require__('${path}')`);
-      return __non_webpack_require__(`${path}`);
-    }
-    else
+    if (import.meta?.url)
     {
       console.log(`await import(/* webpackIgnore: true */ '${path}')`);
       return await import(/* webpackIgnore: true */ `${path}`);
+    }
+    else
+    {
+      console.log(`__non_webpack_require__('${path}')`);
+      return __non_webpack_require__(`${path}`);
     }
   }
 }
