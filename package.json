@@ -4,9 +4,11 @@
   "description": "Electra Migrate Library",
   "author": "Mike Burke",
   "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
   },
   "types": "dist/index.d.ts",
   "files": [

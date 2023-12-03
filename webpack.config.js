@@ -41,11 +41,10 @@ module.exports = [
     // Output
     output:  {
       filename: "migrate.cjs",
-      path: `${__dirname}/dist/cjs`,
+      path: `${__dirname}/dist`,
       library:      {
         type: "commonjs2"
-      },
-      globalObject: "this"
+      }
     },
   }),
   // migrate.ts (esm)
@@ -55,12 +54,11 @@ module.exports = [
     // Output
     output:  {
       filename: "migrate.mjs",
-      path: `${__dirname}/dist/esm`,
+      path: `${__dirname}/dist`,
       library:      {
         type: "module"
       },
-      chunkFormat: 'module',
-      globalObject: "this"
+      chunkFormat: 'module'
     },
     experiments: {
       outputModule: true,
@@ -73,11 +71,10 @@ module.exports = [
     // Output
     output:  {
       filename: "index.cjs",
-      path: `${__dirname}/dist/cjs`,
+      path: `${__dirname}/dist`,
       library:      {
         type: "commonjs2"
-      },
-      globalObject: "this"
+      }
     },
   }),
   // index.ts (esm)
@@ -87,12 +84,11 @@ module.exports = [
     // Output
     output:  {
       filename: "index.mjs",
-      path: `${__dirname}/dist/esm`,
+      path: `${__dirname}/dist`,
       library:      {
         type: "module"
       },
-      chunkFormat: 'module',
-      globalObject: "this"
+      chunkFormat: 'module'
     },
     experiments: {
       outputModule: true,
