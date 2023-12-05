@@ -40,10 +40,14 @@ export class Table
 
   public id(name: string = "id"): this
   {
+    const connection = this.connection;
+    const tableName = this.name;
+    const createTable = !this.tableExists;
+    
     this.operations.push(async () => {
-      console.log('create id column operation', this.name, this.tableExists);
+      console.log('create id column operation', tableName, createTable);
       const column = new IdColumn(name);
-      await column.create(this.connection, this.name, !this.tableExists);
+      await column.create(connection, tableName, createTable);
       this.tableExists = true;
     });
     
