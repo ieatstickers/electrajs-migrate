@@ -73,6 +73,7 @@ export class Commands
       for (const migrationFile of migrationFilesToRun)
       {
         const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
+        console.log('migrationInstance', migrationInstance);
         await migrationInstance.up(mysql);
         
         const migrationRow = new Migration()
