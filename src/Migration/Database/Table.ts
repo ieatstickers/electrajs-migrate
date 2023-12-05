@@ -32,6 +32,7 @@ export class Table
   )
   {
     this.name = name;
+    console.log('Table constructor', name, tableExists);
     this.connection = connection;
     this.operations = operations;
     this.tableExists = tableExists;
@@ -40,6 +41,7 @@ export class Table
   public id(name: string = "id"): this
   {
     this.operations.push(async () => {
+      console.log('id operation', name, this.tableExists);
       const column = new IdColumn(name);
       await column.create(this.connection, this.name, !this.tableExists);
       this.tableExists = true;

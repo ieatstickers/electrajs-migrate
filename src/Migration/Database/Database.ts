@@ -14,11 +14,13 @@ export class Database
   
   public create(tableName: string): Table
   {
+    console.log('create', tableName);
     return new Table(tableName, this.connection, this.operations, false);
   }
   
   public table(tableName: string): Table
   {
+    console.log('table', tableName);
     return new Table(tableName, this.connection, this.operations, true);
   }
   
