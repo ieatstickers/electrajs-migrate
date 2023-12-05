@@ -48,10 +48,10 @@ function dbAction(
     
     // migrate
     application
-      .command('migrate', 'Run all migrations')
+      .command('run', 'Run all migrations')
       .action(
         dbAction(async () => {
-          await Commands.migrate();
+          await Commands.run();
         })
       );
     

@@ -13,12 +13,10 @@ export class Connections
 {
   private readonly config: { [name: string]: ConnectionConfig } = {};
   private readonly connections: { [name: string]: Connection } = {};
-  private readonly startTransactionOnInit: boolean = false;
   
-  public constructor(config: { [name: string]: ConnectionConfig }, startTransactionOnInit: boolean = false)
+  public constructor(config: { [name: string]: ConnectionConfig })
   {
     this.config = config;
-    this.startTransactionOnInit = startTransactionOnInit;
   }
   
   public get(connectionName: string): Connection
@@ -34,8 +32,7 @@ export class Connections
         port: port,
         username: username,
         password: password
-      },
-      this.startTransactionOnInit
+      }
     );
     
     return this.connections[connectionName];
@@ -56,7 +53,18 @@ export class Connections
     return connections;
   }
   
-  public getAllInitialised(): Array<Connection>
+  public async destroyAllInitialised(): Promise<void>
+  {
+    const initialisedConnections = this.getAllInitialised();
+    
+    // Close all connections
+    for (const connection of initialisedConnections)
+    {
+      await connection.destroy();
+    }
+  }
+  
+  private getAllInitialised(): Array<Connection>
   {
     return Object.values(this.connections).filter(connection => connection.isInitialised());
   }

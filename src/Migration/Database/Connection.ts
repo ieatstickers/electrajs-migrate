@@ -12,12 +12,10 @@ export class Connection
   private readonly connectionConfig: ConnectionConfig;
   private connection: DataSource;
   private queryRunner: QueryRunner;
-  private readonly startTransactionOnInit: boolean = false;
   
-  public constructor(connection: ConnectionConfig, startTransactionOnInit: boolean = false)
+  public constructor(connection: ConnectionConfig)
   {
     this.connectionConfig = connection;
-    this.startTransactionOnInit = startTransactionOnInit;
   }
   
   public async query(query: string, parameters: Array<any> = []): Promise<any>
@@ -41,30 +39,6 @@ export class Connection
     }
   }
   
-  public async startTransaction(): Promise<void>
-  {
-    if (this.queryRunner) throw new Error("Transaction already started.");
-    
-    console.log('starting transaction');
-    const connection = await this.get();
-    this.queryRunner = connection.createQueryRunner();
-    await this.queryRunner.startTransaction();
-  }
-  
-  public async commitTransaction(): Promise<void>
-  {
-    await this.queryRunner.commitTransaction();
-    await this.queryRunner.release();
-    this.queryRunner = undefined;
-  }
-  
-  public async rollbackTransaction(): Promise<void>
-  {
-    await this.queryRunner.rollbackTransaction();
-    await this.queryRunner.release();
-    this.queryRunner = undefined;
-  }
-  
   public isInitialised(): boolean
   {
     return !!this.connection;
@@ -83,12 +57,6 @@ export class Connection
       });
       
       await this.connection.initialize();
-      
-      console.log('Connection initialised');
-      if (this.startTransactionOnInit)
-      {
-        await this.startTransaction();
-      }
     }
     
     return this.connection;

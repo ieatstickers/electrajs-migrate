@@ -10,124 +10,98 @@ import { Modules } from "./Utility/Modules";
 
 export class Commands
 {
-  public static async status()
+  public static async status(): Promise<void>
   {
     const migrationDirs = Container.getConfig().migrationDirs;
-    const projectMigrations = await Container.getProjectMigrations();
+    const migrationFilesByGroup = await Container.getProjectMigrations();
     
-    for (const key in projectMigrations)
+    for (const groupKey in migrationFilesByGroup)
     {
-      const migrations: Array<MigrationFile> = projectMigrations[key];
-      const { name: groupDisplayName } = migrationDirs[key];
+      const migrationFiles: Array<MigrationFile> = migrationFilesByGroup[groupKey];
+      const { name: groupDisplayName } = migrationDirs[groupKey];
       
       console.log(chalk.yellowBright(groupDisplayName));
       
-      if (migrations.length === 0)
+      if (migrationFiles.length === 0)
       {
         console.log(chalk.redBright('  * No migrations found *'));
         continue;
       }
       
-      for (const migration of migrations)
+      for (const migrationFile of migrationFiles)
       {
-        // Log migration name in relevant colour
-        console.log(`  ${migration.executed ? chalk.green(migration.name) : chalk.redBright(migration.name)}`);
+        console.log(`  ${migrationFile.executed ? chalk.greenBright(migrationFile.name) : chalk.redBright(migrationFile.name)}`);
       }
     }
   }
   
-  public static async migrate()
+  public static async run(): Promise<void>
   {
-    // Get all migrations that haven't been executed
-    const projectMigrations = await Container.getProjectMigrations({ includeExecuted: false });
+    const migrationFilesNotExecutedByGroup = await Container.getProjectMigrations({ includeExecuted: false });
     
-    // If there aren't any, log a message and exit
-    if (Object.keys(projectMigrations).length === 0)
+    if (Object.keys(migrationFilesNotExecutedByGroup).length === 0)
     {
       console.log(chalk.blueBright('No migrations to run'));
       return;
     }
     
     const config = Container.getConfig();
-    const connections = new Connections(config.connections, true);
-    
-    // Get current batch number
-    const latestBatch = await Container.getMigrationDb().getMigrationRepository().getLatestBatch();
-    const currentBatch = latestBatch ? latestBatch + 1 : 1;
-    
-    // Create a MySql instance to be used for all migrations
+    const connections = new Connections(config.connections);
+    const lastExecutedBatch = await Container.getMigrationDb().getMigrationRepository().getLatestBatch();
+    const currentBatch = lastExecutedBatch ? lastExecutedBatch + 1 : 1;
     const mysql = new MySql(connections);
-    const migrationRowsToBeSaved: Array<Migration> = [];
+    let migrationsRun: number = 0;
     
     try
     {
-      // For each group
-      for (const groupKey in projectMigrations)
+      const migrationFilesToRun: Array<MigrationFile> = [];
+      
+      for (const groupKey in migrationFilesNotExecutedByGroup)
       {
-        const migrations: Array<MigrationFile> = projectMigrations[groupKey];
+        migrationFilesToRun.push(...migrationFilesNotExecutedByGroup[groupKey]);
+      }
+      
+      // TODO: Test sort function
+      migrationFilesToRun.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+      
+      console.log('migrationFilesToRun', migrationFilesToRun);
+      
+      for (const migrationFile of migrationFilesToRun)
+      {
+        const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
+        await migrationInstance.up(mysql);
         
-        // For each migration in the current group
-        for (const migration of migrations)
-        {
-          if (migration.executed) continue;
-          
-          // Run the migration
-          const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migration);
-          await migrationInstance.up(mysql);
-          
-          // Create a migration row to be saved
-          const migrationRow = new Migration()
-          migrationRow.name = migration.name;
-          migrationRow.group = migration.group;
-          migrationRow.executed = DateTime.now().toSQL({ includeOffset: false });
-          migrationRow.batch = currentBatch;
-          
-          migrationRowsToBeSaved.push(migrationRow);
-        }
+        const migrationRow = new Migration()
+        migrationRow.name = migrationFile.name;
+        migrationRow.group = migrationFile.group;
+        migrationRow.executed = DateTime.now().toSQL({ includeOffset: false });
+        migrationRow.batch = currentBatch;
+        
+        await Container.getMigrationDb().getMigrationRepository().save(migrationRow);
+        
+        migrationsRun++;
       }
       
-      const initialisedConnections = connections.getAllInitialised();
-      
-      // TODO: If no connections initialised, throw error... something wrong with the up method
-      // TODO: (either didn't do anything or not waiting for database operations to complete before resolving promise)
-      
-      // Commit all transactions
-      for (const connection of initialisedConnections)
-      {
-        await connection.commitTransaction();
-      }
-      
-      // Save migration rows
-      await Container.getMigrationDb().getMigrationRepository().save(...migrationRowsToBeSaved);
-      
-      // Log success message
-      console.log(chalk.green(`Successfully ran ${migrationRowsToBeSaved.length} migration${migrationRowsToBeSaved.length !== 1 ? 's' : ''}`));
+      console.log(chalk.green(`Successfully ran ${migrationsRun} migration${migrationsRun !== 1 ? 's' : ''}`));
     }
     catch (e)
     {
-      // Log error
       console.log(chalk.redBright(`Failed to run migrations: ${e.message}`));
-      console.log(e.stack);
+      console.log(chalk.redBright(e.stack));
       
-      const initialisedConnections = connections.getAllInitialised();
+      // TODO: If rollback on failure flag is set, call rollback method
       
-      // If any migrations failed, roll back all transactions
-      for (const connection of initialisedConnections)
-      {
-        await connection.rollbackTransaction();
-      }
     }
-    
-    const initialisedConnections = connections.getAllInitialised();
     
     // Close all connections
-    for (const connection of initialisedConnections)
-    {
-      await connection.destroy();
-    }
+    await connections.destroyAllInitialised();
   }
   
-  public static async rollback()
+  public static async rollback(): Promise<void>
   {
     const latestBatch = await Container.getMigrationDb().getMigrationRepository().getLatestBatch();
     
@@ -137,17 +111,16 @@ export class Commands
       return;
     }
     
-    // Create a data source and a query runner for each database connection and start a transaction for each
     const config = Container.getConfig();
-    const connections = new Connections(config.connections, true);
-    
-    // Create a MySql instance to be used for all migrations
+    const connections = new Connections(config.connections);
     const mysql = new MySql(connections);
-    const migrationRowsToBeDeleted: Array<Migration> = [];
+    const migrationFilesByGroup = await Container.getProjectMigrations();
+    let migrationsRolledBack: number = 0;
     
-    const projectMigrations = await Container.getProjectMigrations();
-    // Get all migrations in the last batch
-    const batchMigrations = await Container.getMigrationDb().getMigrationRepository().getAllByBatch(latestBatch);
+    const batchMigrations = await Container
+      .getMigrationDb()
+      .getMigrationRepository()
+      .getAllByBatch(latestBatch);
     
     // If there aren't any migrations to run, log a message and exit
     if (Object.keys(batchMigrations).length === 0)
@@ -158,60 +131,53 @@ export class Commands
     
     try
     {
-      // For each migration in the last batch
-      for (const migration of Object.values(batchMigrations))
-      {
-        const projectMigration = projectMigrations[migration.group].find((projectMigration) => {
-          return projectMigration.name === migration.name
+      // TODO: Test sort function
+      const migrationsToRollBack = Object
+        .values(batchMigrations)
+        .sort((a, b) => {
+          if (a.name < b.name) return 1;
+          if (a.name > b.name) return -1;
+          return 0;
+        })
+        .map((migration) => {
+          
+          const file = migrationFilesByGroup[migration.group].find((projectMigration) => {
+            return projectMigration.name === migration.name
+          });
+          
+          if (!file)
+          {
+            throw new Error(`Could not find migration file for ${migration.name} in group ${migration.group}`);
+          }
+          
+          return {
+            migrationRow: migration,
+            migrationFile: file
+          }
         });
-        
-        // Get migration class
-        const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(projectMigration);
-        // Run the migration's down method
+      
+      console.log('migrationsToRollBack', migrationsToRollBack);
+      
+      for (const {migrationRow, migrationFile} of migrationsToRollBack)
+      {
+        const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
         await migrationInstance.down(mysql);
         
-        // Add id of migration to be deleted to array
-        migrationRowsToBeDeleted.push(migration);
+        await Container.getMigrationDb().getMigrationRepository().remove(migrationRow);
+        
+        migrationsRolledBack++;
       }
       
-      const initialisedConnections = connections.getAllInitialised();
-      
-      // TODO: If no connections initialised, throw error... something wrong with the down method
-      // TODO: (either didn't do anything or not waiting for database operations to complete before resolving promise)
-      
-      // Commit all transactions
-      for (const connection of initialisedConnections)
-      {
-        await connection.commitTransaction();
-      }
-      
-      // Delete all migrations in the last batch
-      await Container.getMigrationDb().getMigrationRepository().remove(...migrationRowsToBeDeleted);
-      
-      // Log success message
-      console.log(chalk.green(`Successfully rolled back ${migrationRowsToBeDeleted.length} migration${migrationRowsToBeDeleted.length !== 1 ? 's' : ''}`));
+      console.log(chalk.green(`Successfully rolled back ${migrationsRolledBack} migration${migrationsRolledBack !== 1 ? 's' : ''}`));
     }
     catch (e)
     {
-      // Log error
-      console.log(chalk.redBright(`Failed to run migrations: ${e.message}`));
-      
-      const initialisedConnections = connections.getAllInitialised();
-      
-      // If any migrations failed, roll back all transactions
-      for (const connection of initialisedConnections)
-      {
-        await connection.rollbackTransaction();
-      }
+      console.log(chalk.redBright(`Failed to roll back migrations: ${e.message}`));
+      console.log(chalk.redBright(e.stack));
     }
-    
-    const initialisedConnections = connections.getAllInitialised();
     
     // Close all connections
-    for (const connection of initialisedConnections)
-    {
-      await connection.destroy();
-    }
+    await connections.destroyAllInitialised();
   }
   
   private static async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
