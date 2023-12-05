@@ -41,7 +41,7 @@ export class Table
   public id(name: string = "id"): this
   {
     this.operations.push(async () => {
-      console.log('id operation', name, this.tableExists);
+      console.log('create id column operation', this.name, this.tableExists);
       const column = new IdColumn(name);
       await column.create(this.connection, this.name, !this.tableExists);
       this.tableExists = true;
