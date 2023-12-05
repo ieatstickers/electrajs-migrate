@@ -9,12 +9,12 @@ type ConnectionConfig = {
 export declare class Connections {
     private readonly config;
     private readonly connections;
-    private readonly startTransactionOnInit;
     constructor(config: {
         [name: string]: ConnectionConfig;
-    }, startTransactionOnInit?: boolean);
+    });
     get(connectionName: string): Connection;
     getAllByDatabaseName(databaseName: string): Array<Connection>;
-    getAllInitialised(): Array<Connection>;
+    destroyAllInitialised(): Promise<void>;
+    private getAllInitialised;
 }
 export {};
