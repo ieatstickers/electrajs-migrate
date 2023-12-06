@@ -37,8 +37,11 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>
   {
+    const escapedColumnName = await connection.escape(this.name);
+    const escapedTableName = await connection.escape(tableName);
+    
     // type
-    let columnDefinition = `${this.name} TIME`;
+    let columnDefinition = `${escapedColumnName} TIME`;
     
     // nullable
     this.options.nullable
@@ -51,12 +54,12 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE IF NOT EXISTS ${tableName}(${columnDefinition});`);
+      await connection.query(`CREATE TABLE IF NOT EXISTS ${escapedTableName}(${columnDefinition});`);
     }
     // Add column to existing table
     else
     {
-      await connection.query(`ALTER TABLE ${tableName} ADD COLUMN ${columnDefinition};`);
+      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition};`);
     }
   }
 }

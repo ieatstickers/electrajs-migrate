@@ -4,7 +4,7 @@ export type StringColumnOptions = {
   type: StringColumnTypeEnum;
   nullable: boolean,
   primaryKey: boolean;
-  default: number,
+  default: string,
   length: number,
   index: boolean
 };

@@ -42,8 +42,11 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>
   {
+    const escapedColumnName = await connection.escape(this.name);
+    const escapedTableName = await connection.escape(tableName);
+    
     // type
-    let columnDefinition = `${this.name} ${this.options.type}`;
+    let columnDefinition = `${escapedColumnName} ${this.options.type}`;
     
     // if CHAR or VARCHAR
     if (this.options.type === StringColumnTypeEnum.CHAR || this.options.type === StringColumnTypeEnum.VARCHAR)
@@ -61,7 +64,7 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     if (this.options.primaryKey) columnDefinition += " PRIMARY KEY";
     
     // default
-    if (this.options.default !== undefined) columnDefinition += ` DEFAULT ${this.options.default}`;
+    if (this.options.default !== undefined) columnDefinition += ` DEFAULT ${await connection.escape(this.options.default)}`;
     
     // index
     if (this.options.index) columnDefinition += " INDEX";
@@ -69,12 +72,12 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE IF NOT EXISTS ${tableName}(${columnDefinition});`);
+      await connection.query(`CREATE TABLE IF NOT EXISTS ${escapedTableName}(${columnDefinition});`);
     }
     // Add column to existing table
     else
     {
-      await connection.query(`ALTER TABLE ${tableName} ADD COLUMN ${columnDefinition};`);
+      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition};`);
     }
   }
 }

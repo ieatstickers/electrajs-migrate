@@ -50,7 +50,11 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>
   {
-    let columnDefinition = `${this.name} ENUM('${this.values.join("', '")}')`;
+    const escapedColumnName = await connection.escape(this.name);
+    const escapedTableName = await connection.escape(tableName);
+    const escapedValues = await Promise.all(this.values.map(value => connection.escape(value)));
+    
+    let columnDefinition = `${escapedColumnName} ENUM('${escapedValues.join("', '")}')`;
     
     // nullable
     this.options.nullable
@@ -58,7 +62,7 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       : columnDefinition += " NOT NULL";
     
     // default
-    if (this.options.default !== undefined) columnDefinition += ` DEFAULT '${this.options.default}'`;
+    if (this.options.default !== undefined) columnDefinition += ` DEFAULT '${await connection.escape(this.options.default)}'`;
     
     // index
     if (this.options.index) columnDefinition += " INDEX";
@@ -66,12 +70,12 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE ${tableName} (${columnDefinition})`);
+      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition})`);
     }
     // Alter existing table
     else
     {
-      await connection.query(`ALTER TABLE ${tableName} ADD COLUMN ${columnDefinition}`);
+      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition}`);
     }
   }
 }
