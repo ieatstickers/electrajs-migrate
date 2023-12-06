@@ -45,6 +45,12 @@ export class Connection
     return !!this.connection;
   }
   
+  public async escape(name: string): Promise<string>
+  {
+    const connection = await this.get();
+    return connection.driver.escape(name);
+  }
+  
   private async get(): Promise<DataSource>
   {
     if (!this.connection)
