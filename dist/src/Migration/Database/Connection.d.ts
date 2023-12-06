@@ -12,6 +12,7 @@ export declare class Connection {
     query(query: string, parameters?: Array<any>): Promise<any>;
     destroy(): Promise<void>;
     isInitialised(): boolean;
+    escape(name: string): Promise<string>;
     private get;
 }
 export {};

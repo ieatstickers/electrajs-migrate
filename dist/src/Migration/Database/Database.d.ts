@@ -6,6 +6,4 @@ export declare class Database {
     constructor(connection: Connection, operations: Array<() => Promise<void>>);
     create(tableName: string): Table;
     table(tableName: string): Table;
-    drop(tableName: string): this;
-    execute(): Promise<void>;
 }

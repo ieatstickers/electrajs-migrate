@@ -5,4 +5,5 @@ export declare class MySql {
     private readonly operations;
     constructor(connections: Connections);
     database(name: string, connectionName?: string): Database;
+    executePendingOperations(): Promise<void>;
 }
