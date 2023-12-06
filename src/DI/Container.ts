@@ -135,6 +135,15 @@ export class Container
       {
         const [ fileName ] = file.split(".");
         
+        const { valid, message } = Validators
+          .regex(
+            /^(19|20)\d{2}_(0[1-9]|1[0-2])_(0[1-9]|[12][0-9]|3[01])_([0-1][0-9]|2[0-3])([0-5][0-9]){2}_[A-Za-z][A-Za-z0-9_]*$/,
+            'YYYY_MM_DD_HHMMSS_MigrationName'
+          )
+          .validate(fileName);
+        
+        if (!valid) throw new Error(`Invalid migration file name "${fileName}": ${message}`);
+        
         const dbRow = Object.values(existingDbMigrations).find((dbRow) => dbRow.name === fileName);
         
         if (options?.includeExecuted === false && dbRow?.executed) continue;
