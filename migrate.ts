@@ -49,9 +49,12 @@ function dbAction(
     // migrate
     application
       .command('run', 'Run all migrations')
+      .option('--rollback-on-error', 'Automatically rollback migrations if an error occurs')
       .action(
-        dbAction(async () => {
-          await Commands.run();
+        dbAction(async (args, options, logger) => {
+          await Commands.run({
+            rollbackOnError: options.rollbackOnError || false
+          });
         })
       );
     

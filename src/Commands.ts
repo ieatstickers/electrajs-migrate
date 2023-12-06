@@ -35,7 +35,7 @@ export class Commands
     }
   }
   
-  public static async run(): Promise<void>
+  public static async run(options?: { rollbackOnError?: boolean }): Promise<void>
   {
     const migrationFilesNotExecutedByGroup = await Container.getProjectMigrations({ includeExecuted: false });
     
@@ -91,8 +91,20 @@ export class Commands
       console.log(chalk.redBright(`Failed to run migrations: ${e.message}`));
       console.log(chalk.redBright(e.stack));
       
-      // TODO: If rollback on failure flag is set, call rollback method
-      
+      if (options?.rollbackOnError === true)
+      {
+        if (migrationsRun > 0)
+        {
+          console.log('');
+          console.log(chalk.yellowBright("Attempting to roll back migrations..."));
+          await this.rollback();
+        }
+        else
+        {
+          console.log('');
+          console.log(chalk.yellowBright("Nothing to roll back - 0 migrations finished successfully."));
+        }
+      }
     }
     
     // Close all connections
