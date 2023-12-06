@@ -14,30 +14,11 @@ export class Database
   
   public create(tableName: string): Table
   {
-    console.log('create', tableName);
     return new Table(tableName, this.connection, this.operations, false);
   }
   
   public table(tableName: string): Table
   {
-    console.log('table', tableName);
     return new Table(tableName, this.connection, this.operations, true);
-  }
-  
-  public drop(tableName: string): this
-  {
-    this.operations.push(async () => {
-      await this.connection.query(`DROP TABLE ${tableName};`);
-    });
-    
-    return this;
-  }
-  
-  public async execute(): Promise<void>
-  {
-    for (const operation of this.operations)
-    {
-      await operation();
-    }
   }
 }
