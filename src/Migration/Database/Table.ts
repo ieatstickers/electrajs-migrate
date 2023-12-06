@@ -32,7 +32,6 @@ export class Table
   )
   {
     this.name = name;
-    console.log('Table constructor', name, tableExists);
     this.connection = connection;
     this.operations = operations;
     this.tableExists = tableExists;
@@ -40,14 +39,9 @@ export class Table
 
   public id(name: string = "id"): this
   {
-    const connection = this.connection;
-    const tableName = this.name;
-    const createTable = !this.tableExists;
-    
     this.operations.push(async () => {
-      console.log('create id column operation', tableName, createTable);
       const column = new IdColumn(name);
-      await column.create(connection, tableName, createTable);
+      await column.create(this.connection, this.name, !this.tableExists);
       this.tableExists = true;
     });
     
@@ -143,14 +137,57 @@ export class Table
     return this;
   }
   
-  // TODO: renameColumn(currentName, newName)
-  // TODO: updateColumn(name, { type, index, nullable, default )
-  
-  public async execute(): Promise<void>
+  public renameColumn(currentName: string, newName: string): this
   {
-    for (const operation of this.operations)
-    {
-      await operation();
-    }
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} RENAME COLUMN ${await this.connection.escape(currentName)} TO ${await this.connection.escape(newName)};`);
+    });
+    
+    return this;
+  }
+  
+  public addColumnIndex(columnName: string): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} ADD INDEX ${await this.connection.escape(columnName)};`);
+    });
+    
+    return this;
+  }
+
+  public dropColumnIndex(columnName: string): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} DROP INDEX ${await this.connection.escape(columnName)};`);
+    });
+    
+    return this;
+  }
+  
+  public setColumnNullable(columnName: string, nullable: boolean): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} MODIFY COLUMN ${await this.connection.escape(columnName)} ${nullable ? "NULL" : "NOT NULL"};`);
+    });
+    
+    return this;
+  }
+  
+  public setColumnDefault(columnName: string, defaultValue: any): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} MODIFY COLUMN ${await this.connection.escape(columnName)} DEFAULT ${await this.connection.escape(defaultValue)};`);
+    });
+    
+    return this;
+  }
+  
+  public drop(): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`DROP TABLE ${await this.connection.escape(this.name)};`);
+    });
+    
+    return this;
   }
 }
