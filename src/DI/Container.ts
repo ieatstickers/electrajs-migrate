@@ -142,7 +142,7 @@ export class Container
           )
           .validate(fileName);
         
-        if (!valid) throw new Error(`Invalid migration file name "${fileName}": ${message}`);
+        if (!valid) throw new Error(`Invalid migration file name: ${message}`);
         
         const dbRow = Object.values(existingDbMigrations).find((dbRow) => dbRow.name === fileName);
         

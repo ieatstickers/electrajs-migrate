@@ -22,6 +22,15 @@ Classes are exported as named exports from `@electra/migrate`.
 
 TODO: Add usage examples
 
+- js + commonjs
+- js + esm
+- ts + commonjs (if possible)
+- ts + esm
+
+TODO: Fix bugs
+
+- Transaction rollback across all connections on error
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

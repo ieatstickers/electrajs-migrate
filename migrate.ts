@@ -68,7 +68,7 @@ function dbAction(
   }
   catch (e)
   {
-    console.log(chalk.red(e.stack));
+    console.log(chalk.redBright(e.stack));
   }
   
 })();
