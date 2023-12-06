@@ -68,13 +68,11 @@ export class Commands
         return 0;
       });
       
-      console.log('migrationFilesToRun', migrationFilesToRun);
-      
       for (const migrationFile of migrationFilesToRun)
       {
         const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
-        console.log('migrationInstance', migrationInstance);
         await migrationInstance.up(mysql);
+        await mysql.executePendingOperations();
         
         const migrationRow = new Migration()
         migrationRow.name = migrationFile.name;
@@ -163,6 +161,7 @@ export class Commands
       {
         const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
         await migrationInstance.down(mysql);
+        await mysql.executePendingOperations();
         
         await Container.getMigrationDb().getMigrationRepository().remove(migrationRow);
         
