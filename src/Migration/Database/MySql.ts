@@ -30,13 +30,22 @@ export class MySql
     }
     
     this.operations.push(async () => {
-      await connection.query(`CREATE DATABASE IF NOT EXISTS ${name};`);
+      await connection.query(`CREATE DATABASE IF NOT EXISTS ${await connection.escape(name)};`);
     });
 
     this.operations.push(async () => {
-      await connection.query(`USE ${name};`);
+      await connection.query(`USE ${await connection.escape(name)};`);
     });
     
     return new Database(connection, this.operations);
+  }
+  
+  public async executePendingOperations(): Promise<void>
+  {
+    while(this.operations.length > 0)
+    {
+      const operation = this.operations.shift();
+      await operation();
+    }
   }
 }
