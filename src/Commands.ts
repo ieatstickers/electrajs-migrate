@@ -61,7 +61,6 @@ export class Commands
         migrationFilesToRun.push(...migrationFilesNotExecutedByGroup[groupKey]);
       }
       
-      // TODO: Test sort function
       migrationFilesToRun.sort((a, b) => {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;
@@ -130,7 +129,6 @@ export class Commands
     
     try
     {
-      // TODO: Test sort function
       const migrationsToRollBack = Object
         .values(batchMigrations)
         .sort((a, b) => {
@@ -154,8 +152,6 @@ export class Commands
             migrationFile: file
           }
         });
-      
-      console.log('migrationsToRollBack', migrationsToRollBack);
       
       for (const {migrationRow, migrationFile} of migrationsToRollBack)
       {
