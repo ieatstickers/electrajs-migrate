@@ -14,6 +14,10 @@
   "files": [
     "dist/**/*"
   ],
+  "bin": {
+    "electra-migrate": "./dist/migrate.mjs",
+    "electra-migrate-cjs": "./dist/migrate.cjs"
+  },
   "scripts": {
     "build": "webpack",
     "test": "jest"
