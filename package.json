@@ -16,7 +16,7 @@
     "bin/**/*"
   ],
   "bin": {
-    "electra-migrate": "./bin/electra-migrate.js"
+    "migrate": "./bin/migrate.js"
   },
   "scripts": {
     "build": "webpack",
