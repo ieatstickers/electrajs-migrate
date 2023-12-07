@@ -146,6 +146,15 @@ export class Table
     return this;
   }
   
+  public dropColumn(name: string): this
+  {
+    this.operations.push(async () => {
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} DROP COLUMN ${await this.connection.escape(name)};`);
+    });
+    
+    return this;
+  }
+  
   public addColumnIndex(columnName: string): this
   {
     this.operations.push(async () => {

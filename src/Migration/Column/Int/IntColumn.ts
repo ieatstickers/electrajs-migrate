@@ -26,6 +26,8 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
       zeroFill: false,
       primaryKey: false,
       index: false,
+      addBefore: undefined,
+      addAfter: undefined,
       ...options
     };
     
@@ -39,7 +41,9 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
         autoIncrement: Validators.boolean(),
         zeroFill: Validators.boolean(),
         primaryKey: Validators.boolean(),
-        index: Validators.boolean()
+        index: Validators.boolean(),
+        addBefore: Validators.string({ optional: true }),
+        addAfter: Validators.string({ optional: true })
       }
     );
   }
@@ -51,6 +55,17 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     
     // type
     let columnDefinition = `${escapedColumnName} ${this.options.type}`;
+    
+    // addBefore
+    if (this.options.addBefore)
+    {
+      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
+    }
+    // addAfter
+    else if (this.options.addAfter)
+    {
+      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
+    }
     
     // nullable
     this.options.nullable

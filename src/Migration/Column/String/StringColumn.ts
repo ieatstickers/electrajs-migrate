@@ -24,6 +24,8 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
       default: undefined,
       length: options?.type && options?.type !== StringColumnTypeEnum.VARCHAR ? undefined : 255,
       index: false,
+      addBefore: undefined,
+      addAfter: undefined,
       ...options
     };
     
@@ -35,7 +37,9 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
         primaryKey: Validators.boolean(),
         default: Validators.string({ optional: true }),
         length: Validators.integer({ optional: true }),
-        index: Validators.boolean()
+        index: Validators.boolean(),
+        addBefore: Validators.string({ optional: true }),
+        addAfter: Validators.string({ optional: true })
       }
     );
   }
@@ -53,6 +57,17 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     {
       // length
       if (this.options.length !== undefined) columnDefinition += `(${this.options.length})`;
+    }
+    
+    // addBefore
+    if (this.options.addBefore)
+    {
+      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
+    }
+    // addAfter
+    else if (this.options.addAfter)
+    {
+      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
     }
     
     // nullable

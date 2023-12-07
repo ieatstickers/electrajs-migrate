@@ -19,6 +19,8 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
     this.options = {
       nullable: false,
       default: undefined,
+      addBefore: undefined,
+      addAfter: undefined,
       ...options
     };
     
@@ -30,7 +32,9 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
           /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/,
           'HH:MM:SS',
           { optional: true }
-        )
+        ),
+        addBefore: Validators.string({ optional: true }),
+        addAfter: Validators.string({ optional: true })
       }
     );
   }
@@ -42,6 +46,17 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
     
     // type
     let columnDefinition = `${escapedColumnName} TIME`;
+    
+    // addBefore
+    if (this.options.addBefore)
+    {
+      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
+    }
+    // addAfter
+    else if (this.options.addAfter)
+    {
+      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
+    }
     
     // nullable
     this.options.nullable

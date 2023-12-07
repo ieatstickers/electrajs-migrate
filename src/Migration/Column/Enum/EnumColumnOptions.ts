@@ -2,5 +2,7 @@
 export type EnumColumnOptions = {
   nullable: boolean,
   default: string,
-  index: boolean
+  index: boolean,
+  addBefore: string,
+  addAfter: string
 };

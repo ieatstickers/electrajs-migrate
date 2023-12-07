@@ -21,6 +21,8 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
     this.options = {
       type: BlobColumnTypeEnum.BLOB,
       nullable: false,
+      addBefore: undefined,
+      addAfter: undefined,
       ...options
     };
     
@@ -28,7 +30,9 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
       this.options,
       {
         type: Validators.enumValue(BlobColumnTypeEnum),
-        nullable: Validators.boolean()
+        nullable: Validators.boolean(),
+        addBefore: Validators.string({ optional: true }),
+        addAfter: Validators.string({ optional: true })
       }
     );
   }
@@ -40,6 +44,17 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
     
     // type
     let columnDefinition = `${escapedColumnName} ${this.options.type}`;
+    
+    // addBefore
+    if (this.options.addBefore)
+    {
+      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
+    }
+    // addAfter
+    else if (this.options.addAfter)
+    {
+      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
+    }
     
     // nullable
     this.options.nullable

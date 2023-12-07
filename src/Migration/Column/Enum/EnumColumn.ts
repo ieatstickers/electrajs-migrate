@@ -32,6 +32,8 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       nullable: false,
       default: undefined,
       index: false,
+      addBefore: undefined,
+      addAfter: undefined,
       ...options
     };
     
@@ -43,7 +45,9 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       {
         nullable: Validators.boolean(),
         default: Validators.enumValue(valuesEnum, { optional: true }),
-        index: Validators.boolean()
+        index: Validators.boolean(),
+        addBefore: Validators.string({ optional: true }),
+        addAfter: Validators.string({ optional: true })
       }
     );
   }
@@ -55,6 +59,17 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
     const escapedValues = await Promise.all(this.values.map(value => connection.escape(value)));
     
     let columnDefinition = `${escapedColumnName} ENUM('${escapedValues.join("', '")}')`;
+    
+    // addBefore
+    if (this.options.addBefore)
+    {
+      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
+    }
+    // addAfter
+    else if (this.options.addAfter)
+    {
+      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
+    }
     
     // nullable
     this.options.nullable

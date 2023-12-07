@@ -1,5 +1,7 @@
 
 export type TimeColumnOptions = {
   nullable: boolean,
-  default: string
+  default: string,
+  addBefore: string,
+  addAfter: string
 };

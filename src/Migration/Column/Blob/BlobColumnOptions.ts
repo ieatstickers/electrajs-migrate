@@ -2,5 +2,7 @@ import { BlobColumnTypeEnum } from "./BlobColumnTypeEnum";
 
 export type BlobColumnOptions = {
   type: BlobColumnTypeEnum,
-  nullable: boolean
+  nullable: boolean,
+  addBefore: string,
+  addAfter: string
 };

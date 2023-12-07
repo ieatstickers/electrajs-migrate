@@ -6,5 +6,7 @@ export type StringColumnOptions = {
   primaryKey: boolean;
   default: string,
   length: number,
-  index: boolean
+  index: boolean,
+  addBefore: string,
+  addAfter: string
 };
