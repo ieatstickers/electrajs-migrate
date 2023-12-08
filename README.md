@@ -206,6 +206,7 @@ Table of contents:
   - [time](#tabletime)
   - [datetime](#tabledatetime)
   - [blob](#tableblob)
+  - [dropColumn](#tabledropcolumn)
   - [renameColumn](#tablerenamecolumn)
   - [addColumnIndex](#tableaddcolumnindex)
   - [dropColumnIndex](#tabledropcolumnindex)
@@ -311,6 +312,8 @@ The `int` method is used to create an integer column. By default, the column typ
   - `autoIncrement?: boolean`: Whether the column is auto-incrementing. Defaults to `false`.
   - `zeroFill?: boolean`: Whether the column is zero-filled. Defaults to `false`.
   - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -344,6 +347,8 @@ The `decimal` method is used to create a column with type `DECIMAL`. By default,
   - `precision?: boolean`: The number of digits in the number. Defaults to `10`.
   - `scale?: boolean`: The number of digits to the right of the decimal point. Defaults to `2`.
   - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -378,6 +383,8 @@ The `string` method is used to create a string column. By default, the column ty
   - `default?: boolean`: The default value of the column. Defaults to `undefined`.
   - `length?: boolean`: The length of the column. Defaults to `255` (if type supports length i.e. `CHAR` and `VARCHAR`).
   - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -409,6 +416,8 @@ The `enum` method is used to create a column with type `ENUM`.
   - `nullable?: boolean`: Whether the column can be null. Defaults to `false`.
   - `default?: string`: The default value of the column. Defaults to `undefined`.
   - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -440,6 +449,8 @@ The `date` method is used to create a column with type `DATE`.
   - `nullable: boolean`: Whether the column can be null. Defaults to `false`.
   - `default: string`: The default value of the column. Defaults to `undefined`.
   - `index: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 
@@ -469,7 +480,10 @@ The `time` method is used to create a column with type `TIME`.
 - `name: string`: The name of the column
 - `options?`: An object containing the column options
   - `nullable: boolean`: Whether the column can be null. Defaults to `false`.
-  - `default: string`: The default value of the column. Defaults to `undefined`.`
+  - `default: string`: The default value of the column. Defaults to `undefined`.
+  - `index: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -499,6 +513,8 @@ The `datetime` method is used to create a column with type `DATETIME`.
   - `nullable: boolean`: Whether the column can be null. Defaults to `false`.
   - `default: string`: The default value of the column. Defaults to `undefined`.
   - `index: boolean`: Whether the column is indexed. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -528,6 +544,8 @@ The `blob` method is used to create a blob column. By default, the column type w
 - `options?`: An object containing the column options
   - `type: BlobColumnTypeEnum`: The type of the column. Defaults to `BlobColumnTypeEnum.BLOB`.
   - `nullable: boolean`: Whether the column can be null. Defaults to `false`.
+  - `addBefore?: string`: The name of the column to add this column before. Defaults to `undefined`.
+  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
 - An instance of the `Table` class
@@ -566,6 +584,27 @@ mysql
   .database("app")
   .table("users")
   .renameColumn("name", "fullName")
+```
+
+### dropColumn
+
+The `dropColumn` method is used to drop a column from the table.
+
+#### Parameters
+
+- `name: string`: The name of the column to drop
+
+#### Returns
+
+- An instance of the `Table` class
+
+#### Example
+
+```js
+mysql
+  .database("app")
+  .table("users")
+  .dropColumn("fullName")
 ```
 
 ### addColumnIndex
