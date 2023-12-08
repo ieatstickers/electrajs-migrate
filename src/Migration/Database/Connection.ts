@@ -1,4 +1,4 @@
-import { DataSource, QueryRunner } from "typeorm";
+import { DataSource } from "typeorm";
 
 type ConnectionConfig = {
   host: string,
@@ -11,7 +11,6 @@ export class Connection
 {
   private readonly connectionConfig: ConnectionConfig;
   private connection: DataSource;
-  private queryRunner: QueryRunner;
   
   public constructor(connection: ConnectionConfig)
   {
@@ -26,12 +25,6 @@ export class Connection
   
   public async destroy(): Promise<void>
   {
-    if (this.queryRunner)
-    {
-      await this.queryRunner.release();
-      this.queryRunner = undefined;
-    }
-    
     if (this.connection)
     {
       await this.connection.destroy();
