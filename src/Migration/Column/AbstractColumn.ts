@@ -1,6 +1,7 @@
 import { Schema, Validators } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
 import { Connection } from "../Database/Connection";
+import chalk from "chalk";
 
 export abstract class AbstractColumn implements ColumnInterface
 {
@@ -29,5 +30,69 @@ export abstract class AbstractColumn implements ColumnInterface
     }
     
     return true;
+  }
+  
+  protected addNullableStatement(query: string, nullable: boolean): string
+  {
+    return nullable ? `${query} NULL` : `${query} NOT NULL`;
+  }
+  
+  protected addDefaultStatement(query: string, defaultValue: any): string
+  {
+    return defaultValue !== undefined ? `${query} DEFAULT ${defaultValue}` : query;
+  }
+  
+  protected addIndexStatement(query: string, index: boolean): string
+  {
+    return index ? `${query} INDEX` : query;
+  }
+  
+  protected addUnsignedStatement(query: string, unsigned: boolean): string
+  {
+    return unsigned ? `${query} UNSIGNED` : query;
+  }
+  
+  protected addZeroFillStatement(query: string, zeroFill: boolean): string
+  {
+    return zeroFill ? `${query} ZEROFILL` : query;
+  }
+  
+  protected addAutoIncrementStatement(query: string, autoIncrement: boolean): string
+  {
+    return autoIncrement ? `${query} AUTO_INCREMENT` : query;
+  }
+  
+  protected addPrimaryKeyStatement(query: string, primaryKey: boolean): string
+  {
+    return primaryKey ? `${query} PRIMARY KEY` : query;
+  }
+  
+  protected addPositionStatement(query: string, addBefore: string, addAfter: string, tableExists: boolean): string
+  {
+    // Log warning if createTable is true and addBefore or addAfter are set
+    if (!tableExists && (addBefore || addAfter))
+    {
+      console.warn(chalk.yellowBright('WARNING: addBefore and addAfter options are ignored when creating a new table.'));
+    }
+    // Log warning if table already exists and both addBefore and addAfter are set
+    else if (tableExists && addBefore && addAfter)
+    {
+      console.warn('WARNING: addBefore and addAfter options are mutually exclusive. Using addBefore.');
+    }
+    
+    if (!tableExists) return query;
+    
+    // addBefore
+    if (addBefore)
+    {
+      query += ` BEFORE ${addBefore}`;
+    }
+    // addAfter
+    else if (addAfter)
+    {
+      query += ` AFTER ${addAfter}`;
+    }
+    
+    return query;
   }
 }
