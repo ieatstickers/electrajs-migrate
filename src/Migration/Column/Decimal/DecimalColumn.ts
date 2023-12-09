@@ -53,33 +53,28 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     // type
     let columnDefinition = `${escapedColumnName} DECIMAL(${this.options.precision}, ${this.options.scale})`;
     
-    // addBefore
-    if (this.options.addBefore)
-    {
-      columnDefinition += ` BEFORE ${await connection.escape(this.options.addBefore)}`;
-    }
-    // addAfter
-    else if (this.options.addAfter)
-    {
-      columnDefinition += ` AFTER ${await connection.escape(this.options.addAfter)}`;
-    }
+    // before / after
+    columnDefinition = this.addPositionStatement(
+      columnDefinition,
+      this.options.addBefore ? await connection.escape(this.options.addBefore) : undefined,
+      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
+      !createTable
+    );
     
     // nullable
-    this.options.nullable
-      ? columnDefinition += " NULL"
-      : columnDefinition += " NOT NULL";
+    columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
     
     // default
-    if (this.options.default !== undefined) columnDefinition += ` DEFAULT ${this.options.default}`;
+    columnDefinition = this.addDefaultStatement(columnDefinition, this.options.default);
     
     // unsigned
-    if (this.options.unsigned) columnDefinition += " UNSIGNED";
+    columnDefinition = this.addUnsignedStatement(columnDefinition, this.options.unsigned);
     
     // zeroFill
-    if (this.options.zeroFill) columnDefinition += " ZEROFILL";
+    columnDefinition = this.addZeroFillStatement(columnDefinition, this.options.zeroFill);
     
     // index
-    if (this.options.index) columnDefinition += " INDEX";
+    columnDefinition = this.addIndexStatement(columnDefinition, this.options.index);
     
     // Create new table
     if (createTable)
