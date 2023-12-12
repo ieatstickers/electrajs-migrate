@@ -17,7 +17,9 @@
     "node_modules",
     "**/*/*.d.ts"
   ],
-  "include": [],
+  "include": [
+    "src/**/*.ts"
+  ],
   "files": [
     "migrate.ts",
     "index.ts"
