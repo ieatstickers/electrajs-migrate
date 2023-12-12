@@ -21,7 +21,6 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
     this.options = {
       type: BlobColumnTypeEnum.BLOB,
       nullable: false,
-      addBefore: undefined,
       addAfter: undefined,
       ...options
     };
@@ -31,7 +30,6 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
       {
         type: Validators.enumValue(BlobColumnTypeEnum),
         nullable: Validators.boolean(),
-        addBefore: Validators.string({ optional: true }),
         addAfter: Validators.string({ optional: true })
       }
     );
@@ -45,21 +43,20 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
     // type
     let columnDefinition = `${escapedColumnName} ${this.options.type}`;
     
-    // before / after
-    columnDefinition = this.addPositionStatement(
+    // nullable
+    columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
+    
+    // after
+    columnDefinition = this.addAfterStatement(
       columnDefinition,
-      this.options.addBefore ? await connection.escape(this.options.addBefore) : undefined,
       this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
       !createTable
     );
     
-    // nullable
-    columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
-    
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE IF NOT EXISTS ${escapedTableName}(${columnDefinition});`);
+      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
     }
     // Add column to existing table
     else

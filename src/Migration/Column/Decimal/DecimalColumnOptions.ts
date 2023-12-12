@@ -7,6 +7,5 @@ export type DecimalColumnOptions = {
   precision: number, // total digits
   scale: number, // digits after decimal
   index: boolean,
-  addBefore: string,
   addAfter: string
 };

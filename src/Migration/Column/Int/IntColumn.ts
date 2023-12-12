@@ -26,7 +26,6 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
       zeroFill: false,
       primaryKey: false,
       index: false,
-      addBefore: undefined,
       addAfter: undefined,
       ...options
     };
@@ -42,7 +41,6 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
         zeroFill: Validators.boolean(),
         primaryKey: Validators.boolean(),
         index: Validators.boolean(),
-        addBefore: Validators.string({ optional: true }),
         addAfter: Validators.string({ optional: true })
       }
     );
@@ -55,14 +53,6 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     
     // type
     let columnDefinition = `${escapedColumnName} ${this.options.type}`;
-    
-    // before / after
-    columnDefinition = this.addPositionStatement(
-      columnDefinition,
-      this.options.addBefore ? await connection.escape(this.options.addBefore) : undefined,
-      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
-      !createTable
-    );
     
     // nullable
     columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
@@ -85,10 +75,17 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     // index
     columnDefinition = this.addIndexStatement(columnDefinition, this.options.index);
     
+    // after
+    columnDefinition = this.addAfterStatement(
+      columnDefinition,
+      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
+      !createTable
+    );
+    
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE IF NOT EXISTS ${escapedTableName} (${columnDefinition});`);
+      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
     }
     // Add column to existing table
     else

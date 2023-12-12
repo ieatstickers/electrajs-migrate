@@ -24,7 +24,6 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
       precision: 10,
       scale: 2,
       index: false,
-      addBefore: undefined,
       addAfter: undefined,
       ...options
     };
@@ -39,7 +38,6 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
         precision: Validators.integer(),
         scale: Validators.integer(),
         index: Validators.boolean(),
-        addBefore: Validators.string({ optional: true }),
         addAfter: Validators.string({ optional: true })
       }
     );
@@ -53,19 +51,14 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     // type
     let columnDefinition = `${escapedColumnName} DECIMAL(${this.options.precision}, ${this.options.scale})`;
     
-    // before / after
-    columnDefinition = this.addPositionStatement(
-      columnDefinition,
-      this.options.addBefore ? await connection.escape(this.options.addBefore) : undefined,
-      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
-      !createTable
-    );
-    
     // nullable
     columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
     
     // default
-    columnDefinition = this.addDefaultStatement(columnDefinition, this.options.default);
+    columnDefinition = this.addDefaultStatement(
+      columnDefinition,
+      typeof this.options.default === "number" ? this.options.default.toFixed(this.options.scale) : undefined
+    );
     
     // unsigned
     columnDefinition = this.addUnsignedStatement(columnDefinition, this.options.unsigned);
@@ -76,10 +69,17 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     // index
     columnDefinition = this.addIndexStatement(columnDefinition, this.options.index);
     
+    // after
+    columnDefinition = this.addAfterStatement(
+      columnDefinition,
+      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
+      !createTable
+    );
+    
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE IF NOT EXISTS ${escapedTableName} (${columnDefinition});`);
+      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
     }
     // Add column to existing table
     else

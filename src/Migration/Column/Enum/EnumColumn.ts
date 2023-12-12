@@ -21,7 +21,9 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
     
     const { valid, message } = Validators
       .all([
-        Validators.array(Validators.string()),
+        Validators.array(
+          Validators.all([ Validators.string(), Validators.minLength(1) ])
+        ),
         Validators.minLength(1)
       ])
       .validate(this.values);
@@ -32,7 +34,6 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       nullable: false,
       default: undefined,
       index: false,
-      addBefore: undefined,
       addAfter: undefined,
       ...options
     };
@@ -46,7 +47,6 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
         nullable: Validators.boolean(),
         default: Validators.enumValue(valuesEnum, { optional: true }),
         index: Validators.boolean(),
-        addBefore: Validators.string({ optional: true }),
         addAfter: Validators.string({ optional: true })
       }
     );
@@ -56,17 +56,8 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
   {
     const escapedColumnName = await connection.escape(this.name);
     const escapedTableName = await connection.escape(tableName);
-    const escapedValues = await Promise.all(this.values.map(value => connection.escape(value)));
     
-    let columnDefinition = `${escapedColumnName} ENUM('${escapedValues.join("', '")}')`;
-    
-    // before / after
-    columnDefinition = this.addPositionStatement(
-      columnDefinition,
-      this.options.addBefore ? await connection.escape(this.options.addBefore) : undefined,
-      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
-      !createTable
-    );
+    let columnDefinition = `${escapedColumnName} ENUM('${this.values.join("', '")}')`;
     
     // nullable
     columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
@@ -74,21 +65,28 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
     // default
     columnDefinition = this.addDefaultStatement(
       columnDefinition,
-      this.options.default ? await connection.escape(this.options.default) : undefined
+      this.options.default ? `'${this.options.default}'` : undefined
     );
     
     // index
     columnDefinition = this.addIndexStatement(columnDefinition, this.options.index);
     
+    // after
+    columnDefinition = this.addAfterStatement(
+      columnDefinition,
+      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
+      !createTable
+    );
+    
     // Create new table
     if (createTable)
     {
-      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition})`);
+      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
     }
     // Alter existing table
     else
     {
-      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition}`);
+      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition};`);
     }
   }
 }

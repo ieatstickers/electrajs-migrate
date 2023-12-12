@@ -67,28 +67,17 @@ export abstract class AbstractColumn implements ColumnInterface
     return primaryKey ? `${query} PRIMARY KEY` : query;
   }
   
-  protected addPositionStatement(query: string, addBefore: string, addAfter: string, tableExists: boolean): string
+  protected addAfterStatement(query: string, addAfter: string, tableExists: boolean): string
   {
-    // Log warning if createTable is true and addBefore or addAfter are set
-    if (!tableExists && (addBefore || addAfter))
+    // Log warning if createTable is true and addAfter is set
+    if (!tableExists && addAfter)
     {
-      console.warn(chalk.yellowBright('WARNING: addBefore and addAfter options are ignored when creating a new table.'));
-    }
-    // Log warning if table already exists and both addBefore and addAfter are set
-    else if (tableExists && addBefore && addAfter)
-    {
-      console.warn('WARNING: addBefore and addAfter options are mutually exclusive. Using addBefore.');
+      console.warn(chalk.yellowBright("WARNING: addAfter option is ignored when creating a new table."));
     }
     
     if (!tableExists) return query;
     
-    // addBefore
-    if (addBefore)
-    {
-      query += ` BEFORE ${addBefore}`;
-    }
-    // addAfter
-    else if (addAfter)
+    if (addAfter)
     {
       query += ` AFTER ${addAfter}`;
     }
