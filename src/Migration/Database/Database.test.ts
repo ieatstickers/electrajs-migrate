@@ -7,13 +7,13 @@ jest.mock("./Connection");
 
 describe("Database", () => {
   let mockConnection: Connection;
-  let database: Database;
   let operations: Array<() => Promise<void>>;
+  let database: Database;
   
   beforeEach(() => {
     mockConnection = new Connection({} as any);
-    database = new Database(mockConnection, operations);
     operations = [];
+    database = new Database(mockConnection, operations);
   });
   
   describe("constructor", () => {
