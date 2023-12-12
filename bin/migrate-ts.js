@@ -6,12 +6,12 @@
   if (typeof module !== 'undefined' && module.exports)
   {
     console.log('Loading CommonJS module...');
-    exec('node -r ts-node/register ./migrate.js');
+    exec('node -r ts-node/register ./migrate.js', { stdio: 'inherit' });
   }
   else
   {
     console.log('Loading ES module...');
-    exec('node --loader ts-node/esm ./migrate.js');
+    exec('node --loader ts-node/esm ./migrate.js', { stdio: 'inherit' });
     await import('../dist/migrate.mjs');
   }
 })();
