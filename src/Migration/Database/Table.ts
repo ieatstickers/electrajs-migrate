@@ -182,10 +182,10 @@ export class Table
     return this;
   }
   
-  public setColumnDefault(columnName: string, defaultValue: any): this
+  public setColumnDefault(columnName: string, defaultValue: string | number): this
   {
     this.operations.push(async () => {
-      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} MODIFY COLUMN ${await this.connection.escape(columnName)} DEFAULT ${await this.connection.escape(defaultValue)};`);
+      await this.connection.query(`ALTER TABLE ${await this.connection.escape(this.name)} MODIFY COLUMN ${await this.connection.escape(columnName)} DEFAULT ${typeof defaultValue === "string" ? `'${defaultValue}'` : defaultValue};`);
     });
     
     return this;
