@@ -110,6 +110,7 @@ export class Container
     const projectMigrations = {};
     const migrationDirs = this.getConfig().migrationDirs;
     const existingDbMigrations = await this.getMigrationDb().getMigrationRepository().getAll();
+    const migrationNameByTimestamp = {};
     
     // For each migration directory
     for (const groupKey in migrationDirs)
@@ -143,6 +144,16 @@ export class Container
           .validate(fileName);
         
         if (!valid) throw new Error(`Invalid migration file name: ${message}`);
+        
+        const [ year, month, day, time ] = fileName.split("_");
+        const timestamp = `${year}_${month}_${day}_${time}`;
+        
+        if (migrationNameByTimestamp[timestamp])
+        {
+          throw new Error(`Duplicate migration timestamp "${timestamp}" found in ${migrationNameByTimestamp[timestamp]} and ${file}`);
+        }
+        
+        migrationNameByTimestamp[timestamp] = file;
         
         const dbRow = Object.values(existingDbMigrations).find((dbRow) => dbRow.name === fileName);
         
