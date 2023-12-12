@@ -7,7 +7,6 @@ type ConnectionConfig = {
 export declare class Connection {
     private readonly connectionConfig;
     private connection;
-    private queryRunner;
     constructor(connection: ConnectionConfig);
     query(query: string, parameters?: Array<any>): Promise<any>;
     destroy(): Promise<void>;

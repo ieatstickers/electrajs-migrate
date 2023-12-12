@@ -6,4 +6,5 @@ export type DecimalColumnOptions = {
     precision: number;
     scale: number;
     index: boolean;
+    addAfter: string;
 };

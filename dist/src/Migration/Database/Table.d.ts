@@ -23,9 +23,10 @@ export declare class Table {
     datetime(name: string, options?: Partial<DateTimeColumnOptions>): this;
     blob(name: string, options?: Partial<BlobColumnOptions>): this;
     renameColumn(currentName: string, newName: string): this;
+    dropColumn(name: string): this;
     addColumnIndex(columnName: string): this;
     dropColumnIndex(columnName: string): this;
     setColumnNullable(columnName: string, nullable: boolean): this;
-    setColumnDefault(columnName: string, defaultValue: any): this;
+    setColumnDefault(columnName: string, defaultValue: string | number): this;
     drop(): this;
 }

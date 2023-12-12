@@ -6,4 +6,5 @@ export type StringColumnOptions = {
     default: string;
     length: number;
     index: boolean;
+    addAfter: string;
 };

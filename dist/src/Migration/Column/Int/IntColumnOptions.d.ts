@@ -8,4 +8,5 @@ export type IntColumnOptions = {
     autoIncrement: boolean;
     zeroFill: boolean;
     index: boolean;
+    addAfter: string;
 };
