@@ -1,7 +1,9 @@
 import { Container } from "./src/DI/Container";
-import { Commands } from "./src/Commands";
 import chalk from "chalk";
 import "reflect-metadata";
+import { StatusCommand } from "./src/Command/Status/StatusCommand";
+import { RunCommand } from "./src/Command/Run/RunCommand";
+import { RollbackCommand } from "./src/Command/Rollback/RollbackCommand";
 
 function dbAction(
   action: (
@@ -42,7 +44,7 @@ function dbAction(
       .command('status', 'Show the status of all migrations')
       .action(
         dbAction(async () => {
-          await Commands.status();
+          await (new StatusCommand()).execute()
         })
       );
     
@@ -51,10 +53,12 @@ function dbAction(
       .command('run', 'Run all migrations')
       .option('--rollback-on-error', 'Automatically rollback migrations if an error occurs')
       .action(
-        dbAction(async (args, options, logger) => {
-          await Commands.run({
+        dbAction(async (args, options) => {
+          const command = new RunCommand({
             rollbackOnError: options.rollbackOnError || false
           });
+          
+          await command.execute();
         })
       );
     
@@ -63,7 +67,7 @@ function dbAction(
       .command('rollback', 'Rollback the last batch of migrations')
       .action(
         dbAction(async () => {
-          await Commands.rollback();
+          await (new RollbackCommand()).execute();
         })
       );
     
