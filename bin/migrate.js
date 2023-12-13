@@ -1,14 +1,27 @@
 #!/usr/bin/env node
 
 (async () => {
-  if (typeof module !== 'undefined' && module.exports)
+  const path = await import("path");
+  const { promises: fs } = await import("fs");
+  const packageJsonPath = path.join(process.cwd(), "package.json");
+  let packageJson;
+
+  try
   {
-    console.log('Loading CommonJS module...');
-    await import('../dist/migrate.cjs');
+    packageJson = JSON.parse(await fs.readFile(packageJsonPath, { encoding: "utf8" }));
   }
-  else
+  catch (error)
   {
-    console.log('Loading ES module...');
-    await import('../dist/migrate.mjs');
+    throw new Error("No package.json found. Command must be run from the root of your project.");
   }
+
+  if (packageJson.type === "module")
+  {
+    console.log("Loading ES module...");
+    await import("../dist/migrate.mjs");
+    return;
+  }
+
+  console.log("Loading CommonJS module...");
+  await import("../dist/migrate.cjs");
 })();
