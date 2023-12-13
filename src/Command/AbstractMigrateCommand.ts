@@ -3,16 +3,16 @@ import { MigrationFile } from "../Type/MigrationFile";
 import { MigrationInterface } from "../Migration/MigrationInterface";
 import { Modules } from "../Utility/Modules";
 
-declare const __non_webpack_require__: typeof require;
-
 export abstract class AbstractMigrateCommand implements MigrateCommandInterface
 {
   public abstract execute(): void | Promise<void>;
   
   protected async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
   {
-    return __non_webpack_require__(`${migration.filepath}`);
-    const importedMigrationModule = await Modules.import(migration.filepath);
+    const importedMigrationModule = Modules.isCommonJS()
+      ? Modules.require(migration.filepath)
+      : await Modules.import(migration.filepath);
+    
     let migrationClass: any;
     
     const migrationClassName = migration.name.split("_").pop();
