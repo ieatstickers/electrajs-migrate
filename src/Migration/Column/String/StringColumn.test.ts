@@ -18,7 +18,21 @@ describe("StringColumn", () => {
   
   describe("constructor", () => {
     
-    it("initializes properties correctly", () => {
+    it("initializes properties correctly with no options", () => {
+      const stringColumn = new StringColumn("name");
+      expect(stringColumn).toHaveProperty("name", "name");
+      expect(stringColumn).toHaveProperty("options", {
+        type: StringColumnTypeEnum.VARCHAR,
+        nullable: false,
+        primaryKey: false,
+        default: undefined,
+        length: 255,
+        index: false,
+        addAfter: undefined
+      });
+    });
+    
+    it("initializes properties correctly with options", () => {
       const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
       expect(stringColumn).toHaveProperty("name", "name");
       expect(stringColumn).toHaveProperty("options", {

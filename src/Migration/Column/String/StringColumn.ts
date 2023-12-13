@@ -16,13 +16,14 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     
     this.name = name;
     this.validateName(this.name);
+    const type = options?.type || StringColumnTypeEnum.VARCHAR;
     
     this.options = {
-      type: StringColumnTypeEnum.VARCHAR,
+      type: type,
       nullable: false,
       primaryKey: false,
       default: undefined,
-      length: options.type && options.type !== StringColumnTypeEnum.VARCHAR ? undefined : 255,
+      length: type !== StringColumnTypeEnum.VARCHAR ? undefined : 255,
       index: false,
       addAfter: undefined,
       ...options
