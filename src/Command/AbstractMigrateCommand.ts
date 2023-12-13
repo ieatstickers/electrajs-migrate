@@ -2,7 +2,8 @@ import { MigrateCommandInterface } from "./MigrateCommandInterface";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MigrationInterface } from "../Migration/MigrationInterface";
 import { Modules } from "../Utility/Modules";
-const path = require('path');
+
+declare const __non_webpack_require__: typeof require;
 
 export abstract class AbstractMigrateCommand implements MigrateCommandInterface
 {
@@ -10,12 +11,7 @@ export abstract class AbstractMigrateCommand implements MigrateCommandInterface
   
   protected async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
   {
-    console.log(
-      `requiring: ${migration.filepath}`,
-      `from: ${__dirname}`,
-      `as: ${path.relative(__dirname, migration.filepath)}`,
-      )
-    return require(`${path.relative(__dirname, migration.filepath)}`);
+    return __non_webpack_require__(`${migration.filepath}`);
     const importedMigrationModule = await Modules.import(migration.filepath);
     let migrationClass: any;
     
