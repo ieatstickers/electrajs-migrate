@@ -1,5 +1,6 @@
 
 declare const __non_webpack_require__: typeof require;
+import fs from "fs";
 
 export class Modules
 {
@@ -27,9 +28,20 @@ export class Modules
     return module;
   }
   
-  public static isCommonJS(): boolean
+  public static async isCommonJS(): Promise<boolean>
   {
-    console.log('module.exports', module.exports);
-    return typeof module === "object" && typeof module.exports !== null;
+    const packageJsonPath = `${process.cwd()}/package.json`;
+    let packageJson: { [key: string]: any };
+    
+    try
+    {
+      packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, { encoding: "utf-8" }));
+    }
+    catch (error)
+    {
+      throw new Error("Command must be run from the root of your project containing a valid package.json file.");
+    }
+    
+    return packageJson.type !== "module";
   }
 }
