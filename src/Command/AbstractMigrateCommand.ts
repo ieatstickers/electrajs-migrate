@@ -2,6 +2,7 @@ import { MigrateCommandInterface } from "./MigrateCommandInterface";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MigrationInterface } from "../Migration/MigrationInterface";
 import { Modules } from "../Utility/Modules";
+const path = require('path');
 
 export abstract class AbstractMigrateCommand implements MigrateCommandInterface
 {
@@ -9,7 +10,7 @@ export abstract class AbstractMigrateCommand implements MigrateCommandInterface
   
   protected async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
   {
-    return require(`${migration.filepath}`);
+    return require(`${path.relative(__dirname, migration.filepath)}`);
     const importedMigrationModule = await Modules.import(migration.filepath);
     let migrationClass: any;
     
