@@ -9,6 +9,7 @@ export abstract class AbstractMigrateCommand implements MigrateCommandInterface
   
   protected async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
   {
+    return require(`${migration.filepath}`);
     const importedMigrationModule = await Modules.import(migration.filepath);
     let migrationClass: any;
     
