@@ -9,7 +9,11 @@ export abstract class AbstractMigrateCommand implements MigrateCommandInterface
   
   protected async getMigrationClassInstance(migration: MigrationFile): Promise<MigrationInterface>
   {
-    const importedMigrationModule = Modules.isCommonJS()
+    const isCommonJS = Modules.isCommonJS();
+    
+    console.log('isCommonJS', isCommonJS);
+    
+    const importedMigrationModule = isCommonJS
       ? Modules.require(migration.filepath)
       : await Modules.import(migration.filepath);
     
