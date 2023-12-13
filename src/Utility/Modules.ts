@@ -29,6 +29,6 @@ export class Modules
   
   public static isCommonJS(): boolean
   {
-    return typeof module === "object" && typeof module.exports != null;
+    return typeof module === "object" && typeof module.exports === "object";
   }
 }

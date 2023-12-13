@@ -22,7 +22,7 @@
       ...process.env,
       NODE_OPTIONS: [
         process.env["NODE_OPTIONS"],
-        packageJson.type === "module" ? "--loader ts-node/esm" : "--loader ts-node",
+        packageJson.type === "module" ? "--loader ts-node/esm" : "--require ts-node/register",
         "--no-warnings",
       ]
       .filter((item) => !!item)
