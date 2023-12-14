@@ -13,7 +13,7 @@ const baseConfig = {
       // TypeScript
       {
         test: /\.(ts|tsx)$/,
-        exclude: /\.test\.ts$/,
+        exclude: /\.(test|testing)\.ts$/,
         use:  [ { loader: "ts-loader" } ]
       }
     ]
