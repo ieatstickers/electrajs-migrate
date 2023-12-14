@@ -1,8 +1,9 @@
 import { IntColumn } from "./IntColumn";
 import { IntColumnTypeEnum } from "./IntColumnTypeEnum";
 import { Connection } from "../../Database/Connection";
-import chalk from "chalk";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -11,8 +12,6 @@ jest.mock("../../Database/Connection", () => {
     }))
   };
 });
-
-console.warn = jest.fn();
 
 describe("IntColumn", () => {
   
@@ -109,7 +108,7 @@ describe("IntColumn", () => {
         const mockConnection = new Connection({} as any);
         const intColumn = new IntColumn("age", testCase.options);
         await intColumn.create(mockConnection, "test_table", testCase.createTable);
-        if (testCase.warning) expect(console.warn).toHaveBeenCalledWith(chalk.yellowBright(testCase.warning));
+        if (testCase.warning) expect(Log.yellow).toHaveBeenCalledWith(testCase.warning);
         expect(mockConnection.query).toHaveBeenCalledWith(testCase.query);
       });
     }

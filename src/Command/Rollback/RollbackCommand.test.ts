@@ -1,9 +1,10 @@
 import { Container } from "../../DI/Container";
 import { RollbackCommand } from "./RollbackCommand";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
 jest.mock("../../DI/Container");
 jest.mock("../../Utility/Modules");
+jest.mock("../../Utility/Log");
 jest.mock("../../Migration/Database/MySql");
 
 class MockMigration
@@ -11,8 +12,6 @@ class MockMigration
   up = jest.fn();
   down = jest.fn();
 }
-
-console.log = jest.fn();
 
 describe("RollbackCommand", () => {
   
@@ -96,7 +95,7 @@ describe("RollbackCommand", () => {
         created: "2023-12-12 11:08:11",
         updated: "2023-12-12 11:08:11"
       });
-      expect(console.log).toHaveBeenCalledWith(chalk.greenBright("Successfully rolled back 2 migrations"));
+      expect(Log.green).toHaveBeenCalledWith("Successfully rolled back 2 migrations");
     });
     
     it("logs correct message when migrations successfully run", async () => {
@@ -137,7 +136,7 @@ describe("RollbackCommand", () => {
         created: "2023-12-12 11:08:11",
         updated: "2023-12-12 11:08:11"
       });
-      expect(console.log).toHaveBeenCalledWith(chalk.greenBright("Successfully rolled back 1 migration"));
+      expect(Log.green).toHaveBeenCalledWith("Successfully rolled back 1 migration")
     });
     
     it("logs an error if a migration fails to roll back", async () => {
@@ -177,7 +176,7 @@ describe("RollbackCommand", () => {
       rollbackCommand["getMigrationClassInstance"] = jest.fn().mockResolvedValue(migrationInstance);
       await rollbackCommand.execute();
       expect(migrationInstance.down).toHaveBeenCalledTimes(1);
-      expect(console.log).toHaveBeenCalledWith(chalk.redBright("Failed to roll back migrations: Something went wrong"));
+      expect(Log.red).toHaveBeenCalledWith("Failed to roll back migrations: Something went wrong");
     });
     
   });

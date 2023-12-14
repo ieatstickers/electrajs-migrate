@@ -1,8 +1,9 @@
 import { StringColumn } from "./StringColumn";
 import { StringColumnTypeEnum } from "./StringColumnTypeEnum";
 import { Connection } from "../../Database/Connection";
-import chalk from "chalk";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -11,8 +12,6 @@ jest.mock("../../Database/Connection", () => {
     }))
   };
 });
-
-console.warn = jest.fn();
 
 describe("StringColumn", () => {
   
@@ -184,7 +183,7 @@ describe("StringColumn", () => {
         const mockConnection = new Connection({} as any);
         const stringColumn = new StringColumn("name", testCase.options);
         await stringColumn.create(mockConnection, "test_table", testCase.createTable);
-        if (testCase.warning) expect(console.warn).toHaveBeenCalledWith(chalk.yellowBright(testCase.warning));
+        if (testCase.warning) expect(Log.yellow).toHaveBeenCalledWith(testCase.warning);
         expect(mockConnection.query).toHaveBeenCalledWith(testCase.query);
       });
     }

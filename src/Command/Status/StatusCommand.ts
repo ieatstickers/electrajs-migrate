@@ -1,7 +1,7 @@
 import { AbstractMigrateCommand } from "../AbstractMigrateCommand";
 import { Container } from "../../DI/Container";
 import { MigrationFile } from "../../Type/MigrationFile";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
 export class StatusCommand extends AbstractMigrateCommand
 {
@@ -15,17 +15,19 @@ export class StatusCommand extends AbstractMigrateCommand
       const migrationFiles: Array<MigrationFile> = migrationFilesByGroup[groupKey];
       const { name: groupDisplayName } = migrationDirs[groupKey];
       
-      console.log(chalk.yellowBright(groupDisplayName));
+      Log.yellow(groupDisplayName);
       
       if (migrationFiles.length === 0)
       {
-        console.log(chalk.redBright('  * No migrations found *'));
+        Log.red('  * No migrations found *');
         continue;
       }
       
       for (const migrationFile of migrationFiles)
       {
-        console.log(`  ${migrationFile.executed ? chalk.greenBright(migrationFile.name) : chalk.redBright(migrationFile.name)}`);
+        migrationFile.executed
+          ? Log.green(`  ${migrationFile.name}`)
+          : Log.red(`  ${migrationFile.name}`);
       }
     }
   }

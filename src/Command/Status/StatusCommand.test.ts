@@ -1,9 +1,9 @@
 import { Container } from "../../DI/Container";
 import { StatusCommand } from "./StatusCommand";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
-console.log = jest.fn();
 
+jest.mock("../../Utility/Log");
 jest.mock("../../DI/Container");
 
 describe("StatusCommand", () => {
@@ -14,8 +14,8 @@ describe("StatusCommand", () => {
       (Container.getConfig as jest.Mock).mockReturnValue({ migrationDirs: { "group1": { name: "Group 1" } } });
       (Container.getProjectMigrations as jest.Mock).mockResolvedValue({ "group1": [] });
       await (new StatusCommand()).execute();
-      expect(console.log).toHaveBeenCalledWith(chalk.yellowBright("Group 1"));
-      expect(console.log).toHaveBeenCalledWith(chalk.redBright("  * No migrations found *"));
+      expect(Log.yellow).toHaveBeenCalledWith("Group 1");
+      expect(Log.red).toHaveBeenCalledWith("  * No migrations found *");
       
     });
     
@@ -28,9 +28,9 @@ describe("StatusCommand", () => {
         ]
       });
       await (new StatusCommand()).execute();
-      expect(console.log).toHaveBeenCalledWith(chalk.yellowBright("Group 1"));
-      expect(console.log).toHaveBeenCalledWith(`  ${chalk.greenBright("Migration1")}`);
-      expect(console.log).toHaveBeenCalledWith(`  ${chalk.redBright("Migration2")}`);
+      expect(Log.yellow).toHaveBeenCalledWith("Group 1");
+      expect(Log.green).toHaveBeenCalledWith("  Migration1");
+      expect(Log.red).toHaveBeenCalledWith("  Migration2");
     });
     
   });

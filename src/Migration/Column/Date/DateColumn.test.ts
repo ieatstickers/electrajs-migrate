@@ -1,7 +1,8 @@
 import { Connection } from "../../Database/Connection";
 import { DateColumn } from "./DateColumn";
-import chalk from "chalk";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -10,9 +11,6 @@ jest.mock("../../Database/Connection", () => {
     }))
   };
 });
-
-
-console.warn = jest.fn();
 
 describe("DateColumn", () => {
   
@@ -107,7 +105,7 @@ describe("DateColumn", () => {
         const mockConnection = new Connection({} as any);
         const dateColumn = new DateColumn("dateOfBirth", testCase.options);
         await dateColumn.create(mockConnection, "test_table", testCase.createTable);
-        if (testCase.warning) expect(console.warn).toHaveBeenCalledWith(chalk.yellowBright(testCase.warning));
+        if (testCase.warning) expect(Log.yellow).toHaveBeenCalledWith(testCase.warning);
         expect(mockConnection.query).toHaveBeenCalledWith(testCase.query);
       });
     }

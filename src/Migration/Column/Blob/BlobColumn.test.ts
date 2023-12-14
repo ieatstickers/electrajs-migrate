@@ -1,8 +1,9 @@
 import { BlobColumn } from "./BlobColumn";
 import { BlobColumnTypeEnum } from "./BlobColumnTypeEnum";
 import { Connection } from "../../Database/Connection";
-import chalk from "chalk";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -12,8 +13,6 @@ jest.mock("../../Database/Connection", () => {
   };
 });
 
-
-console.warn = jest.fn();
 
 describe("BlobColumn", () => {
   
@@ -105,7 +104,7 @@ describe("BlobColumn", () => {
         const mockConnection = new Connection({} as any);
         const blobColumn = new BlobColumn("imageContent", testCase.options);
         await blobColumn.create(mockConnection, "test_table", testCase.createTable);
-        if (testCase.warning) expect(console.warn).toHaveBeenCalledWith(chalk.yellowBright(testCase.warning));
+        if (testCase.warning) expect(Log.yellow).toHaveBeenCalledWith(testCase.warning);
         expect(mockConnection.query).toHaveBeenCalledWith(testCase.query);
       });
     }

@@ -1,6 +1,8 @@
 import { Connection } from "../../Database/Connection";
 import { EnumColumn } from "./EnumColumn";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -9,8 +11,6 @@ jest.mock("../../Database/Connection", () => {
     }))
   };
 });
-
-console.warn = jest.fn();
 
 describe("EnumColumn", () => {
   

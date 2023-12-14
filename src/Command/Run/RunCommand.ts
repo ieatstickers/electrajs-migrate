@@ -6,8 +6,10 @@ import { MigrationFile } from "../../Type/MigrationFile";
 import { MigrationInterface } from "../../Migration/MigrationInterface";
 import { Migration } from "../../Database/Migration/Repository/Migration/Migration";
 import { DateTime } from "luxon";
-import chalk from "chalk";
 import { RollbackCommand } from "../Rollback/RollbackCommand";
+import { Log } from "../../Utility/Log";
+
+console.log = jest.fn();
 
 export class RunCommand extends AbstractMigrateCommand
 {
@@ -49,25 +51,25 @@ export class RunCommand extends AbstractMigrateCommand
         migrationsRun++;
       }
       
-      console.log(chalk.greenBright(`Successfully ran ${migrationsRun} migration${migrationsRun !== 1 ? 's' : ''}`));
+      Log.green(`Successfully ran ${migrationsRun} migration${migrationsRun !== 1 ? 's' : ''}`);
     }
     catch (e)
     {
-      console.log(chalk.redBright(`Failed to run migrations: ${e.message}`));
-      console.log(chalk.redBright(e.stack));
+      Log.red(`Failed to run migrations: ${e.message}`);
+      Log.red(e.stack);
       
       if (this.options?.rollbackOnError === true)
       {
         if (migrationsRun > 0)
         {
           console.log('');
-          console.log(chalk.yellowBright("Attempting to roll back migrations..."));
+          Log.yellow("Attempting to roll back migrations...");
           await (new RollbackCommand()).execute();
         }
         else
         {
           console.log('');
-          console.log(chalk.yellowBright("Nothing to roll back - 0 migrations finished successfully."));
+          Log.yellow("Nothing to roll back - 0 migrations finished successfully.");
         }
       }
     }

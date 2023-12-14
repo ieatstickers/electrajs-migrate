@@ -1,14 +1,13 @@
 import { Container } from "../../DI/Container";
 import { RunCommand } from "./RunCommand";
 import { Modules } from "../../Utility/Modules";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
 jest.mock("../../DI/Container");
 jest.mock("../../Migration/Database/Connections");
 jest.mock("../../Migration/Database/MySql");
 jest.mock("../../Utility/Modules");
-
-console.log = jest.fn();
+jest.mock("../../Utility/Log");
 
 class MockMigration
 {
@@ -75,7 +74,7 @@ describe("RunCommand", () => {
       await runCommand.execute();
       expect(mockMigration.up).toHaveBeenCalledTimes(3);
       expect(Container.getMigrationDb().getMigrationRepository().save).toHaveBeenCalledTimes(3);
-      expect(console.log).toHaveBeenCalledWith(chalk.greenBright("Successfully ran 3 migrations"));
+      expect(Log.green).toHaveBeenCalledWith("Successfully ran 3 migrations");
     });
     
     it("correctly runs a single migration", async () => {
@@ -101,7 +100,7 @@ describe("RunCommand", () => {
       await runCommand.execute();
       expect(mockMigration.up).toHaveBeenCalledTimes(1);
       expect(Container.getMigrationDb().getMigrationRepository().save).toHaveBeenCalledTimes(1);
-      expect(console.log).toHaveBeenCalledWith(chalk.greenBright("Successfully ran 1 migration"));
+      expect(Log.green).toHaveBeenCalledWith("Successfully ran 1 migration");
     });
     
     it("logs an error if a migration fails", async () => {
@@ -136,7 +135,7 @@ describe("RunCommand", () => {
       await runCommand.execute();
       expect(mockMigration.up).toHaveBeenCalledTimes(1);
       expect(Container.getMigrationDb().getMigrationRepository().save).toHaveBeenCalledTimes(0);
-      expect(console.log).toHaveBeenCalledWith(chalk.redBright(`Failed to run migrations: Migration failed`));
+      expect(Log.red).toHaveBeenCalledWith(`Failed to run migrations: Migration failed`);
     });
     
     it("logs correct error if a migration fails, rollback on error is set and there is nothing to roll back", async () => {
@@ -163,10 +162,8 @@ describe("RunCommand", () => {
       await runCommand.execute();
       expect(mockMigration.up).toHaveBeenCalledTimes(1);
       expect(Container.getMigrationDb().getMigrationRepository().save).toHaveBeenCalledTimes(0);
-      expect(console.log).toHaveBeenNthCalledWith(1, chalk.redBright("Failed to run migrations: Migration failed"));
-      // 2nd and 3rd call are the stack trace from the error and spacing
-      expect(console.log)
-        .toHaveBeenNthCalledWith(4, chalk.yellowBright("Nothing to roll back - 0 migrations finished successfully."));
+      expect(Log.red).toHaveBeenCalledWith("Failed to run migrations: Migration failed");
+      expect(Log.yellow).toHaveBeenCalledWith("Nothing to roll back - 0 migrations finished successfully.");
     });
     
     it("logs correct message if a migration fails, rollback on error is set and there is something to roll back", async () => {
@@ -218,9 +215,8 @@ describe("RunCommand", () => {
       await runCommand.execute();
       expect(mockMigration.up).toHaveBeenCalledTimes(2);
       expect(Container.getMigrationDb().getMigrationRepository().save).toHaveBeenCalledTimes(1);
-      expect(console.log).toHaveBeenNthCalledWith(1, chalk.redBright("Failed to run migrations: Migration failed"));
-      // 2nd and 3rd call are the stack trace from the error and spacing
-      expect(console.log).toHaveBeenNthCalledWith(4, chalk.yellowBright("Attempting to roll back migrations..."));
+      expect(Log.red).toHaveBeenCalledWith("Failed to run migrations: Migration failed");
+      expect(Log.yellow).toHaveBeenCalledWith("Attempting to roll back migrations...");
     });
     
   });

@@ -1,7 +1,8 @@
 import { Connection } from "../../Database/Connection";
 import { TimeColumn } from "./TimeColumn";
-import chalk from "chalk";
+import { Log } from "../../../Utility/Log";
 
+jest.mock("../../../Utility/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({
@@ -11,7 +12,6 @@ jest.mock("../../Database/Connection", () => {
   };
 });
 
-console.warn = jest.fn();
 
 describe("TimeColumn", () => {
   
@@ -103,7 +103,7 @@ describe("TimeColumn", () => {
         const mockConnection = new Connection({} as any);
         const timeColumn = new TimeColumn("startTime", testCase.options);
         await timeColumn.create(mockConnection, "test_table", testCase.createTable);
-        if (testCase.warning) expect(console.warn).toHaveBeenCalledWith(chalk.yellowBright(testCase.warning));
+        if (testCase.warning) expect(Log.yellow).toHaveBeenCalledWith(testCase.warning);
         expect(mockConnection.query).toHaveBeenCalledWith(testCase.query);
       });
     }

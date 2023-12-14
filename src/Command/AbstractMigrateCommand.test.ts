@@ -75,6 +75,42 @@ describe("AbstractMigrateCommand", () => {
         .toThrow(`Could not find migration class in ${migrationFile.filepath}`);
     });
     
+    it("uses Modules.require if Modules.isCommonJS returns true", async () => {
+      (Modules.isCommonJS as jest.Mock).mockResolvedValue(true);
+      (Modules.require as jest.Mock).mockReturnValue({
+        "MockMigration": MockMigration
+      });
+      const migrationFile = {
+        name: "2023_01_01_103054_MockMigration",
+        filepath: "path/to/migration",
+        group: "test",
+        groupDisplayName: "Test",
+        executed: null,
+        batch: 1
+      };
+      const concreteCommand = new ConcreteMigrateCommand();
+      await concreteCommand.getMigrationClassInstance(migrationFile);
+      expect(Modules.require).toHaveBeenCalledWith(migrationFile.filepath);
+    });
+    
+    it("uses Modules.import if Modules.isCommonJS returns false", async () => {
+      (Modules.isCommonJS as jest.Mock).mockResolvedValue(false);
+      (Modules.import as jest.Mock).mockReturnValue({
+        "MockMigration": MockMigration
+      });
+      const migrationFile = {
+        name: "2023_01_01_103054_MockMigration",
+        filepath: "path/to/migration",
+        group: "test",
+        groupDisplayName: "Test",
+        executed: null,
+        batch: 1
+      };
+      const concreteCommand = new ConcreteMigrateCommand();
+      await concreteCommand.getMigrationClassInstance(migrationFile);
+      expect(Modules.import).toHaveBeenCalledWith(migrationFile.filepath);
+    });
+    
   });
   
 });

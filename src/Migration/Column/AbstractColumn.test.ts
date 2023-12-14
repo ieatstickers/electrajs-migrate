@@ -1,7 +1,7 @@
 import { AbstractColumn } from "./AbstractColumn";
 import { Schema, Validators } from "@electra/utility";
 import { Connection } from "../Database/Connection";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
 class TestColumn extends AbstractColumn
 {
@@ -18,7 +18,7 @@ class TestColumn extends AbstractColumn
   }
 }
 
-console.warn = jest.fn();
+jest.mock("../../Utility/Log");
 
 describe("AbstractColumn", () => {
   let testColumn;
@@ -166,8 +166,8 @@ describe("AbstractColumn", () => {
     
     it("does not add an after statement when table does not exist", () => {
       expect(testColumn.addAfterStatement("columnDefinition", "addAfter", false)).toBe("columnDefinition");
-      expect(console.warn)
-        .toHaveBeenCalledWith(chalk.yellowBright("WARNING: addAfter option is ignored when creating a new table."));
+      expect(Log.yellow)
+        .toHaveBeenCalledWith("WARNING: addAfter option is ignored when creating a new table.");
     });
     
   });

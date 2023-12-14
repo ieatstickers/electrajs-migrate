@@ -1,7 +1,7 @@
 import { Schema, Validators } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
 import { Connection } from "../Database/Connection";
-import chalk from "chalk";
+import { Log } from "../../Utility/Log";
 
 export abstract class AbstractColumn implements ColumnInterface
 {
@@ -72,7 +72,7 @@ export abstract class AbstractColumn implements ColumnInterface
     // Log warning if createTable is true and addAfter is set
     if (!tableExists && addAfter)
     {
-      console.warn(chalk.yellowBright("WARNING: addAfter option is ignored when creating a new table."));
+      Log.yellow("WARNING: addAfter option is ignored when creating a new table.");
     }
     
     if (!tableExists) return query;

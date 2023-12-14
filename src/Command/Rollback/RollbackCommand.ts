@@ -1,11 +1,11 @@
 import { AbstractMigrateCommand } from "../AbstractMigrateCommand";
 import { Container } from "../../DI/Container";
-import chalk from "chalk";
 import { Connections } from "../../Migration/Database/Connections";
 import { MySql } from "../../Migration/Database/MySql";
 import { MigrationInterface } from "../../Migration/MigrationInterface";
 import { Migration } from "../../Database/Migration/Repository/Migration/Migration";
 import { MigrationFile } from "../../Type/MigrationFile";
+import { Log } from "../../Utility/Log";
 
 export class RollbackCommand extends AbstractMigrateCommand
 {
@@ -19,7 +19,7 @@ export class RollbackCommand extends AbstractMigrateCommand
     
     if (!migrationsToRollBack.length)
     {
-      console.log(chalk.blueBright('No migrations to rollback'));
+      Log.blue('No migrations to rollback');
       return;
     }
     
@@ -36,12 +36,12 @@ export class RollbackCommand extends AbstractMigrateCommand
         migrationsRolledBack++;
       }
       
-      console.log(chalk.greenBright(`Successfully rolled back ${migrationsRolledBack} migration${migrationsRolledBack !== 1 ? 's' : ''}`));
+      Log.green(`Successfully rolled back ${migrationsRolledBack} migration${migrationsRolledBack !== 1 ? 's' : ''}`);
     }
     catch (e)
     {
-      console.log(chalk.redBright(`Failed to roll back migrations: ${e.message}`));
-      console.log(chalk.redBright(e.stack));
+      Log.red(`Failed to roll back migrations: ${e.message}`);
+      Log.red(e.stack);
     }
     
     // Close all connections
