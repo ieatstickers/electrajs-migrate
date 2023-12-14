@@ -5,7 +5,7 @@ import { MySql } from "../../Migration/Database/MySql";
 import { MigrationInterface } from "../../Migration/MigrationInterface";
 import { Migration } from "../../Database/Migration/Repository/Migration/Migration";
 import { MigrationFile } from "../../Type/MigrationFile";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 export class RollbackCommand extends AbstractMigrateCommand
 {

@@ -1,7 +1,7 @@
 import { AbstractMigrateCommand } from "../AbstractMigrateCommand";
 import { Container } from "../../DI/Container";
 import { MigrationFile } from "../../Type/MigrationFile";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 export class StatusCommand extends AbstractMigrateCommand
 {

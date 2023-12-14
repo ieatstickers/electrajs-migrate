@@ -1,9 +1,9 @@
 import { Container } from "../../DI/Container";
 import { StatusCommand } from "./StatusCommand";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 
-jest.mock("../../Utility/Log");
+jest.mock("../../Utility/Log/Log");
 jest.mock("../../DI/Container");
 
 describe("StatusCommand", () => {

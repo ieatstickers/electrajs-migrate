@@ -1,8 +1,8 @@
 import { Connection } from "../../Database/Connection";
 import { DecimalColumn } from "./DecimalColumn";
-import { Log } from "../../../Utility/Log";
+import { Log } from "../../../Utility/Log/Log";
 
-jest.mock("../../../Utility/Log");
+jest.mock("../../../Utility/Log/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({

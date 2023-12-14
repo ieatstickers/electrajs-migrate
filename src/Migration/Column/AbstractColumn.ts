@@ -1,7 +1,7 @@
 import { Schema, Validators } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
 import { Connection } from "../Database/Connection";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 export abstract class AbstractColumn implements ColumnInterface
 {

@@ -1,7 +1,7 @@
 import { AbstractColumn } from "./AbstractColumn";
 import { Schema, Validators } from "@electra/utility";
 import { Connection } from "../Database/Connection";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 class TestColumn extends AbstractColumn
 {
@@ -18,7 +18,7 @@ class TestColumn extends AbstractColumn
   }
 }
 
-jest.mock("../../Utility/Log");
+jest.mock("../../Utility/Log/Log");
 
 describe("AbstractColumn", () => {
   let testColumn;

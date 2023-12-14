@@ -1,9 +1,9 @@
 import { IntColumn } from "./IntColumn";
 import { IntColumnTypeEnum } from "./IntColumnTypeEnum";
 import { Connection } from "../../Database/Connection";
-import { Log } from "../../../Utility/Log";
+import { Log } from "../../../Utility/Log/Log";
 
-jest.mock("../../../Utility/Log");
+jest.mock("../../../Utility/Log/Log");
 jest.mock("../../Database/Connection", () => {
   return {
     Connection: jest.fn().mockImplementation(() => ({

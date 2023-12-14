@@ -1,10 +1,10 @@
 import { Container } from "../../DI/Container";
 import { RollbackCommand } from "./RollbackCommand";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 jest.mock("../../DI/Container");
 jest.mock("../../Utility/Modules");
-jest.mock("../../Utility/Log");
+jest.mock("../../Utility/Log/Log");
 jest.mock("../../Migration/Database/MySql");
 
 class MockMigration

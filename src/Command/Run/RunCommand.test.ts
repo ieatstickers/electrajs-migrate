@@ -1,13 +1,13 @@
 import { Container } from "../../DI/Container";
 import { RunCommand } from "./RunCommand";
 import { Modules } from "../../Utility/Modules";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 jest.mock("../../DI/Container");
 jest.mock("../../Migration/Database/Connections");
 jest.mock("../../Migration/Database/MySql");
 jest.mock("../../Utility/Modules");
-jest.mock("../../Utility/Log");
+jest.mock("../../Utility/Log/Log");
 
 class MockMigration
 {

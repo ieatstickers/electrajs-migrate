@@ -7,7 +7,7 @@ import { MigrationInterface } from "../../Migration/MigrationInterface";
 import { Migration } from "../../Database/Migration/Repository/Migration/Migration";
 import { DateTime } from "luxon";
 import { RollbackCommand } from "../Rollback/RollbackCommand";
-import { Log } from "../../Utility/Log";
+import { Log } from "../../Utility/Log/Log";
 
 console.log = jest.fn();
 
