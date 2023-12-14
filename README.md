@@ -124,7 +124,7 @@ The `@electra/migrate` package provides several CLI commands for working with mi
 The `status` command will display the current status of all the migrations in your project, organised by group.
 
 ```bash
-electra-migrate status
+migrate status
 ```
 
 See below for an example of the output based on the example configuration and migrations above. Any migrations within each group that haven't yet been run will appear in red, and any migrations that have been run will appear in green.
@@ -141,7 +141,7 @@ User Module
 As you would expect, the `run` command will run all migrations (that haven't already been run), in order of the datetime in the file name.
 
 ```bash
-electra-migrate run
+migrate run
 ```
 
 Example output:
@@ -155,7 +155,7 @@ Successfully ran 4 migrations
 The `run` command accepts a `--rollback-on-error` flag. If this flag is present, then in the event that any of the migrations fail, all migrations in the batch will be rolled back to ensure that you're not left in a state where some migrations have run and some haven't.
 
 ```bash
-electra-migrate run --rollback-on-error
+migrate run --rollback-on-error
 ```
 
 #### rollback
@@ -163,7 +163,7 @@ electra-migrate run --rollback-on-error
 @electra/migrate keeps track of which migrations are run in the same batch. If you execute the `run` command and there are multiple migrations that haven't yet been run, they will all be run in the same batch. This means that when you subsequently execute the `rollback` command, all migrations that were run in the last batch will be rolled back.
 
 ```bash
-electra-migrate rollback
+migrate rollback
 ```
 
 Example output:
@@ -177,15 +177,189 @@ Successfully rolled back 4 migrations
 The `help` command will display a list of all available commands.
 
 ```bash
-electra-migrate help
+migrate help
 ```
 
-TODO: Add usage examples
+## CommonJS vs ES Modules
 
-- js + commonjs
-- js + esm
-- ts + commonjs (if possible)
-- ts + esm
+@electra/migrate supports both CommonJS and ES modules and will look at your project's package.json to decide which one to use. The following examples show how to configure your project for each.
+
+### CommonJS
+
+If the `type` property in your project's package.json isn't set or is set to `commonjs`, then @electra/migrate will use CommonJS modules.
+
+Your migrate configuration file should be exported using `module.exports`:
+
+```js
+// migrate.config.js
+
+module.exports = {
+  // ...
+}
+```
+
+Your migration files should be exported using `module.exports` and use `require` to import the `AbstractMigration` class:
+
+```js
+// 2023_12_06_194529_CreateUsersTable.js
+
+const { AbstractMigration } = require("@electra/migrate");
+
+module.exports = class CreateUsersTable extends AbstractMigration 
+{
+  async up(mysql)
+  {
+    // ...
+  }
+  
+  async down(mysql)
+  {
+    // ...
+  }
+}
+```
+
+### ES Modules
+
+If the `type` property in your project's package.json is set to `module`, then @electra/migrate will use ES modules.
+
+Your migrate configuration file should be exported using `export default`:
+
+```js
+// migrate.config.js
+
+export default {
+  // ...
+}
+```
+
+Your migration files should be exported using `export` and use `import` to import the `AbstractMigration` class:
+
+```js
+// 2023_12_06_194529_CreateUsersTable.js
+
+import { AbstractMigration } from "@electra/migrate";
+
+export class CreateUsersTable extends AbstractMigration 
+{
+  async up(mysql)
+  {
+    // ...
+  }
+  
+  async down(mysql)
+  {
+    // ...
+  }
+}
+```
+
+### TypeScript
+
+@electra/migrate supports writing migration files in TypeScript. The following examples show how to configure your project.
+
+#### Dependencies
+
+To use @electra/migrate with TypeScript, you'll need to install `typescript` and `ts-node`:
+
+When using npm:
+
+```bash
+npm install typescript ts-node
+```
+
+When using yarn:
+
+```bash
+yarn add typescript ts-node
+```
+
+#### Configuration
+
+As when using JavaScript migrations, your migrate configuration file should be exported using `module.exports` when using CommonJS modules, or `export default` when using ES modules.
+
+CommonJS:
+```js
+// migrate.config.js
+
+module.exports = {
+  // ...
+}
+```
+
+ES Modules:
+```js
+// migrate.config.js
+
+export default {
+  // ...
+}
+```
+
+#### Migration Files
+
+When using TypeScript, your migration files should be exported using `export` and use `import` to import the `AbstractMigration` class.
+
+```typescript
+// 2023_12_06_194529_CreateUsersTable.ts
+
+import { AbstractMigration, MySql } from "@electra/migrate";
+
+export class CreateUsersTable extends AbstractMigration 
+{
+  public async up(mysql: MySql)
+  {
+    // ...
+  }
+  
+  public async down(mysql: MySql)
+  {
+    // ...
+  }
+}
+```
+
+#### tsconfig.json
+
+Depending on whether you're using CommonJS or ES Modules in your project, you'll need to make sure your `tsconfig.json` configuration matches.
+
+If you want @electra/migrate to use CommonJS modules, you'll need to set the `compilerOptions.module` key to `commonjs`.
+
+```json
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
+```
+
+Alternatively, if you can configure `ts-node` to use CommonJS, while setting your `compilerOptions.module` to something else if you need to.
+
+```json
+{
+  "compilerOptions": {
+    "module": "es6"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}
+```
+
+#### TypeScript Commands
+
+If your migration files are written in TypeScript, you'll need to use the `migrate-ts` command rather than the `migrate` command. This will ensure that all migration commands are run with the appropriate ts-node setup based on your project settings.
+
+```bash
+migrate-ts status
+migrate-ts run
+migrate-ts rollback
+```
+## Environment Specific Configuration
+TODO: Add support for environment specific configuration files (that extend the base configuration file)
+
 
 ### API Reference
 
