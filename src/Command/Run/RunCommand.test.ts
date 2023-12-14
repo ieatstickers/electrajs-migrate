@@ -9,6 +9,8 @@ jest.mock("../../Migration/Database/MySql");
 jest.mock("../../Utility/Modules/Modules");
 jest.mock("../../Utility/Log/Log");
 
+console.log = jest.fn();
+
 class MockMigration
 {
   // Mock methods and properties of the migration class

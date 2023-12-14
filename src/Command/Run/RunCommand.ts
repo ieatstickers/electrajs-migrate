@@ -9,8 +9,6 @@ import { DateTime } from "luxon";
 import { RollbackCommand } from "../Rollback/RollbackCommand";
 import { Log } from "../../Utility/Log/Log";
 
-console.log = jest.fn();
-
 export class RunCommand extends AbstractMigrateCommand
 {
   private options?: { rollbackOnError?: boolean };
