@@ -1,7 +1,7 @@
 import { MigrateCommandInterface } from "./MigrateCommandInterface";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MigrationInterface } from "../Migration/MigrationInterface";
-import { Modules } from "../Utility/Modules";
+import { Modules } from "../Utility/Modules/Modules";
 
 export abstract class AbstractMigrateCommand implements MigrateCommandInterface
 {

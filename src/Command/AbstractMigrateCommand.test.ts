@@ -1,9 +1,9 @@
-import { Modules } from "../Utility/Modules";
+import { Modules } from "../Utility/Modules/Modules";
 import { AbstractMigrateCommand } from "./AbstractMigrateCommand";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MigrationInterface } from "../Migration/MigrationInterface";
 
-jest.mock("../Utility/Modules");
+jest.mock("../Utility/Modules/Modules");
 
 class MockMigration
 {

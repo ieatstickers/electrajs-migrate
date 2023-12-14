@@ -6,7 +6,7 @@ import { MySqlConnectionOptions } from "../Type/MySqlConnectionOptions";
 import { DataSource } from "typeorm";
 import path from 'path';
 import fs from "fs";
-import { Modules } from "../Utility/Modules";
+import { Modules } from "../Utility/Modules/Modules";
 
 export class Container
 {

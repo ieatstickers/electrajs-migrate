@@ -3,7 +3,7 @@ import { RollbackCommand } from "./RollbackCommand";
 import { Log } from "../../Utility/Log/Log";
 
 jest.mock("../../DI/Container");
-jest.mock("../../Utility/Modules");
+jest.mock("../../Utility/Modules/Modules");
 jest.mock("../../Utility/Log/Log");
 jest.mock("../../Migration/Database/MySql");
 

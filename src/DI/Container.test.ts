@@ -1,6 +1,6 @@
 import { Container } from "./Container";
 import { DataSource } from "typeorm";
-import { Modules } from "../Utility/Modules";
+import { Modules } from "../Utility/Modules/Modules";
 import { MigrationDb } from "../Database/Migration/MigrationDb";
 import * as fs from "fs";
 import * as path from "path";
@@ -38,7 +38,7 @@ jest.mock("path", () => ({
   resolve: jest.fn().mockReturnValue("")
 }));
 
-jest.mock("../Utility/Modules", () => {
+jest.mock("../Utility/Modules/Modules", () => {
   return {
     Modules: {
       import: jest.fn()
