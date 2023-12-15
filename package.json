@@ -17,7 +17,8 @@
   ],
   "bin": {
     "migrate": "./bin/migrate.js",
-    "migrate-ts": "./bin/migrate-ts.js"
+    "migrate-ts": "./bin/migrate-ts.js",
+    "entry": "./bin/entry.js"
   },
   "scripts": {
     "build": "webpack",

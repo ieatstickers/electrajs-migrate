@@ -360,6 +360,10 @@ migrate-ts rollback
 ## Environment Specific Configuration
 TODO: Add support for environment specific configuration files (that extend the base configuration file)
 
+TODO: Error handling
+TODO: Add source maps
+
+TODO: See if the migrate and migrate-ts commands can be combined into a single command
 
 ### API Reference
 
