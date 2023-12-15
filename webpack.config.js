@@ -2,6 +2,7 @@ const nodeExternals = require('webpack-node-externals');
 
 const baseConfig = {
   target: "node",
+  devtool: "source-map",
   plugins: [],
   mode:    process.env.ENV === "dev" ? "development" : "production",
   resolve: {
