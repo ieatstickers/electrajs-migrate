@@ -1,10 +1,10 @@
 import { MigrateConfig } from "../Type/MigrateConfig";
-import { Validators } from "@electra/utility";
+import { HydrateModeEnum, Objects, Validators } from "@electra/utility";
 import { MigrationDb } from "../Database/Migration/MigrationDb";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MySqlConnectionOptions } from "../Type/MySqlConnectionOptions";
 import { DataSource } from "typeorm";
-import path from 'path';
+import path from "path";
 import fs from "fs";
 import { Modules } from "../Utility/Modules/Modules";
 
@@ -80,11 +80,14 @@ export class Container
     
     try
     {
-      this.config = Object.assign(
-        {},
+      const configs = [
         await Modules.import("default", path.join(process.cwd(), "migrate.config.js")),
         environmentSpecificConfig || {}
-      );
+      ];
+      
+      this.config = configs.reduce((acc, config) => {
+        return Objects.hydrate(acc, config, { mode: HydrateModeEnum.SOURCE_PROPERTIES });
+      }, {});
     }
     catch (error)
     {
