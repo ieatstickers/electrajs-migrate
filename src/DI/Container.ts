@@ -62,7 +62,7 @@ export class Container
   {
     let environmentSpecificConfig;
     
-    if (process.env.NODE_ENV)
+    if (global.process.env.NODE_ENV)
     {
       try
       {

@@ -266,6 +266,7 @@ describe("Container", () => {
       process.env.NODE_ENV = "production";
       (Modules.import as jest.Mock).mockRejectedValue(new Error("Failed to import config"));
       await expect(Container.loadConfig()).rejects.toThrow("Failed to import config");
+      delete process.env.NODE_ENV;
     });
     
     it("throws an error if the config is invalid", async () => {
