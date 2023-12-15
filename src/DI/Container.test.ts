@@ -184,7 +184,10 @@ describe("Container", () => {
   });
   
   describe("loadConfig", () => {
+    
     it("loads and validates the configuration", async () => {
+      delete process.env.NODE_ENV;
+      
       const mockConfig = {
         migrationDirs:     {
           app: { name: "App", path: "./migrations" }
@@ -206,7 +209,61 @@ describe("Container", () => {
       expect(config).toEqual(mockConfig);
     });
     
+    it("loads an env specific config file correctly", async () => {
+      process.env.NODE_ENV = "production";
+      
+      const mockConfig = {
+        migrationDirs:     {
+          app: { name: "App", path: "./migrations" }
+        },
+        migrationDatabase: "test_db",
+        connections:       {
+          default: {
+            host:      "localhost",
+            port:      3306,
+            username:  "user",
+            password:  "password",
+            databases: [ "test_db" ]
+          }
+        }
+      };
+      const mockProdConfig = {
+        connections:       {
+          default: {
+            host:      "prod_host",
+            port:      3306,
+            username:  "user",
+            password:  "password",
+            databases: [ "test_db" ]
+          }
+        }
+      };
+      let firstCall = true;
+      (Modules.import as jest.Mock).mockImplementation(() => {
+        if (firstCall)
+        {
+          firstCall = false;
+          return mockProdConfig;
+        }
+        
+        return mockConfig;
+      });
+      const config = await Container.loadConfig();
+      expect(Modules.import).toHaveBeenCalledTimes(2);
+      expect(config.migrationDirs).toEqual(mockConfig.migrationDirs);
+      expect(config.migrationDatabase).toEqual(mockConfig.migrationDatabase);
+      expect(config.connections).toEqual(mockProdConfig.connections);
+      
+      delete process.env.NODE_ENV;
+    });
+    
     it("throws an error if the config import fails", async () => {
+      (Modules.import as jest.Mock).mockRejectedValue(new Error("Failed to import config"));
+      await expect(Container.loadConfig()).rejects.toThrow("Failed to import config");
+    });
+    
+    it("throws an error if the environment specific config import fails", async () => {
+      process.env.NODE_ENV = "production";
       (Modules.import as jest.Mock).mockRejectedValue(new Error("Failed to import config"));
       await expect(Container.loadConfig()).rejects.toThrow("Failed to import config");
     });

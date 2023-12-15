@@ -60,9 +60,30 @@ export class Container
   
   public static async loadConfig(): Promise<MigrateConfig>
   {
+    let environmentSpecificConfig;
+    
+    if (process.env.NODE_ENV)
+    {
+      try
+      {
+        environmentSpecificConfig = await Modules.import(
+          "default",
+          path.join(process.cwd(), `migrate.config.${process.env.NODE_ENV}.js`)
+        );
+      }
+      catch (error)
+      {
+        throw new Error(`Failed to read migrate.config.${process.env.NODE_ENV}.js file: ${error.message}`);
+      }
+    }
+    
     try
     {
-      this.config = await Modules.import("default", path.join(process.cwd(), "migrate.config.js"));
+      this.config = Object.assign(
+        {},
+        await Modules.import("default", path.join(process.cwd(), "migrate.config.js")),
+        environmentSpecificConfig || {}
+      );
     }
     catch (error)
     {
