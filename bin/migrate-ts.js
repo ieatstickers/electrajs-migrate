@@ -16,7 +16,7 @@
     throw new Error("Could not find a valid package.json. Command must be run from the root of your project with a valid package.json.");
   }
 
-  const childProcess = spawnSync("migrate", process.argv.slice(2), {
+  const childProcess = spawnSync("migrate-js", process.argv.slice(2), {
     stdio: "inherit",
     env: {
       ...process.env,
