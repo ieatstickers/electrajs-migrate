@@ -4,13 +4,10 @@
   let containsTsMigrations = false;
 
   try {
-    // TODO: Generate path to migrate config
-    const configPath = `${process.cwd()}/migrate.config.ts`;
+    const configImport = await import(`${process.cwd()}/migrate.config.js`);
+    const config = configImport.default;
+    const migrationsDirs = config.migrationDirs;
     const fs = await import("fs");
-    // TODO: Read config file
-    const fileContents = await fs.promises.readFile(configPath, { encoding: "utf8" });
-    const config = JSON.parse(fileContents);
-    const migrationsDirs = config.migrationsDirs;
 
     for (const groupKey in migrationsDirs)
     {
@@ -26,14 +23,18 @@
     }
   }
   catch (error)
-  {}
+  {
+    console.log('error', error.message);
+  }
 
   if (containsTsMigrations)
   {
+    console.log(`Running migrate-ts.js...`, { containsTsMigrations });
     await import("./migrate-ts.js");
   }
   else
   {
+    console.log(`Running migrate.js...`, { containsTsMigrations });
     await import("./migrate.js");
   }
 
