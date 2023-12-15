@@ -1,27 +1,42 @@
 #!/usr/bin/env node
 
 (async () => {
-  const path = await import("path");
-  const { promises: fs } = await import("fs");
-  const packageJsonPath = path.join(process.cwd(), "package.json");
-  let packageJson;
+  let containsTsMigrations = false;
 
-  try
-  {
-    packageJson = JSON.parse(await fs.readFile(packageJsonPath, { encoding: "utf8" }));
+  try {
+    const configImport = await import(`${process.cwd()}/migrate.config.js`);
+    const config = configImport.default;
+    const migrationsDirs = config.migrationDirs;
+    const fs = await import("fs");
+
+    for (const groupKey in migrationsDirs)
+    {
+      const { path } = migrationsDirs[groupKey];
+      const migrationFiles = await fs.promises.readdir(path);
+      const containsTsFiles = migrationFiles.some((file) => file.endsWith(".ts"));
+
+      if (containsTsFiles)
+      {
+        containsTsMigrations = containsTsFiles;
+        break;
+      }
+    }
   }
   catch (error)
   {
-    throw new Error("No package.json found. Command must be run from the root of your project.");
+    console.log('error', error.message);
   }
 
-  if (packageJson.type === "module")
+  if (containsTsMigrations)
   {
-    console.log("Loading ES module...");
-    await import("../dist/migrate.mjs");
-    return;
+    console.log(`Running migrate-ts.js...`, { containsTsMigrations });
+    await import("./migrate-ts.js");
+  }
+  else
+  {
+    console.log(`Running migrate-js.js...`, { containsTsMigrations });
+    await import("./migrate-js.js");
   }
 
-  console.log("Loading CommonJS module...");
-  await import("../dist/migrate.cjs");
 })();
+
