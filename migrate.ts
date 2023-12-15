@@ -28,12 +28,11 @@ function dbAction(
 
 (async () => {
   
-  await Container.loadConfig();
-  
-  const { default: application } = await import('caporal');
-  
   try
   {
+    await Container.loadConfig();
+    const { default: application } = await import('caporal');
+    
     application
       .name("Electra Migrate")
       .description("MySQL Migrations for Node.js Applications")
