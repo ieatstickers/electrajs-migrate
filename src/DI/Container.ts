@@ -80,14 +80,10 @@ export class Container
     
     try
     {
-      const configs = [
+      this.config = Objects.merge(
         await Modules.import("default", path.join(process.cwd(), "migrate.config.js")),
         environmentSpecificConfig || {}
-      ];
-      
-      this.config = configs.reduce((acc, config) => {
-        return Objects.hydrate(acc, config, { mode: HydrateModeEnum.SOURCE_PROPERTIES });
-      }, {});
+      );
     }
     catch (error)
     {
