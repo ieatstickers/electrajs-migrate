@@ -348,22 +348,40 @@ Alternatively, if you can configure `ts-node` to use CommonJS, while setting you
 }
 ```
 
-#### TypeScript Commands
-
-If your migration files are written in TypeScript, you'll need to use the `migrate-ts` command rather than the `migrate` command. This will ensure that all migration commands are run with the appropriate ts-node setup based on your project settings.
-
-```bash
-migrate-ts status
-migrate-ts run
-migrate-ts rollback
-```
 ## Environment Specific Configuration
-TODO: Add support for environment specific configuration files (that extend the base configuration file)
 
-TODO: Error handling
-TODO: Add source maps
+You can provide environment specific configuration by creating a configuration file for each environment. The name of the configuration file should be in the format `migrate.config.[environment].js` where `[environment]` is the name of the environment.
 
-TODO: See if the migrate and migrate-ts commands can be combined into a single command
+For example, if you have a `prod` environment, you can create a configuration file called `migrate.config.prod.js` and @electra/migrate will use that configuration when the `NODE_ENV` environment variable is set to `prod`.
+
+The environment specific configuration will be merged with the base configuration, with the environment specific configuration taking precedence.
+
+Alternatively, you can handle the environment specific configuration yourself from within your `migrate.config.js` file.
+
+```js
+// migrate.config.js
+
+const baseConfig = {
+  // ...
+}
+
+const envConfig = {
+  prod: {
+    // ...
+  },
+  qa: {
+    // ...
+  },
+  dev: {
+    // ...
+  }
+}
+
+module.exports = {
+  ...baseConfig,
+  ...envConfig[process.env.NODE_ENV]
+}
+```
 
 ### API Reference
 
