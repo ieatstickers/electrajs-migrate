@@ -29,6 +29,22 @@ describe("TimeColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns correct column definition", async () => {
+      const timeColumn = new TimeColumn("startTime", { nullable: true, addAfter: "otherColumn" });
+      const definition = await timeColumn.getDefinition();
+      expect(definition).toEqual("`startTime` TIME NULL AFTER `otherColumn`");
+    });
+    
+    it("returns correct column definition with default", async () => {
+      const timeColumn = new TimeColumn("startTime", { nullable: true, default: "20:30:00", addAfter: "otherColumn" });
+      const definition = await timeColumn.getDefinition();
+      expect(definition).toEqual("`startTime` TIME NULL DEFAULT '20:30:00' AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

@@ -7,5 +7,6 @@ export declare class EnumColumn extends AbstractColumn implements ColumnInterfac
     private readonly values;
     private readonly options;
     constructor(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

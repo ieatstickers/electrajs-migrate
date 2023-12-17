@@ -6,5 +6,6 @@ export declare class DateColumn extends AbstractColumn implements ColumnInterfac
     private readonly name;
     private readonly options;
     constructor(name: string, options?: Partial<DateColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

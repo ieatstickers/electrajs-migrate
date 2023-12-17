@@ -13,6 +13,8 @@ class MockMigration
   down = jest.fn();
 }
 
+console.log = jest.fn();
+
 describe("RollbackCommand", () => {
   
   describe("execute", () => {

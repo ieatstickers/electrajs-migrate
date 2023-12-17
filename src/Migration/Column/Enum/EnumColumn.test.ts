@@ -36,6 +36,37 @@ describe("EnumColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns the correct column definition", async () => {
+      const enumColumn = new EnumColumn(
+        "status",
+        [ "active", "inactive" ],
+        {
+          nullable: true,
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = await enumColumn.getDefinition();
+      expect(definition).toEqual("`status` ENUM('active', 'inactive') NULL AFTER `otherColumn`");
+    });
+    
+    it("returns the correct column definition when default is set", async () => {
+      const enumColumn = new EnumColumn(
+        "status",
+        [ "active", "inactive" ],
+        {
+          nullable: true,
+          default: "active",
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = await enumColumn.getDefinition();
+      expect(definition).toEqual("`status` ENUM('active', 'inactive') NULL DEFAULT 'active' AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

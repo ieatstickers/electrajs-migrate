@@ -109,6 +109,45 @@ describe("StringColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns the correct definition", async () => {
+      const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
+      const definition = await stringColumn.getDefinition();
+      expect(definition).toEqual("`name` VARCHAR(255) NULL AFTER `otherColumn`");
+    });
+    
+    it("returns the correct definition with length", async () => {
+      const stringColumn = new StringColumn(
+        "name",
+        {
+          type: StringColumnTypeEnum.VARCHAR,
+          nullable: true,
+          length: 50,
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = await stringColumn.getDefinition();
+      expect(definition).toEqual("`name` VARCHAR(50) NULL AFTER `otherColumn`");
+    });
+    
+    it("returns the correct definition with default value", async () => {
+      const stringColumn = new StringColumn(
+        "name",
+        {
+          type: StringColumnTypeEnum.TEXT,
+          length: 50,
+          nullable: true,
+          default: "default value",
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = await stringColumn.getDefinition();
+      expect(definition).toEqual("`name` TEXT NULL DEFAULT 'default value' AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

@@ -6,5 +6,6 @@ export declare class TimeColumn extends AbstractColumn implements ColumnInterfac
     private readonly name;
     private readonly options;
     constructor(name: string, options?: Partial<TimeColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

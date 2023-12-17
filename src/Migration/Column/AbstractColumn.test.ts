@@ -5,6 +5,8 @@ import { Log } from "../../Utility/Log/Log";
 
 class TestColumn extends AbstractColumn
 {
+  async getDefinition(): Promise<string> { return ""; }
+  
   async create(connection: Connection, tableName: string, createTable: boolean): Promise<void> {}
   
   public testValidateName(name: string): boolean

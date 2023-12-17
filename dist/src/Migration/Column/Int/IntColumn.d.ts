@@ -6,5 +6,6 @@ export declare class IntColumn extends AbstractColumn implements ColumnInterface
     private readonly name;
     private readonly options;
     constructor(name: string, options?: Partial<IntColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

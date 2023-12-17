@@ -3,6 +3,7 @@ import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
 import { Connection } from "../../Database/Connection";
+import { ColumnDefinition } from "../ColumnDefinition";
 
 export class DecimalColumn extends AbstractColumn implements ColumnInterface
 {
@@ -41,6 +42,22 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
         addAfter: Validators.string({ optional: true })
       }
     );
+  }
+  
+  public async getDefinition(): Promise<string>
+  {
+    return ColumnDefinition
+      .create(this.name, `DECIMAL(${this.options.precision}, ${this.options.scale})`)
+      .nullable(this.options.nullable)
+      .default(
+        typeof this.options.default === "number"
+          ? this.options.default.toFixed(this.options.scale)
+          : undefined
+      )
+      .unsigned(this.options.unsigned)
+      .zeroFill(this.options.zeroFill)
+      .after(this.options.addAfter)
+      .get();
   }
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>

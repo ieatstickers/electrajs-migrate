@@ -29,6 +29,28 @@ describe("DateTimeColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns correct definition when nullable is true", async () => {
+      const datetimeColumn = new DateTimeColumn("created", { nullable: true, addAfter: "otherColumn" });
+      const definition = await datetimeColumn.getDefinition();
+      expect(definition).toEqual("`created` DATETIME NULL AFTER `otherColumn`");
+    });
+    
+    it("returns correct definition when nullable is false", async () => {
+      const datetimeColumn = new DateTimeColumn("created", { nullable: false, addAfter: "otherColumn" });
+      const definition = await datetimeColumn.getDefinition()
+      expect(definition).toEqual("`created` DATETIME NOT NULL AFTER `otherColumn`");
+    });
+    
+    it("returns correct definition when default is set", async () => {
+      const datetimeColumn = new DateTimeColumn("created", { nullable: true, default: "2020-01-01 00:00:00", addAfter: "otherColumn" });
+      const definition = await datetimeColumn.getDefinition();
+      expect(definition).toEqual("`created` DATETIME NULL DEFAULT '2020-01-01 00:00:00' AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

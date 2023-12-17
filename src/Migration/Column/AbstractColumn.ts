@@ -5,6 +5,8 @@ import { Log } from "../../Utility/Log/Log";
 
 export abstract class AbstractColumn implements ColumnInterface
 {
+  abstract getDefinition(): Promise<string>;
+  
   abstract create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
   
   protected validateName(name: string): boolean

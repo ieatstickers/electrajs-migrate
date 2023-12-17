@@ -16,12 +16,14 @@ import { BlobColumn } from "../Column/Blob/BlobColumn";
 import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { EnumColumn } from "../Column/Enum/EnumColumn";
 import { Connection } from "./Connection";
+import { ColumnInterface } from "../Column/ColumnInterface";
 
 export class Table
 {
   private readonly name: string;
   private readonly connection: Connection;
   private readonly operations: Array<() => Promise<void>> = [];
+  private readonly columnAdditions: Array<ColumnInterface> = [];
   private tableExists: boolean;
 
   public constructor(
@@ -35,105 +37,83 @@ export class Table
     this.connection = connection;
     this.operations = operations;
     this.tableExists = tableExists;
+    
+    this.operations.push(async () => {
+      if (this.columnAdditions.length === 0) return;
+      
+      const escapedTableName = await this.connection.escape(this.name);
+      
+      if (this.tableExists)
+      {
+        const columnDefinitions = await Promise.all(
+          this.columnAdditions.map(async (column) => {
+            return `ADD COLUMN ${await column.getDefinition()}`;
+          })
+        );
+        await this.connection.query(`ALTER TABLE ${escapedTableName} ${columnDefinitions.join(", ")};`);
+      }
+      else
+      {
+        const columnDefinitions = await Promise.all(
+          this.columnAdditions.map(column => column.getDefinition())
+        );
+        await this.connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinitions.join(", ")});`);
+        this.tableExists = true;
+      }
+    });
   }
 
   public id(name: string = "id"): this
   {
-    this.operations.push(async () => {
-      const column = new IdColumn(name);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    });
-    
+    this.columnAdditions.push(new IdColumn(name));
     return this;
   }
 
   public int(name: string, options?: Partial<IntColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new IntColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-      
-    });
-    
+    this.columnAdditions.push(new IntColumn(name, options));
     return this;
   }
 
   public decimal(name: string, options?: Partial<DecimalColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new DecimalColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    });
-    
+    this.columnAdditions.push(new DecimalColumn(name, options));
     return this;
   }
 
   public string(name: string, options?: Partial<StringColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new StringColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    });
-    
+    this.columnAdditions.push(new StringColumn(name, options));
     return this;
   }
 
   public enum(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new EnumColumn(name, values, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    })
-    
+    this.columnAdditions.push(new EnumColumn(name, values, options));
     return this;
   }
 
   public date(name: string, options?: Partial<DateColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new DateColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    })
-    
+    this.columnAdditions.push(new DateColumn(name, options));
     return this;
   }
 
   public time(name: string, options?: Partial<TimeColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new TimeColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    });
-    
+    this.columnAdditions.push(new TimeColumn(name, options));
     return this;
   }
 
   public datetime(name: string, options?: Partial<DateTimeColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new DateTimeColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    })
-    
+    this.columnAdditions.push(new DateTimeColumn(name, options));
     return this;
   }
 
   public blob(name: string, options?: Partial<BlobColumnOptions>): this
   {
-    this.operations.push(async () => {
-      const column = new BlobColumn(name, options);
-      await column.create(this.connection, this.name, !this.tableExists);
-      this.tableExists = true;
-    })
-    
+    this.columnAdditions.push(new BlobColumn(name, options));
     return this;
   }
   

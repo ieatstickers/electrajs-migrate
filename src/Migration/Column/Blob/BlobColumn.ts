@@ -4,6 +4,7 @@ import { ColumnInterface } from "../ColumnInterface";
 import { Validators } from "@electra/utility";
 import { AbstractColumn } from "../AbstractColumn";
 import { Connection } from "../../Database/Connection";
+import { ColumnDefinition } from "../ColumnDefinition";
 
 export class BlobColumn extends AbstractColumn implements ColumnInterface
 {
@@ -33,6 +34,15 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
         addAfter: Validators.string({ optional: true })
       }
     );
+  }
+  
+  public async getDefinition(): Promise<string>
+  {
+    return ColumnDefinition
+      .create(this.name, this.options.type)
+      .nullable(this.options.nullable)
+      .after(this.options.addAfter)
+      .get();
   }
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>

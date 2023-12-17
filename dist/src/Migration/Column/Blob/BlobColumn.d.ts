@@ -6,5 +6,6 @@ export declare class BlobColumn extends AbstractColumn implements ColumnInterfac
     private readonly name;
     private readonly options;
     constructor(name: string, options?: Partial<BlobColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

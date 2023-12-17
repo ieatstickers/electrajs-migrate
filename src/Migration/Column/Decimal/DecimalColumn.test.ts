@@ -33,6 +33,22 @@ describe("DecimalColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+  
+    it("returns correct column definition", async () => {
+      const decimalColumn = new DecimalColumn("balance", { nullable: true, addAfter: "otherColumn" });
+      const definition = await decimalColumn.getDefinition();
+      expect(definition).toEqual("`balance` DECIMAL(10, 2) NULL AFTER `otherColumn`");
+    });
+  
+    it("returns correct column definition with a default", async () => {
+      const decimalColumn = new DecimalColumn("balance", { nullable: true, addAfter: "otherColumn", default: 0.00 });
+      const definition = await decimalColumn.getDefinition();
+      expect(definition).toEqual("`balance` DECIMAL(10, 2) NULL DEFAULT 0.00 AFTER `otherColumn`");
+    });
+  
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

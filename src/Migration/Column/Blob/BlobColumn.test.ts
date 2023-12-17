@@ -30,6 +30,16 @@ describe("BlobColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns correct column definition", async () => {
+      const blobColumn = new BlobColumn("imageContent", { nullable: true, addAfter: "otherColumn" });
+      const definition = await blobColumn.getDefinition();
+      expect(definition).toEqual("`imageContent` BLOB NULL AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

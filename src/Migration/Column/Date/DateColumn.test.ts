@@ -29,6 +29,22 @@ describe("DateColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns correct column definition", async () => {
+      const dateColumn = new DateColumn("dateOfBirth", { nullable: true, addAfter: "otherColumn" });
+      const definition = await dateColumn.getDefinition();
+      expect(definition).toEqual("`dateOfBirth` DATE NULL AFTER `otherColumn`");
+    });
+    
+    it("returns correct column definition with default", async () => {
+      const dateColumn = new DateColumn("dateOfBirth", { nullable: true, addAfter: "otherColumn", default: "2023-12-17" });
+      const definition = await dateColumn.getDefinition();
+      expect(definition).toEqual("`dateOfBirth` DATE NULL DEFAULT '2023-12-17' AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

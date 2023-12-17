@@ -35,6 +35,16 @@ describe("IntColumn", () => {
     
   });
   
+  describe("getDefinition", () => {
+    
+    it("returns the correct definition", async () => {
+      const intColumn = new IntColumn("age", { nullable: true, addAfter: "otherColumn" });
+      const definition = await intColumn.getDefinition();
+      expect(definition).toEqual("`age` INT NULL AFTER `otherColumn`");
+    });
+    
+  });
+  
   describe("create", () => {
     
     it("create method constructs and executes SQL query for new table", async () => {

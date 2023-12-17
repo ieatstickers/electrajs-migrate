@@ -6,5 +6,6 @@ export declare class DateTimeColumn extends AbstractColumn implements ColumnInte
     private readonly name;
     private readonly options;
     constructor(name: string, options?: Partial<DateTimeColumnOptions>);
+    getDefinition(): Promise<string>;
     create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
 }

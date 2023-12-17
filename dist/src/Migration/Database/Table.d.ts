@@ -11,6 +11,7 @@ export declare class Table {
     private readonly name;
     private readonly connection;
     private readonly operations;
+    private readonly columnAdditions;
     private tableExists;
     constructor(name: string, connection: Connection, operations: Array<() => Promise<void>>, tableExists: boolean);
     id(name?: string): this;
