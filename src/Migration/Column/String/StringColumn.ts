@@ -70,9 +70,6 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
       this.options.default ? `'${this.options.default}'` : undefined
     );
     
-    // index
-    columnDefinition = this.addIndexStatement(columnDefinition, this.options.index);
-    
     // after
     columnDefinition = this.addAfterStatement(
       columnDefinition,
@@ -80,15 +77,13 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
       !createTable
     );
     
-    // Create new table
-    if (createTable)
-    {
-      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
-    }
-    // Add column to existing table
-    else
-    {
-      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition};`);
-    }
+    let query = createTable
+      ? `CREATE TABLE ${escapedTableName} (${columnDefinition})`
+      : `ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition}`;
+    
+    // index
+    query = this.addIndexStatement(query, this.options.index, escapedColumnName);
+    
+    await connection.query(`${query};`);
   }
 }

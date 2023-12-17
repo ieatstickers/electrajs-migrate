@@ -100,7 +100,7 @@ describe("EnumColumn", () => {
       {
         name: "all options are set but table doesn't exist",
         createTable: true,
-        query: "CREATE TABLE `test_table` (`status` ENUM('active', 'inactive') NULL DEFAULT 'active' INDEX);",
+        query: "CREATE TABLE `test_table` (`status` ENUM('active', 'inactive') NULL DEFAULT 'active'), ADD INDEX (`status`);",
         options: {
           nullable: true,
           default: "active",
@@ -111,7 +111,7 @@ describe("EnumColumn", () => {
       {
         name: "all options are set and table already exist",
         createTable: false,
-        query: "ALTER TABLE `test_table` ADD COLUMN `status` ENUM('active', 'inactive') NULL DEFAULT 'inactive' INDEX AFTER `afterColumnName`;",
+        query: "ALTER TABLE `test_table` ADD COLUMN `status` ENUM('active', 'inactive') NULL DEFAULT 'inactive' AFTER `afterColumnName`, ADD INDEX (`status`);",
         options: {
           nullable: true,
           default: "inactive",

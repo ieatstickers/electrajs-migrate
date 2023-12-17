@@ -96,11 +96,11 @@ describe("AbstractColumn", () => {
   describe("addIndexStatement", () => {
     
     it("adds an index statement", () => {
-      expect(testColumn.addIndexStatement("columnDefinition", true)).toBe("columnDefinition INDEX");
+      expect(testColumn.addIndexStatement("columnDefinition", true, "`testColumn`")).toBe("columnDefinition, ADD INDEX (`testColumn`)");
     });
     
     it("does not add an index statement", () => {
-      expect(testColumn.addIndexStatement("columnDefinition", false)).toBe("columnDefinition");
+      expect(testColumn.addIndexStatement("columnDefinition", false, "`testColumn`")).toBe("columnDefinition");
     });
     
   });

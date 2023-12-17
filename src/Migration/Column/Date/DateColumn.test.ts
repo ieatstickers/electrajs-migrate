@@ -70,7 +70,7 @@ describe("DateColumn", () => {
       {
         name: "all options are set but table doesn't exist",
         createTable: true,
-        query: "CREATE TABLE `test_table` (`dateOfBirth` DATE NULL DEFAULT '2020-01-01' INDEX);",
+        query: "CREATE TABLE `test_table` (`dateOfBirth` DATE NULL DEFAULT '2020-01-01'), ADD INDEX (`dateOfBirth`);",
         options: {
           nullable: true,
           default: "2020-01-01",
@@ -81,7 +81,7 @@ describe("DateColumn", () => {
       {
         name: "all options are set and table already exist",
         createTable: false,
-        query: "ALTER TABLE `test_table` ADD COLUMN `dateOfBirth` DATE NULL DEFAULT '2020-01-01' INDEX AFTER `afterColumnName`;",
+        query: "ALTER TABLE `test_table` ADD COLUMN `dateOfBirth` DATE NULL DEFAULT '2020-01-01' AFTER `afterColumnName`, ADD INDEX (`dateOfBirth`);",
         options: {
           nullable: true,
           default: "2020-01-01",

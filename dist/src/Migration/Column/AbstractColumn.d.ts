@@ -9,7 +9,7 @@ export declare abstract class AbstractColumn implements ColumnInterface {
     }, schema: Schema): boolean;
     protected addNullableStatement(query: string, nullable: boolean): string;
     protected addDefaultStatement(query: string, defaultValue: any): string;
-    protected addIndexStatement(query: string, index: boolean): string;
+    protected addIndexStatement(query: string, index: boolean, columnName: string): string;
     protected addUnsignedStatement(query: string, unsigned: boolean): string;
     protected addZeroFillStatement(query: string, zeroFill: boolean): string;
     protected addAutoIncrementStatement(query: string, autoIncrement: boolean): string;

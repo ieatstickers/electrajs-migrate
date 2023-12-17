@@ -42,9 +42,9 @@ export abstract class AbstractColumn implements ColumnInterface
     return defaultValue !== undefined ? `${query} DEFAULT ${defaultValue}` : query;
   }
   
-  protected addIndexStatement(query: string, index: boolean): string
+  protected addIndexStatement(query: string, index: boolean, columnName: string): string
   {
-    return index ? `${query} INDEX` : query;
+    return index ? `${query}, ADD INDEX (${columnName})` : query;
   }
   
   protected addUnsignedStatement(query: string, unsigned: boolean): string

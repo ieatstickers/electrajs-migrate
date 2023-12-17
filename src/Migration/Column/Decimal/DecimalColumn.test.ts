@@ -74,7 +74,7 @@ describe("DecimalColumn", () => {
       {
         name: "all options are set but table doesn't exist",
         createTable: true,
-        query: "CREATE TABLE `test_table` (`balance` DECIMAL(10, 2) NULL DEFAULT 0.00 INDEX);",
+        query: "CREATE TABLE `test_table` (`balance` DECIMAL(10, 2) NULL DEFAULT 0.00), ADD INDEX (`balance`);",
         options: {
           nullable: true,
           default: 0.00,
@@ -85,7 +85,7 @@ describe("DecimalColumn", () => {
       {
         name: "all options are set and table already exist",
         createTable: false,
-        query: "ALTER TABLE `test_table` ADD COLUMN `balance` DECIMAL(10, 2) NULL DEFAULT 0.00 INDEX AFTER `afterColumnName`;",
+        query: "ALTER TABLE `test_table` ADD COLUMN `balance` DECIMAL(10, 2) NULL DEFAULT 0.00 AFTER `afterColumnName`, ADD INDEX (`balance`);",
         options: {
           nullable: true,
           default: 0.00,

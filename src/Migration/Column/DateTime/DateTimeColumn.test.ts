@@ -70,7 +70,7 @@ describe("DateTimeColumn", () => {
       {
         name: "all options are set but table doesn't exist",
         createTable: true,
-        query: "CREATE TABLE `test_table` (`created` DATETIME NULL DEFAULT '2020-01-01 00:00:00' INDEX);",
+        query: "CREATE TABLE `test_table` (`created` DATETIME NULL DEFAULT '2020-01-01 00:00:00'), ADD INDEX (`created`);",
         options: {
           nullable: true,
           default: "2020-01-01 00:00:00",
@@ -81,7 +81,7 @@ describe("DateTimeColumn", () => {
       {
         name: "all options are set and table already exist",
         createTable: false,
-        query: "ALTER TABLE `test_table` ADD COLUMN `created` DATETIME NULL DEFAULT '2020-01-01 00:00:00' INDEX AFTER `afterColumnName`;",
+        query: "ALTER TABLE `test_table` ADD COLUMN `created` DATETIME NULL DEFAULT '2020-01-01 00:00:00' AFTER `afterColumnName`, ADD INDEX (`created`);",
         options: {
           nullable: true,
           default: "2020-01-01 00:00:00",
