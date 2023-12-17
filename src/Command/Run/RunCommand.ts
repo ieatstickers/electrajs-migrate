@@ -34,6 +34,7 @@ export class RunCommand extends AbstractMigrateCommand
     {
       for (const migrationFile of migrationFilesToRun)
       {
+        Log.yellow(`Running: ${migrationFile.name}`);
         const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
         await migrationInstance.up(mysql);
         await mysql.executePendingOperations();
@@ -47,6 +48,8 @@ export class RunCommand extends AbstractMigrateCommand
         await migrationRepo.save(migrationRow);
         
         migrationsRun++;
+        Log.green(`Success: ${migrationFile.name}`);
+        console.log('');
       }
       
       Log.green(`Successfully ran ${migrationsRun} migration${migrationsRun !== 1 ? 's' : ''}`);

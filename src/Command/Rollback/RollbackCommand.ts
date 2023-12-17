@@ -27,6 +27,7 @@ export class RollbackCommand extends AbstractMigrateCommand
     {
       for (const {migrationRow, migrationFile} of migrationsToRollBack)
       {
+        Log.yellow(`Rolling back: ${migrationFile.name}`);
         const migrationInstance: MigrationInterface = await this.getMigrationClassInstance(migrationFile);
         await migrationInstance.down(mysql);
         await mysql.executePendingOperations();
@@ -34,6 +35,8 @@ export class RollbackCommand extends AbstractMigrateCommand
         await Container.getMigrationDb().getMigrationRepository().remove(migrationRow);
         
         migrationsRolledBack++;
+        Log.green(`Success: ${migrationFile.name}`);
+        console.log('');
       }
       
       Log.green(`Successfully rolled back ${migrationsRolledBack} migration${migrationsRolledBack !== 1 ? 's' : ''}`);
