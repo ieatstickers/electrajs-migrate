@@ -3,12 +3,19 @@ import { IndexDefinitionType } from "./IndexDefinitionType";
 export class IndexDefinition
 {
   private indexName: string;
+  private defaultIndexName: string;
   private indexColumns: Array<string> = [];
   private indexType: IndexDefinitionType = IndexDefinitionType.INDEX;
   
   public static create(): IndexDefinition
   {
     return new IndexDefinition();
+  }
+  
+  public defaultName(name: string): this
+  {
+    this.defaultIndexName = name;
+    return this;
   }
   
   public name(name: string): this
@@ -32,8 +39,9 @@ export class IndexDefinition
   public get(): string
   {
     if (!this.indexColumns.length) throw new Error("No columns defined for index");
-    let indexDefinition = this.indexName && this.indexType === IndexDefinitionType.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
-    if (this.indexName) indexDefinition += ` \`${this.indexName}\``;
+    const indexName = this.indexName || this.defaultIndexName;
+    let indexDefinition = indexName && this.indexType === IndexDefinitionType.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
+    if (indexName) indexDefinition += ` \`${indexName}\``;
     indexDefinition += ` (${this.indexColumns.map(column => `\`${column}\``).join(", ")})`;
     return indexDefinition;
   }

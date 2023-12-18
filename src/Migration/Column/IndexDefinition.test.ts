@@ -27,6 +27,17 @@ describe("IndexDefinition", () => {
     
   });
   
+  describe("defaultName", () => {
+    
+    it("sets the default index name", () => {
+      console.log('testIndexDefinition', testIndexDefinition);
+      testIndexDefinition.defaultName("testName");
+      expect(testIndexDefinition).toHaveProperty("defaultIndexName", "testName");
+      expect(() => testIndexDefinition.get()).toThrow("No columns defined for index");
+    });
+    
+  });
+  
   describe("name", () => {
     
     it("sets the index name", () => {
