@@ -1,12 +1,13 @@
 import { Schema } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
-import { Connection } from "../Database/Connection";
 import { ColumnDefinition } from "./ColumnDefinition";
 import { IndexDefinition } from "./IndexDefinition";
 export declare abstract class AbstractColumn implements ColumnInterface {
+    protected name: string;
+    protected constructor(name: string);
     abstract getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;
-    abstract create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
+    getName(): string;
     protected validateName(name: string): boolean;
     protected validateOptions(options: {
         [key: string]: any;
