@@ -36,7 +36,7 @@ describe("EnumColumn", () => {
     
   });
   
-  describe("getDefinition", () => {
+  describe("getColumnDefinition", () => {
     
     it("returns the correct column definition", async () => {
       const enumColumn = new EnumColumn(
@@ -47,7 +47,7 @@ describe("EnumColumn", () => {
           addAfter: "otherColumn"
         }
       );
-      const definition = await enumColumn.getDefinition();
+      const definition = enumColumn.getColumnDefinition().get();
       expect(definition).toEqual("`status` ENUM('active', 'inactive') NULL AFTER `otherColumn`");
     });
     
@@ -61,8 +61,39 @@ describe("EnumColumn", () => {
           addAfter: "otherColumn"
         }
       );
-      const definition = await enumColumn.getDefinition();
+      const definition = enumColumn.getColumnDefinition().get();
       expect(definition).toEqual("`status` ENUM('active', 'inactive') NULL DEFAULT 'active' AFTER `otherColumn`");
+    });
+    
+  });
+  
+  describe("getIndexDefinition", () => {
+    
+    it("returns null when index is false", async () => {
+      const enumColumn = new EnumColumn(
+        "status",
+        [ "active", "inactive" ],
+        {
+          nullable: true,
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = enumColumn.getIndexDefinition();
+      expect(definition).toEqual(null);
+    });
+    
+    it("returns the correct index definition when index is true", async () => {
+      const enumColumn = new EnumColumn(
+        "status",
+        [ "active", "inactive" ],
+        {
+          nullable: true,
+          index: true,
+          addAfter: "otherColumn"
+        }
+      );
+      const definition = enumColumn.getIndexDefinition().get();
+      expect(definition).toEqual("INDEX (`status`)");
     });
     
   });

@@ -5,6 +5,7 @@ import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
 import { Connection } from "../../Database/Connection";
 import { ColumnDefinition } from "../ColumnDefinition";
+import { IndexDefinition } from "../IndexDefinition";
 
 export class IntColumn extends AbstractColumn implements ColumnInterface
 {
@@ -47,7 +48,7 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     );
   }
   
-  public async getDefinition(): Promise<string>
+  public getColumnDefinition(): ColumnDefinition
   {
     return ColumnDefinition
       .create(this.name, this.options.type)
@@ -57,8 +58,16 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
       .autoIncrement(this.options.autoIncrement)
       .zeroFill(this.options.zeroFill)
       .primaryKey(this.options.primaryKey)
-      .after(this.options.addAfter)
-      .get()
+      .after(this.options.addAfter);
+  }
+  
+  public getIndexDefinition(): IndexDefinition
+  {
+    if (!this.options.index) return null;
+    
+    return IndexDefinition
+      .create()
+      .columns(this.name);
   }
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>

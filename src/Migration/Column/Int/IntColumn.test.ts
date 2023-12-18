@@ -35,12 +35,28 @@ describe("IntColumn", () => {
     
   });
   
-  describe("getDefinition", () => {
+  describe("getColumnDefinition", () => {
     
     it("returns the correct definition", async () => {
       const intColumn = new IntColumn("age", { nullable: true, addAfter: "otherColumn" });
-      const definition = await intColumn.getDefinition();
+      const definition = intColumn.getColumnDefinition().get();
       expect(definition).toEqual("`age` INT NULL AFTER `otherColumn`");
+    });
+    
+  });
+  
+  describe("getIndexDefinition", () => {
+    
+    it("returns null when index is false", async () => {
+      const intColumn = new IntColumn("age", { nullable: true, addAfter: "otherColumn" });
+      const definition = intColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns the correct definition", async () => {
+      const intColumn = new IntColumn("age", { nullable: true, addAfter: "otherColumn", index: true });
+      const definition = intColumn.getIndexDefinition().get();
+      expect(definition).toEqual("INDEX (`age`)");
     });
     
   });

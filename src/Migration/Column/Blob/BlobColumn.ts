@@ -36,13 +36,12 @@ export class BlobColumn extends AbstractColumn implements ColumnInterface
     );
   }
   
-  public async getDefinition(): Promise<string>
+  public getColumnDefinition(): ColumnDefinition
   {
     return ColumnDefinition
       .create(this.name, this.options.type)
       .nullable(this.options.nullable)
-      .after(this.options.addAfter)
-      .get();
+      .after(this.options.addAfter);
   }
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>

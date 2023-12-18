@@ -4,6 +4,7 @@ import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
 import { Connection } from "../../Database/Connection";
 import { ColumnDefinition } from "../ColumnDefinition";
+import { IndexDefinition } from "../IndexDefinition";
 
 export class DateTimeColumn extends AbstractColumn implements ColumnInterface
 {
@@ -40,14 +41,22 @@ export class DateTimeColumn extends AbstractColumn implements ColumnInterface
     );
   }
   
-  public async getDefinition(): Promise<string>
+  public getColumnDefinition(): ColumnDefinition
   {
     return ColumnDefinition
       .create(this.name, "DATETIME")
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
-      .after(this.options.addAfter)
-      .get();
+      .after(this.options.addAfter);
+  }
+  
+  public getIndexDefinition(): IndexDefinition
+  {
+    if (!this.options.index) return null;
+    
+    return IndexDefinition
+      .create()
+      .columns(this.name);
   }
   
   public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>

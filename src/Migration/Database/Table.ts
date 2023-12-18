@@ -43,23 +43,41 @@ export class Table
       
       const escapedTableName = await this.connection.escape(this.name);
       
-      if (this.tableExists)
+      if (!this.tableExists)
       {
-        const columnDefinitions = await Promise.all(
-          this.columnAdditions.map(async (column) => {
-            return `ADD COLUMN ${await column.getDefinition()}`;
+        // Get all column definitions
+        const columnDefinitions = this.columnAdditions.map(column => column.getColumnDefinition().get())
+        // Get all index definitions
+        const indexDefinitions = this.columnAdditions
+          .map(column => {
+            const definition = column.getIndexDefinition();
+            return definition ? definition.get() : null;
           })
-        );
-        await this.connection.query(`ALTER TABLE ${escapedTableName} ${columnDefinitions.join(", ")};`);
-      }
-      else
-      {
-        const columnDefinitions = await Promise.all(
-          this.columnAdditions.map(column => column.getDefinition())
-        );
-        await this.connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinitions.join(", ")});`);
+          .filter(definition => definition != null);
+        // Combine all definitions
+        const allDefinitions = [ ...columnDefinitions, ...indexDefinitions ];
+        // Create the table
+        await this.connection.query(`CREATE TABLE ${escapedTableName} (${allDefinitions.join(", ")});`);
+        // Set the table exists flag
         this.tableExists = true;
+        // Clear the column additions
+        this.columnAdditions.splice(0, this.columnAdditions.length);
       }
+      
+      const columnDefinitions = this.columnAdditions.map((column) => {
+        return `ADD COLUMN ${column.getColumnDefinition().get()}`;
+      });
+      const indexDefinitions = this.columnAdditions
+        .map((column) => {
+          const definition = column.getIndexDefinition();
+          return definition ? `ADD ${definition.get()}` : null;
+        })
+        .filter((definition) => definition != null);
+      
+      const allDefinitions = [ ...columnDefinitions, ...indexDefinitions ];
+      
+      if (allDefinitions.length === 0) return;
+      await this.connection.query(`ALTER TABLE ${escapedTableName} ${allDefinitions.join(", ")};`);
     });
   }
 

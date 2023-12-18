@@ -109,11 +109,11 @@ describe("StringColumn", () => {
     
   });
   
-  describe("getDefinition", () => {
+  describe("getColumnDefinition", () => {
     
     it("returns the correct definition", async () => {
       const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
-      const definition = await stringColumn.getDefinition();
+      const definition = stringColumn.getColumnDefinition().get();
       expect(definition).toEqual("`name` VARCHAR(255) NULL AFTER `otherColumn`");
     });
     
@@ -127,7 +127,7 @@ describe("StringColumn", () => {
           addAfter: "otherColumn"
         }
       );
-      const definition = await stringColumn.getDefinition();
+      const definition = stringColumn.getColumnDefinition().get();
       expect(definition).toEqual("`name` VARCHAR(50) NULL AFTER `otherColumn`");
     });
     
@@ -142,8 +142,24 @@ describe("StringColumn", () => {
           addAfter: "otherColumn"
         }
       );
-      const definition = await stringColumn.getDefinition();
+      const definition = stringColumn.getColumnDefinition().get();
       expect(definition).toEqual("`name` TEXT NULL DEFAULT 'default value' AFTER `otherColumn`");
+    });
+    
+  });
+  
+  describe("getIndexDefinition", () => {
+    
+    it("returns null if index is false", async () => {
+      const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
+      const definition = stringColumn.getIndexDefinition();
+      expect(definition).toEqual(null);
+    });
+    
+    it("returns the correct definition", async () => {
+      const stringColumn = new StringColumn("name", { nullable: true, index: true, addAfter: "otherColumn" });
+      const definition = stringColumn.getIndexDefinition().get();
+      expect(definition).toEqual("INDEX (`name`)");
     });
     
   });

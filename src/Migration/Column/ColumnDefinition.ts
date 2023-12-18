@@ -1,11 +1,30 @@
 
 export class ColumnDefinition
 {
-  private definition: string = "";
+  private readonly name: string;
+  private readonly type: string;
+  private options: {
+    nullable?: boolean;
+    default?: string | number;
+    unsigned?: boolean;
+    autoIncrement?: boolean;
+    zeroFill?: boolean;
+    primaryKey?: boolean;
+    after?: string;
+  } = {
+    nullable: undefined,
+    default: undefined,
+    unsigned: undefined,
+    autoIncrement: undefined,
+    zeroFill: undefined,
+    primaryKey: undefined,
+    after: undefined
+  }
   
   public constructor(name: string, type: string)
   {
-    this.definition = `\`${name}\` ${type}`;
+    this.name = name;
+    this.type = type;
   }
   
   public static create(name: string, type: string): ColumnDefinition
@@ -15,49 +34,57 @@ export class ColumnDefinition
   
   public nullable(nullable: boolean): this
   {
-    this.definition += nullable ? " NULL" : " NOT NULL";
+    this.options.nullable = nullable;
     return this;
   }
   
   public default(value: string | number): this
   {
-    if (value !== undefined) this.definition += ` DEFAULT ${value}`;
+    this.options.default = value;
     return this;
   }
   
   public unsigned(unsigned: boolean): this
   {
-    if (unsigned) this.definition += " UNSIGNED";
+    this.options.unsigned = unsigned;
     return this;
   }
   
   public autoIncrement(autoIncrement: boolean): this
   {
-    if (autoIncrement) this.definition += " AUTO_INCREMENT";
+    this.options.autoIncrement = autoIncrement;
     return this;
   }
   
   public zeroFill(zerofill: boolean): this
   {
-    if (zerofill) this.definition += " ZEROFILL";
+    this.options.zeroFill = zerofill;
     return this;
   }
   
   public primaryKey(primaryKey: boolean): this
   {
-    if (primaryKey) this.definition += " PRIMARY KEY";
+    this.options.primaryKey = primaryKey;
     return this;
   }
   
   public after(after: string): this
   {
-    if (after) this.definition += ` AFTER \`${after}\``;
+    this.options.after = after;
     return this;
   }
   
   public get(): string
   {
-    return this.definition;
+    let definition = `\`${this.name}\` ${this.type}`;
+    if (typeof this.options.nullable === "boolean") definition += this.options.nullable ? " NULL" : " NOT NULL";
+    if (this.options.default !== undefined) definition += ` DEFAULT ${this.options.default}`;
+    if (this.options.unsigned === true) definition += " UNSIGNED";
+    if (this.options.autoIncrement === true) definition += " AUTO_INCREMENT";
+    if (this.options.zeroFill === true) definition += " ZEROFILL";
+    if (this.options.primaryKey === true) definition += " PRIMARY KEY";
+    if (typeof this.options.after === "string") definition += ` AFTER \`${this.options.after}\``;
+    return definition;
   }
   
 }

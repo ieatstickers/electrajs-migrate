@@ -30,11 +30,11 @@ describe("BlobColumn", () => {
     
   });
   
-  describe("getDefinition", () => {
+  describe("getColumnDefinition", () => {
     
     it("returns correct column definition", async () => {
       const blobColumn = new BlobColumn("imageContent", { nullable: true, addAfter: "otherColumn" });
-      const definition = await blobColumn.getDefinition();
+      const definition = blobColumn.getColumnDefinition().get();
       expect(definition).toEqual("`imageContent` BLOB NULL AFTER `otherColumn`");
     });
     

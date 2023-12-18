@@ -24,26 +24,100 @@ jest.mock("../Column/Int/IntColumn", () => {
   return {
     IntColumn: jest.fn().mockImplementation(() => {
       return {
-        getDefinition: jest.fn().mockResolvedValue("`age` INT")
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`age` INT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
       };
     })
   };
 });
-jest.mock("../Column/Decimal/DecimalColumn");
+jest.mock("../Column/Decimal/DecimalColumn", () => {
+  return {
+    DecimalColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
 jest.mock("../Column/String/StringColumn", () => {
   return {
     StringColumn: jest.fn().mockImplementation(() => {
       return {
-        getDefinition: jest.fn().mockResolvedValue("`name` VARCHAR(255)")
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`name` VARCHAR(255)")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("INDEX (`name`)")
+        }),
       };
     })
   };
 });
-jest.mock("../Column/Enum/EnumColumn");
-jest.mock("../Column/Date/DateColumn");
-jest.mock("../Column/Time/TimeColumn");
-jest.mock("../Column/DateTime/DateTimeColumn");
-jest.mock("../Column/Blob/BlobColumn");
+jest.mock("../Column/Enum/EnumColumn", () => {
+  return {
+    EnumColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`status` ENUM('active', 'inactive')")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
+jest.mock("../Column/Date/DateColumn", () => {
+  return {
+    DateColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`dateOfBirth` DATE")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
+jest.mock("../Column/Time/TimeColumn", () => {
+  return {
+    TimeColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`start` TIME")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
+jest.mock("../Column/DateTime/DateTimeColumn", () => {
+  return {
+    DateTimeColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`created` DATETIME")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
+jest.mock("../Column/Blob/BlobColumn", () => {
+  return {
+    BlobColumn: jest.fn().mockImplementation(() => {
+      return {
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`imageContent` BLOB")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
 
 describe("Table", () => {
   let mockConnection: Connection;
@@ -89,7 +163,7 @@ describe("Table", () => {
         .int("age")
         .string("name");
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255);");
+      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX (`name`);");
     });
     
   });
