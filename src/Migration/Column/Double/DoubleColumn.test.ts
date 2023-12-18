@@ -10,6 +10,8 @@ describe("DoubleColumn", () => {
       expect(doubleColumn).toHaveProperty("options", {
         nullable: true,
         default: undefined,
+        precision: undefined,
+        scale: undefined,
         index: false,
         addAfter: "otherColumn",
         zeroFill: false
@@ -29,7 +31,13 @@ describe("DoubleColumn", () => {
     it("returns correct column definition with a default", async () => {
       const doubleColumn = new DoubleColumn("balance", { nullable: true, addAfter: "otherColumn", default: 0.00 });
       const definition = doubleColumn.getColumnDefinition().get();
-      expect(definition).toEqual("`balance` DOUBLE NULL DEFAULT 0.00 AFTER `otherColumn`");
+      expect(definition).toEqual("`balance` DOUBLE NULL DEFAULT 0 AFTER `otherColumn`");
+    });
+  
+    it("returns correct column definition with a precision and scale", async () => {
+      const doubleColumn = new DoubleColumn("balance", { precision: 10, scale: 2, default: 0.00 });
+      const definition = doubleColumn.getColumnDefinition().get();
+      expect(definition).toEqual("`balance` DOUBLE(10, 2) NOT NULL DEFAULT 0.00");
     });
   
   });

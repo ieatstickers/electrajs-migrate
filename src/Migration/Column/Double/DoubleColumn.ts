@@ -17,6 +17,8 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
       nullable: false,
       default: undefined,
       zeroFill: false,
+      precision: undefined,
+      scale: undefined,
       index: false,
       addAfter: undefined,
       ...options
@@ -28,6 +30,8 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
         nullable: Validators.boolean(),
         default: Validators.number({ optional: true }),
         zeroFill: Validators.boolean(),
+        precision: Validators.integer({ optional: true }),
+        scale: Validators.integer({ optional: true }),
         index: Validators.boolean(),
         addAfter: Validators.string({ optional: true })
       }
@@ -36,12 +40,15 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
+    const type = this.options.precision != null && this.options.scale != null
+      ? `DOUBLE(${this.options.precision}, ${this.options.scale})`
+      : "DOUBLE";
     return ColumnDefinition
-      .create(this.name, "DOUBLE")
+      .create(this.name, type)
       .nullable(this.options.nullable)
       .default(
         typeof this.options.default === "number"
-          ? this.options.default.toFixed(2)
+          ? this.options.default.toFixed(this.options.scale)
           : undefined
       )
       .zeroFill(this.options.zeroFill)
