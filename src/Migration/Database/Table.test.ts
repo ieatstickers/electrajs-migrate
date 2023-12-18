@@ -182,7 +182,7 @@ describe("Table", () => {
         nullable:      false,
         primaryKey:    true,
         type:          IntColumnTypeEnum.INT,
-        unsigned:      false,
+        unsigned:      true,
         zeroFill:      false
       });
     });
@@ -199,7 +199,7 @@ describe("Table", () => {
         nullable:      false,
         primaryKey:    true,
         type:          IntColumnTypeEnum.INT,
-        unsigned:      false,
+        unsigned:      true,
         zeroFill:      false
       });
     });

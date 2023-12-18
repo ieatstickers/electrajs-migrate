@@ -12,7 +12,7 @@ export class IdColumn extends IntColumn implements ColumnInterface
         type: IntColumnTypeEnum.INT,
         nullable: false,
         default: undefined,
-        unsigned: false,
+        unsigned: true,
         autoIncrement: true,
         zeroFill: false,
         primaryKey: true,
