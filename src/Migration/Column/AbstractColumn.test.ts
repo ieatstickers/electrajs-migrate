@@ -5,6 +5,11 @@ import { ColumnDefinition } from "./ColumnDefinition";
 
 class TestColumn extends AbstractColumn
 {
+  public constructor()
+  {
+    super("test");
+  }
+  
   public getColumnDefinition(): ColumnDefinition { return ColumnDefinition.create("test", ""); }
   
   public testValidateName(name: string): boolean
@@ -31,6 +36,14 @@ describe("AbstractColumn", () => {
     
     it("returns null", () => {
       expect(testColumn.getIndexDefinition()).toBe(null);
+    });
+    
+  });
+  
+  describe("getName", () => {
+    
+    it("returns the name", () => {
+      expect(testColumn.getName()).toBe("test");
     });
     
   });

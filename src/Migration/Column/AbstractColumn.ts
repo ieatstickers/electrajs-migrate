@@ -6,11 +6,24 @@ import { IndexDefinition } from "./IndexDefinition";
 
 export abstract class AbstractColumn implements ColumnInterface
 {
-  abstract getColumnDefinition(): ColumnDefinition;
+  protected name: string;
+  
+  protected constructor(name: string)
+  {
+    this.name = name;
+    this.validateName(this.name);
+  }
+  
+  public abstract getColumnDefinition(): ColumnDefinition;
   
   public getIndexDefinition(): IndexDefinition
   {
     return null;
+  }
+  
+  public getName(): string
+  {
+    return this.name;
   }
   
   protected validateName(name: string): boolean

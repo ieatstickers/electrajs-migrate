@@ -7,15 +7,11 @@ import { IndexDefinition } from "../IndexDefinition";
 
 export class DateTimeColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: DateTimeColumnOptions;
   
   public constructor(name: string, options?: Partial<DateTimeColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    this.validateName(this.name);
+    super(name);
     
     this.options = {
       nullable: false,

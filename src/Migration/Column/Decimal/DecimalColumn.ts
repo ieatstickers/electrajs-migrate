@@ -7,15 +7,11 @@ import { IndexDefinition } from "../IndexDefinition";
 
 export class DecimalColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: DecimalColumnOptions;
   
   public constructor(name: string, options?: Partial<DecimalColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    this.validateName(this.name);
+    super(name);
     
     this.options = {
       nullable: false,

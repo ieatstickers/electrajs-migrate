@@ -8,15 +8,12 @@ import { IndexDefinition } from "../IndexDefinition";
 
 export class StringColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: StringColumnOptions;
   
   public constructor(name: string, options?: Partial<StringColumnOptions>)
   {
-    super();
+    super(name);
     
-    this.name = name;
-    this.validateName(this.name);
     const type = options?.type || StringColumnTypeEnum.VARCHAR;
     
     this.options = {

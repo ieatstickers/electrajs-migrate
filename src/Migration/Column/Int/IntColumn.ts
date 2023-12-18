@@ -8,15 +8,11 @@ import { IndexDefinition } from "../IndexDefinition";
 
 export class IntColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: IntColumnOptions;
   
   public constructor(name: string, options?: Partial<IntColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    this.validateName(this.name);
+    super(name);
     
     this.options = {
       type: IntColumnTypeEnum.INT,

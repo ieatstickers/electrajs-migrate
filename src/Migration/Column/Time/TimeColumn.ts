@@ -6,15 +6,11 @@ import { ColumnDefinition } from "../ColumnDefinition";
 
 export class TimeColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: TimeColumnOptions;
   
   public constructor(name: string, options?: Partial<TimeColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    this.validateName(this.name);
+    super(name);
     
     this.options = {
       nullable: false,

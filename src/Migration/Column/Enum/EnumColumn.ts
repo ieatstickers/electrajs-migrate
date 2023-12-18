@@ -7,16 +7,12 @@ import { IndexDefinition } from "../IndexDefinition";
 
 export class EnumColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly values: Array<string>;
   private readonly options: EnumColumnOptions;
   
   public constructor(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    this.validateName(this.name);
+    super(name);
     
     this.values = values;
     

@@ -7,16 +7,11 @@ import { ColumnDefinition } from "../ColumnDefinition";
 
 export class BlobColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly name: string;
   private readonly options: BlobColumnOptions;
   
   public constructor(name: string, options?: Partial<BlobColumnOptions>)
   {
-    super();
-    
-    this.name = name;
-    
-    this.validateName(this.name);
+    super(name);
     
     this.options = {
       type: BlobColumnTypeEnum.BLOB,
