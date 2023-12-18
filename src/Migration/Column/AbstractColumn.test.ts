@@ -1,14 +1,11 @@
 import { AbstractColumn } from "./AbstractColumn";
 import { Schema, Validators } from "@electra/utility";
-import { Connection } from "../Database/Connection";
 import { Log } from "../../Utility/Log/Log";
 import { ColumnDefinition } from "./ColumnDefinition";
 
 class TestColumn extends AbstractColumn
 {
   public getColumnDefinition(): ColumnDefinition { return ColumnDefinition.create("test", ""); }
-  
-  public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void> {}
   
   public testValidateName(name: string): boolean
   {

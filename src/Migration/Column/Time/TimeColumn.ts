@@ -2,7 +2,6 @@ import { TimeColumnOptions } from "./TimeColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
-import { Connection } from "../../Database/Connection";
 import { ColumnDefinition } from "../ColumnDefinition";
 
 export class TimeColumn extends AbstractColumn implements ColumnInterface
@@ -45,41 +44,5 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
       .after(this.options.addAfter);
-  }
-  
-  public async create(connection: Connection, tableName: string, createTable: boolean): Promise<void>
-  {
-    const escapedColumnName = await connection.escape(this.name);
-    const escapedTableName = await connection.escape(tableName);
-    
-    // type
-    let columnDefinition = `${escapedColumnName} TIME`;
-    
-    // nullable
-    columnDefinition = this.addNullableStatement(columnDefinition, this.options.nullable);
-    
-    // default
-    columnDefinition = this.addDefaultStatement(
-      columnDefinition,
-      this.options.default ? `'${this.options.default}'` : undefined
-    );
-    
-    // after
-    columnDefinition = this.addAfterStatement(
-      columnDefinition,
-      this.options.addAfter ? await connection.escape(this.options.addAfter) : undefined,
-      !createTable
-    );
-    
-    // Create new table
-    if (createTable)
-    {
-      await connection.query(`CREATE TABLE ${escapedTableName} (${columnDefinition});`);
-    }
-    // Add column to existing table
-    else
-    {
-      await connection.query(`ALTER TABLE ${escapedTableName} ADD COLUMN ${columnDefinition};`);
-    }
   }
 }

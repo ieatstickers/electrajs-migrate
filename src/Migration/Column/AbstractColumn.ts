@@ -1,6 +1,5 @@
 import { Schema, Validators } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
-import { Connection } from "../Database/Connection";
 import { Log } from "../../Utility/Log/Log";
 import { ColumnDefinition } from "./ColumnDefinition";
 import { IndexDefinition } from "./IndexDefinition";
@@ -13,8 +12,6 @@ export abstract class AbstractColumn implements ColumnInterface
   {
     return null;
   }
-  
-  abstract create(connection: Connection, tableName: string, createTable: boolean): Promise<void>;
   
   protected validateName(name: string): boolean
   {
