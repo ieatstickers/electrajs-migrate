@@ -18,6 +18,21 @@ describe("DoubleColumn", () => {
       });
     });
     
+    it("throws error when precision or scale is defined but not both", () => {
+      expect(() => {
+        new DoubleColumn("balance", { precision: 10 });
+      }).toThrow("Precision and scale must be both defined or both undefined in column balance");
+      expect(() => {
+        new DoubleColumn("balance", { scale: 2 });
+      }).toThrow("Precision and scale must be both defined or both undefined in column balance");
+      expect(() => {
+        new DoubleColumn("balance", {});
+      }).not.toThrow();
+      expect(() => {
+        new DoubleColumn("balance", { precision: 10, scale: 2 });
+      }).not.toThrow();
+    });
+    
   });
   
   describe("getColumnDefinition", () => {

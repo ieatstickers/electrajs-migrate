@@ -36,6 +36,14 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
         addAfter: Validators.string({ optional: true })
       }
     );
+    
+    if (
+      (this.options.precision != null || this.options.scale != null)
+      && (this.options.precision == null || this.options.scale == null)
+    )
+    {
+      throw new Error(`Precision and scale must be both defined or both undefined in column ${this.name}`);
+    }
   }
   
   public getColumnDefinition(): ColumnDefinition
