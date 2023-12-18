@@ -24,10 +24,14 @@ jest.mock("../Column/Int/IntColumn", () => {
   return {
     IntColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`age` INT")
         }),
-        getIndexDefinition: jest.fn().mockReturnValue(null),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+        }),
       };
     })
   };
@@ -36,6 +40,7 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
   return {
     DecimalColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("balance"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)")
         }),
@@ -48,11 +53,13 @@ jest.mock("../Column/String/StringColumn", () => {
   return {
     StringColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`name` VARCHAR(255)")
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("INDEX (`name`)")
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_name_index` (`name`)")
         }),
       };
     })
@@ -62,6 +69,7 @@ jest.mock("../Column/Enum/EnumColumn", () => {
   return {
     EnumColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("status"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`status` ENUM('active', 'inactive')")
         }),
@@ -74,6 +82,7 @@ jest.mock("../Column/Date/DateColumn", () => {
   return {
     DateColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("dateOfBirth"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`dateOfBirth` DATE")
         }),
@@ -86,6 +95,7 @@ jest.mock("../Column/Time/TimeColumn", () => {
   return {
     TimeColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("start"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`start` TIME")
         }),
@@ -98,6 +108,7 @@ jest.mock("../Column/DateTime/DateTimeColumn", () => {
   return {
     DateTimeColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("created"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`created` DATETIME")
         }),
@@ -110,6 +121,7 @@ jest.mock("../Column/Blob/BlobColumn", () => {
   return {
     BlobColumn: jest.fn().mockImplementation(() => {
       return {
+        getName: jest.fn().mockReturnValue("imageContent"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`imageContent` BLOB")
         }),
@@ -153,7 +165,15 @@ describe("Table", () => {
     it("default operation creates table if no table exists and columns to add", async () => {
       table.int("age");
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("CREATE TABLE `test_table` (`age` INT);");
+      expect(mockConnection.query).toHaveBeenCalledWith("CREATE TABLE `test_table` (`age` INT, INDEX `test_table_age_index` (`age`));");
+    });
+    
+    it("does not add indexes if none set", async () => {
+      const operations = [];
+      const table = new Table("test_table", mockConnection, operations, true);
+      table.date("dateOfBirth");
+      await operations[0]();
+      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `dateOfBirth` DATE;");
     });
     
     it("default operation adds column to existing table", async () => {
@@ -163,7 +183,7 @@ describe("Table", () => {
         .int("age")
         .string("name");
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX (`name`);");
+      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`);");
     });
     
   });

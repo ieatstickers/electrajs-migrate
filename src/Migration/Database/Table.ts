@@ -51,7 +51,11 @@ export class Table
         const indexDefinitions = this.columnAdditions
           .map(column => {
             const definition = column.getIndexDefinition();
-            return definition ? definition.get() : null;
+            return definition
+              ? definition
+                .defaultName(`${this.name.toLowerCase()}_${column.getName().toLowerCase()}_index`)
+                .get()
+              : null;
           })
           .filter(definition => definition != null);
         // Combine all definitions
@@ -70,7 +74,9 @@ export class Table
       const indexDefinitions = this.columnAdditions
         .map((column) => {
           const definition = column.getIndexDefinition();
-          return definition ? `ADD ${definition.get()}` : null;
+          if (!definition) return null;
+          definition.defaultName(`${this.name.toLowerCase()}_${column.getName().toLowerCase()}_index`)
+          return `ADD ${definition.get()}`;
         })
         .filter((definition) => definition != null);
       
