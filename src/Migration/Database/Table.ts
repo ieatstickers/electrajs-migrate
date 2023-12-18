@@ -17,6 +17,8 @@ import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { EnumColumn } from "../Column/Enum/EnumColumn";
 import { Connection } from "./Connection";
 import { ColumnInterface } from "../Column/ColumnInterface";
+import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
+import { DoubleColumn } from "../Column/Double/DoubleColumn";
 
 export class Table
 {
@@ -102,6 +104,12 @@ export class Table
   public decimal(name: string, options?: Partial<DecimalColumnOptions>): this
   {
     this.columnAdditions.push(new DecimalColumn(name, options));
+    return this;
+  }
+
+  public double(name: string, options?: Partial<DoubleColumnOptions>): this
+  {
+    this.columnAdditions.push(new DoubleColumn(name, options));
     return this;
   }
 

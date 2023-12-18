@@ -9,6 +9,7 @@ import { DateColumn } from "../Column/Date/DateColumn";
 import { TimeColumn } from "../Column/Time/TimeColumn";
 import { DateTimeColumn } from "../Column/DateTime/DateTimeColumn";
 import { BlobColumn } from "../Column/Blob/BlobColumn";
+import { DoubleColumn } from "../Column/Double/DoubleColumn";
 
 jest.mock("./Connection", () => {
   return {
@@ -43,6 +44,19 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
         getName: jest.fn().mockReturnValue("balance"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+      };
+    })
+  };
+});
+jest.mock("../Column/Double/DoubleColumn", () => {
+  return {
+    DoubleColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("balance"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`balance` DECIMAL")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
       };
@@ -254,6 +268,22 @@ describe("Table", () => {
       expect(result).toBe(table);
       await operations[0]();
       expect(DecimalColumn).toHaveBeenCalledWith("balance", options);
+    });
+    
+  });
+  
+  describe("double", () => {
+    
+    it("adds an operation that creates a double column and returns the table instance", async () => {
+      const options = {
+        nullable: true,
+        index:    true
+      };
+      const result = table.double("balance", options);
+      expect(table['columnAdditions'].length).toBe(1);
+      expect(result).toBe(table);
+      await operations[0]();
+      expect(DoubleColumn).toHaveBeenCalledWith("balance", options);
     });
     
   });

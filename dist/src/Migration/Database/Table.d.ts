@@ -7,6 +7,7 @@ import { DateTimeColumnOptions } from "../Column/DateTime/DateTimeColumnOptions"
 import { BlobColumnOptions } from "../Column/Blob/BlobColumnOptions";
 import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { Connection } from "./Connection";
+import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
 export declare class Table {
     private readonly name;
     private readonly connection;
@@ -17,6 +18,7 @@ export declare class Table {
     id(name?: string): this;
     int(name: string, options?: Partial<IntColumnOptions>): this;
     decimal(name: string, options?: Partial<DecimalColumnOptions>): this;
+    double(name: string, options?: Partial<DoubleColumnOptions>): this;
     string(name: string, options?: Partial<StringColumnOptions>): this;
     enum(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>): this;
     date(name: string, options?: Partial<DateColumnOptions>): this;
