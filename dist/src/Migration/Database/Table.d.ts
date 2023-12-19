@@ -8,18 +8,14 @@ import { BlobColumnOptions } from "../Column/Blob/BlobColumnOptions";
 import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { Connection } from "./Connection";
 import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
-import { TableEncodingEnum } from "./Enum/TableEncodingEnum";
-import { TableCollationEnum } from "./Enum/TableCollationEnum";
+import { CreateTableOptions } from "./Type/CreateTableOptions";
 export declare class Table {
     private readonly name;
     private readonly connection;
     private readonly operations;
     private readonly columnAdditions;
     private tableExists;
-    constructor(name: string, connection: Connection, operations: Array<() => Promise<void>>, tableExists: boolean, options?: Partial<{
-        encoding: TableEncodingEnum;
-        collation: TableCollationEnum;
-    }>);
+    constructor(name: string, connection: Connection, operations: Array<() => Promise<void>>, tableExists: boolean, options?: CreateTableOptions);
     id(name?: string): this;
     int(name: string, options?: Partial<IntColumnOptions>): this;
     decimal(name: string, options?: Partial<DecimalColumnOptions>): this;

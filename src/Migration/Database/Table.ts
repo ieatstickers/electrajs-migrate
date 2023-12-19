@@ -21,6 +21,7 @@ import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
 import { DoubleColumn } from "../Column/Double/DoubleColumn";
 import { TableEncodingEnum } from "./Enum/TableEncodingEnum";
 import { TableCollationEnum } from "./Enum/TableCollationEnum";
+import { CreateTableOptions } from "./Type/CreateTableOptions";
 
 export class Table
 {
@@ -35,7 +36,7 @@ export class Table
     connection: Connection,
     operations: Array<() => Promise<void>>,
     tableExists: boolean,
-    options?: Partial<{ encoding: TableEncodingEnum, collation: TableCollationEnum }>
+    options?: CreateTableOptions
   )
   {
     this.name = name;
