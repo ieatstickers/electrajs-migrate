@@ -47,7 +47,7 @@ export class Table
       {},
       {
         encoding: TableEncodingEnum.UTF8MB4,
-        collation: TableCollationEnum.UTF8_GENERAL_CI
+        collation: TableCollationEnum.UTF8MB4_GENERAL_CI
       },
       options
     );
