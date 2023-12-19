@@ -179,7 +179,7 @@ describe("Table", () => {
     it("default operation creates table if no table exists and columns to add", async () => {
       table.int("age");
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("CREATE TABLE `test_table` (`age` INT, INDEX `test_table_age_index` (`age`));");
+      expect(mockConnection.query).toHaveBeenCalledWith("CREATE TABLE `test_table` (`age` INT, INDEX `test_table_age_index` (`age`)) DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8_general_ci;");
     });
     
     it("does not add indexes if none set", async () => {

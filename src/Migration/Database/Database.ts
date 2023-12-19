@@ -1,5 +1,6 @@
 import { Table } from "./Table";
 import { Connection } from "./Connection";
+import { CreateTableOptions } from "./Type/CreateTableOptions";
 
 export class Database
 {
@@ -12,9 +13,9 @@ export class Database
     this.operations = operations;
   }
   
-  public create(tableName: string): Table
+  public create(tableName: string, options?: CreateTableOptions): Table
   {
-    return new Table(tableName, this.connection, this.operations, false);
+    return new Table(tableName, this.connection, this.operations, false, options);
   }
   
   public table(tableName: string): Table

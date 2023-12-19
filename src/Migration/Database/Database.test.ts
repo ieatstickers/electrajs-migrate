@@ -33,7 +33,7 @@ describe("Database", () => {
       const tableName = "test_table";
       const table = database.create(tableName);
       expect(table).toBeInstanceOf(Table);
-      expect(Table).toHaveBeenCalledWith(tableName, mockConnection, operations, false);
+      expect(Table).toHaveBeenCalledWith(tableName, mockConnection, operations, false, undefined);
     });
     
   });

@@ -19,6 +19,8 @@ import { Connection } from "./Connection";
 import { ColumnInterface } from "../Column/ColumnInterface";
 import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
 import { DoubleColumn } from "../Column/Double/DoubleColumn";
+import { TableEncodingEnum } from "./Enum/TableEncodingEnum";
+import { TableCollationEnum } from "./Enum/TableCollationEnum";
 
 export class Table
 {
@@ -32,13 +34,22 @@ export class Table
     name: string,
     connection: Connection,
     operations: Array<() => Promise<void>>,
-    tableExists: boolean
+    tableExists: boolean,
+    options?: Partial<{ encoding: TableEncodingEnum, collation: TableCollationEnum }>
   )
   {
     this.name = name;
     this.connection = connection;
     this.operations = operations;
     this.tableExists = tableExists;
+    const tableOptions = Object.assign(
+      {},
+      {
+        encoding: TableEncodingEnum.UTF8MB4,
+        collation: TableCollationEnum.UTF8_GENERAL_CI
+      },
+      options
+    );
     
     this.operations.push(async () => {
       if (this.columnAdditions.length === 0) return;
@@ -62,8 +73,12 @@ export class Table
           .filter(definition => definition != null);
         // Combine all definitions
         const allDefinitions = [ ...columnDefinitions, ...indexDefinitions ];
+        // Get the table options string
+        let tableOptionsString = "";
+        if (tableOptions.encoding) tableOptionsString += ` DEFAULT CHARACTER SET ${tableOptions.encoding}`;
+        if (tableOptions.collation) tableOptionsString += ` DEFAULT COLLATE ${tableOptions.collation}`;
         // Create the table
-        await this.connection.query(`CREATE TABLE ${escapedTableName} (${allDefinitions.join(", ")});`);
+        await this.connection.query(`CREATE TABLE ${escapedTableName} (${allDefinitions.join(", ")})${tableOptionsString};`);
         // Set the table exists flag
         this.tableExists = true;
         // Clear the column additions
