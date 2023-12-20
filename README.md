@@ -404,10 +404,10 @@ Table of contents:
   - [blob](#tableblob)
   - [dropColumn](#tabledropcolumn)
   - [renameColumn](#tablerenamecolumn)
-  - [addColumnIndex](#tableaddcolumnindex)
-  - [dropColumnIndex](#tabledropcolumnindex)
-  - [setColumnNullable](#tablesetcolumnnullable)
-  - [setColumnDefault](#tablesetcolumndefault)
+  - [addIndex](#tableaddindex)
+  - [dropIndex](#tabledropindex)
+  - [setNullable](#tablesetnullable)
+  - [setDefault](#tablesetdefault)
   - [drop](#tabledrop)
 
 ## MySql
@@ -803,13 +803,15 @@ mysql
   .dropColumn("fullName")
 ```
 
-### addColumnIndex
+### addIndex
 
-The `addColumnIndex` method is used to add an index to a column in the table.
+The `addIndex` method is used to add an index to a column in the table.
 
 #### Parameters
 
-- `name: string`: The name of the column
+- `columnNames: Array<string>`: The names of the columns to add the index to
+- `name?: string`: The name of the index
+- `type?: IndexDefinitionTypeEnum`: The type of index to add. Defaults to `IndexDefinitionTypeEnum.INDEX`.
 
 #### Returns
 - An instance of the `Table` class
@@ -820,16 +822,18 @@ The `addColumnIndex` method is used to add an index to a column in the table.
 mysql
   .database("app")
   .table("users")
-  .addColumnIndex("name")
+  .addIndex(["columnName"])
 ```
 
-### dropColumnIndex
+### dropIndex
 
-The `dropColumnIndex` method is used to drop an index from a column in the table.
+The `dropIndex` method is used to drop an index from a column in the table. There are two ways to use this method:
+
+#### Drop an index by name
 
 #### Parameters
 
-- `name: string`: The name of the column
+- `name: string`: The name of the index
 
 #### Returns
 
@@ -838,16 +842,34 @@ The `dropColumnIndex` method is used to drop an index from a column in the table
 #### Example
 
 ```js
-
 mysql
   .database("app")
   .table("users")
-  .dropColumnIndex("name")
+  .dropIndex("index_name")
 ```
 
-### setColumnNullable
+#### Drop an index by columns
 
-The `setColumnNullable` method is used to set whether a column value can be null.
+#### Parameters
+
+- `columnNames: Array<string>`: The names of the columns that the index is on
+
+#### Returns
+
+- An instance of the `Table` class
+
+#### Example
+
+```js
+mysql
+  .database("app")
+  .table("users")
+  .dropIndex(["columnName"])
+```
+
+### setNullable
+
+The `setNullable` method is used to set whether a column value can be null.
 
 #### Parameters
 
@@ -864,12 +886,12 @@ The `setColumnNullable` method is used to set whether a column value can be null
 mysql
   .database("app")
   .table("users")
-  .setColumnNullable("name", true)
+  .setNullable("name", true)
 ```
 
-### setColumnDefault
+### setDefault
 
-The `setColumnDefault` method is used to set the default value of a column.
+The `setDefault` method is used to set the default value of a column.
 
 #### Parameters
 
@@ -885,7 +907,7 @@ The `setColumnDefault` method is used to set the default value of a column.
 mysql
   .database("app")
   .table("users")
-  .setColumnDefault("name", "John Doe")
+  .setDefault("name", "John Doe")
 ```
 
 ### drop
