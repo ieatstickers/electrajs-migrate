@@ -15,7 +15,7 @@ describe("DropTableModification", () => {
     
     it("returns the correct string", () => {
       const modification = new DropTableModification("column");
-      expect(modification.getModificationDefinition()).toBe("DROP TABLE `column`");
+      expect(modification.getModificationDefinition()).toBe("DROP TABLE IF EXISTS `column`");
     });
     
   });

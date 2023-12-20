@@ -11,6 +11,6 @@ export class DropTableModification implements ModificationInterface
   
   public getModificationDefinition(): string
   {
-    return `DROP TABLE \`${this.name}\``;
+    return `DROP TABLE IF EXISTS \`${this.name}\``;
   }
 }

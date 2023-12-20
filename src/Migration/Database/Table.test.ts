@@ -502,7 +502,7 @@ describe("Table", () => {
       expect(result).toBe(table);
       expect(result['tableModifications'].length).toBe(1);
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("DROP TABLE `test_table`;");
+      expect(mockConnection.query).toHaveBeenCalledWith("DROP TABLE IF EXISTS `test_table`;");
     });
 
   });
