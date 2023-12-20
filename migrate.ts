@@ -5,6 +5,9 @@ import { StatusCommand } from "./src/Command/Status/StatusCommand";
 import { RunCommand } from "./src/Command/Run/RunCommand";
 import { RollbackCommand } from "./src/Command/Rollback/RollbackCommand";
 
+// Override file name to "migrate" regardless of whether we're running migrate-js or migrate-ts
+process.argv[1] = "migrate";
+
 function dbAction(
   action: (
     args: { [k: string]: any },
