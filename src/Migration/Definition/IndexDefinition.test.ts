@@ -1,5 +1,5 @@
 import { IndexDefinition } from "./IndexDefinition";
-import { IndexDefinitionType } from "./IndexDefinitionType";
+import { IndexDefinitionTypeEnum } from "./Enum/IndexDefinitionTypeEnum";
 
 describe("IndexDefinition", () => {
   let testIndexDefinition: IndexDefinition;
@@ -13,7 +13,7 @@ describe("IndexDefinition", () => {
     it("sets default values", () => {
       expect(testIndexDefinition).not.toHaveProperty("indexName");
       expect(testIndexDefinition).toHaveProperty("indexColumns", []);
-      expect(testIndexDefinition).toHaveProperty("indexType", IndexDefinitionType.INDEX);
+      expect(testIndexDefinition).toHaveProperty("indexType", IndexDefinitionTypeEnum.INDEX);
     });
     
   });
@@ -41,7 +41,6 @@ describe("IndexDefinition", () => {
   describe("name", () => {
     
     it("sets the index name", () => {
-      console.log('testIndexDefinition', testIndexDefinition);
       testIndexDefinition.name("testName");
       expect(testIndexDefinition).toHaveProperty("indexName", "testName");
       expect(() => testIndexDefinition.get()).toThrow("No columns defined for index");
@@ -63,8 +62,8 @@ describe("IndexDefinition", () => {
   describe("type", () => {
     
     it("sets the index type", () => {
-      testIndexDefinition.type(IndexDefinitionType.UNIQUE);
-      expect(testIndexDefinition).toHaveProperty("indexType", IndexDefinitionType.UNIQUE);
+      testIndexDefinition.type(IndexDefinitionTypeEnum.UNIQUE);
+      expect(testIndexDefinition).toHaveProperty("indexType", IndexDefinitionTypeEnum.UNIQUE);
     });
     
   });
@@ -77,7 +76,7 @@ describe("IndexDefinition", () => {
     });
     
     it("returns the index definition for UNIQUE", () => {
-      testIndexDefinition.name("testName").type(IndexDefinitionType.UNIQUE).columns("testColumn");
+      testIndexDefinition.name("testName").type(IndexDefinitionTypeEnum.UNIQUE).columns("testColumn");
       expect(testIndexDefinition.get()).toBe("UNIQUE INDEX `testName` (`testColumn`)");
     });
     

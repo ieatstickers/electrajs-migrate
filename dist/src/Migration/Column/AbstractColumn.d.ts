@@ -1,7 +1,7 @@
 import { Schema } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
-import { ColumnDefinition } from "./ColumnDefinition";
-import { IndexDefinition } from "./IndexDefinition";
+import { ColumnDefinition } from "../Definition/ColumnDefinition";
+import { IndexDefinition } from "../Definition/IndexDefinition";
 export declare abstract class AbstractColumn implements ColumnInterface {
     protected name: string;
     protected constructor(name: string);

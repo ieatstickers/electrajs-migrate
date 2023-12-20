@@ -3,8 +3,8 @@ import { IntColumnOptions } from "./IntColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
-import { ColumnDefinition } from "../ColumnDefinition";
-import { IndexDefinition } from "../IndexDefinition";
+import { IndexDefinition } from "../../Definition/IndexDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 
 export class IntColumn extends AbstractColumn implements ColumnInterface
 {

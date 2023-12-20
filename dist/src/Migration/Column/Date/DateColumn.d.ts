@@ -1,8 +1,8 @@
 import { DateColumnOptions } from "./DateColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
-import { ColumnDefinition } from "../ColumnDefinition";
-import { IndexDefinition } from "../IndexDefinition";
+import { IndexDefinition } from "../../Definition/IndexDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 export declare class DateColumn extends AbstractColumn implements ColumnInterface {
     private readonly options;
     constructor(name: string, options?: Partial<DateColumnOptions>);

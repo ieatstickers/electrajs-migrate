@@ -1,7 +1,7 @@
 import { AbstractColumn } from "./AbstractColumn";
 import { Schema, Validators } from "@electra/utility";
 import { Log } from "../../Utility/Log/Log";
-import { ColumnDefinition } from "./ColumnDefinition";
+import { ColumnDefinition } from "../Definition/ColumnDefinition";
 
 class TestColumn extends AbstractColumn
 {

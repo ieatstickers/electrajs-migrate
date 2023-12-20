@@ -2,8 +2,8 @@ import { EnumColumnOptions } from "./EnumColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
-import { ColumnDefinition } from "../ColumnDefinition";
-import { IndexDefinition } from "../IndexDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
+import { IndexDefinition } from "../../Definition/IndexDefinition";
 
 export class EnumColumn extends AbstractColumn implements ColumnInterface
 {

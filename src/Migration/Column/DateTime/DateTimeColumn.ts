@@ -2,8 +2,8 @@ import { DateTimeColumnOptions } from "./DateTimeColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
-import { ColumnDefinition } from "../ColumnDefinition";
-import { IndexDefinition } from "../IndexDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
+import { IndexDefinition } from "../../Definition/IndexDefinition";
 
 export class DateTimeColumn extends AbstractColumn implements ColumnInterface
 {

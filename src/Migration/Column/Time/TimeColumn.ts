@@ -2,7 +2,7 @@ import { TimeColumnOptions } from "./TimeColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
-import { ColumnDefinition } from "../ColumnDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 
 export class TimeColumn extends AbstractColumn implements ColumnInterface
 {

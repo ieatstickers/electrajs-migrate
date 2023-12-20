@@ -1,5 +1,5 @@
-import { ColumnDefinition } from "./ColumnDefinition";
-import { IndexDefinition } from "./IndexDefinition";
+import { ColumnDefinition } from "../Definition/ColumnDefinition";
+import { IndexDefinition } from "../Definition/IndexDefinition";
 
 export interface ColumnInterface
 {

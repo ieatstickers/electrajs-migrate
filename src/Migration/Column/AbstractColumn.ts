@@ -1,8 +1,8 @@
 import { Schema, Validators } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
 import { Log } from "../../Utility/Log/Log";
-import { ColumnDefinition } from "./ColumnDefinition";
-import { IndexDefinition } from "./IndexDefinition";
+import { ColumnDefinition } from "../Definition/ColumnDefinition";
+import { IndexDefinition } from "../Definition/IndexDefinition";
 
 export abstract class AbstractColumn implements ColumnInterface
 {

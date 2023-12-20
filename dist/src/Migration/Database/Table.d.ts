@@ -9,11 +9,13 @@ import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { Connection } from "./Connection";
 import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
 import { CreateTableOptions } from "./Type/CreateTableOptions";
+import { IndexDefinitionTypeEnum } from "../Definition/Enum/IndexDefinitionTypeEnum";
 export declare class Table {
     private readonly name;
     private readonly connection;
-    private readonly operations;
     private readonly columnAdditions;
+    private readonly columnModifications;
+    private readonly tableModifications;
     private tableExists;
     constructor(name: string, connection: Connection, operations: Array<() => Promise<void>>, tableExists: boolean, options?: CreateTableOptions);
     id(name?: string): this;
@@ -28,9 +30,13 @@ export declare class Table {
     blob(name: string, options?: Partial<BlobColumnOptions>): this;
     renameColumn(currentName: string, newName: string): this;
     dropColumn(name: string): this;
-    addColumnIndex(columnName: string): this;
-    dropColumnIndex(columnName: string): this;
-    setColumnNullable(columnName: string, nullable: boolean): this;
-    setColumnDefault(columnName: string, defaultValue: string | number): this;
+    addIndex(columnNames: Array<string>, name?: string, type?: IndexDefinitionTypeEnum): this;
+    dropIndex(name: string): this;
+    dropIndex(columnNames: Array<string>): this;
+    setNullable(columnName: string, nullable: boolean): this;
+    setDefault(columnName: string, defaultValue: string | number): this;
     drop(): this;
+    private getDefaultIndexName;
+    private getCreateTableQuery;
+    private getAlterTableQuery;
 }

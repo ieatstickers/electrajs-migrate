@@ -3,7 +3,7 @@ import { BlobColumnOptions } from "./BlobColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { Validators } from "@electra/utility";
 import { AbstractColumn } from "../AbstractColumn";
-import { ColumnDefinition } from "../ColumnDefinition";
+import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 
 export class BlobColumn extends AbstractColumn implements ColumnInterface
 {

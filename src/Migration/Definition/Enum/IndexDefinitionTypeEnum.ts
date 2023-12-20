@@ -1,5 +1,5 @@
 
-export enum IndexDefinitionType
+export enum IndexDefinitionTypeEnum
 {
   INDEX = "INDEX",
   UNIQUE = "UNIQUE",
