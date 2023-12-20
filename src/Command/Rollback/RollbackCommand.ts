@@ -3,7 +3,7 @@ import { Container } from "../../DI/Container";
 import { Connections } from "../../Migration/Database/Connections";
 import { MySql } from "../../Migration/Database/MySql";
 import { MigrationInterface } from "../../Migration/MigrationInterface";
-import { Migration } from "../../Database/Migration/Repository/Migration/Migration";
+import { Migration } from "../../Dal/Migration/Repository/Migration/Migration";
 import { MigrationFile } from "../../Type/MigrationFile";
 import { Log } from "../../Utility/Log/Log";
 

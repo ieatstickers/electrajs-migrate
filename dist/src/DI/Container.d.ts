@@ -1,5 +1,5 @@
 import { MigrateConfig } from "../Type/MigrateConfig";
-import { MigrationDb } from "../Database/Migration/MigrationDb";
+import { MigrationDb } from "../Dal/Migration/MigrationDb";
 import { MigrationFile } from "../Type/MigrationFile";
 export declare class Container {
     private static config;

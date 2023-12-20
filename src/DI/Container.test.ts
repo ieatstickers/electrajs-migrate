@@ -1,7 +1,7 @@
 import { Container } from "./Container";
 import { DataSource } from "typeorm";
 import { Modules } from "../Utility/Modules/Modules";
-import { MigrationDb } from "../Database/Migration/MigrationDb";
+import { MigrationDb } from "../Dal/Migration/MigrationDb";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -46,7 +46,7 @@ jest.mock("../Utility/Modules/Modules", () => {
   };
 });
 
-jest.mock("../Database/Migration/MigrationDb", () => {
+jest.mock("../Dal/Migration/MigrationDb", () => {
   return {
     MigrationDb: Object.assign(jest.fn(), {
       prototype: {

@@ -1,6 +1,6 @@
 import { MigrateConfig } from "../Type/MigrateConfig";
-import { HydrateModeEnum, Objects, Validators } from "@electra/utility";
-import { MigrationDb } from "../Database/Migration/MigrationDb";
+import { Objects, Validators } from "@electra/utility";
+import { MigrationDb } from "../Dal/Migration/MigrationDb";
 import { MigrationFile } from "../Type/MigrationFile";
 import { MySqlConnectionOptions } from "../Type/MySqlConnectionOptions";
 import { DataSource } from "typeorm";
