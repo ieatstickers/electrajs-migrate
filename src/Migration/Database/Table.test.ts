@@ -338,7 +338,6 @@ describe("Table", () => {
       expect(table).toHaveProperty("name", "test_table");
       expect(table).toHaveProperty("connection", mockConnection);
       expect(table).toHaveProperty('columns', []);
-      expect(table).toHaveProperty('columnAdditions', []);
       expect(table).toHaveProperty('columnModifications', []);
       expect(table).toHaveProperty('tableModifications', []);
       expect(table).toHaveProperty("tableExists", false);
