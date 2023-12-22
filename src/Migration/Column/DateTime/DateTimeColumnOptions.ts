@@ -1,7 +1,7 @@
 
 export type DateTimeColumnOptions = {
-  nullable: boolean,
-  default: string,
-  index: boolean,
-  addAfter: string
+  nullable?: boolean,
+  default?: string,
+  index?: boolean,
+  after?: string
 };
