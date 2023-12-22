@@ -30,6 +30,7 @@ import { TinyIntColumn } from "../Column/Int/TinyIntColumn";
 import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
 import { BigIntColumn } from "../Column/Int/BigIntColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
+import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
 
 export class Table
 {
@@ -176,7 +177,13 @@ export class Table
     return column;
   }
   
-  // TODO: tinytext
+  public tinytext(name: string): TinyTextColumn
+  {
+    const column = new TinyTextColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
   // TODO: mediumtext
   // TODO: longtext
 
