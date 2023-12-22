@@ -1,7 +1,6 @@
 import { Table } from "./Table";
 import { Connection } from "./Connection";
 import { IntColumn } from "../Column/Int/IntColumn";
-import { IntColumnTypeEnum } from "../Column/Int/IntColumnTypeEnum";
 import { DecimalColumn } from "../Column/Decimal/DecimalColumn";
 import { StringColumn } from "../Column/String/StringColumn";
 import { EnumColumn } from "../Column/Enum/EnumColumn";
@@ -14,6 +13,13 @@ import { TableEncodingEnum } from "./Enum/TableEncodingEnum";
 import { TableCollationEnum } from "./Enum/TableCollationEnum";
 import { IndexDefinitionTypeEnum } from "../Definition/Enum/IndexDefinitionTypeEnum";
 import { RenameColumnModification } from "../Modification/RenameColumn/RenameColumnModification";
+import { TinyIntColumn } from "../Column/Int/TinyIntColumn";
+import { SmallIntColumn } from "../Column/Int/SmallIntColumn";
+import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
+import { BigIntColumn } from "../Column/Int/BigIntColumn";
+import { TinyBlobColumn } from "../Column/Blob/TinyBlobColumn";
+import { MediumBlobColumn } from "../Column/Blob/MediumBlobColumn";
+import { LongBlobColumn } from "../Column/Blob/LongBlobColumn";
 
 jest.mock("./Connection", () => {
   return {
@@ -38,6 +44,99 @@ jest.mock("../Column/Int/IntColumn", () => {
           defaultName: jest.fn().mockReturnThis(),
           get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
         }),
+        unsigned: jest.fn().mockReturnThis(),
+        nullable: jest.fn().mockReturnThis(),
+        primaryKey: jest.fn().mockReturnThis(),
+        autoIncrement: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Int/TinyIntColumn", () => {
+  return {
+    TinyIntColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("age"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`age` TINYINT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+        }),
+        unsigned: jest.fn().mockReturnThis(),
+        nullable: jest.fn().mockReturnThis(),
+        primaryKey: jest.fn().mockReturnThis(),
+        autoIncrement: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Int/SmallIntColumn", () => {
+  return {
+    SmallIntColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("age"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`age` SMALLINT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+        }),
+        unsigned: jest.fn().mockReturnThis(),
+        nullable: jest.fn().mockReturnThis(),
+        primaryKey: jest.fn().mockReturnThis(),
+        autoIncrement: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Int/MediumIntColumn", () => {
+  return {
+    MediumIntColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("age"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`age` MEDIUMINT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+        }),
+        unsigned: jest.fn().mockReturnThis(),
+        nullable: jest.fn().mockReturnThis(),
+        primaryKey: jest.fn().mockReturnThis(),
+        autoIncrement: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Int/BigIntColumn", () => {
+  return {
+    BigIntColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("age"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`age` BIGINT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue({
+          defaultName: jest.fn().mockReturnThis(),
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+        }),
+        unsigned: jest.fn().mockReturnThis(),
+        nullable: jest.fn().mockReturnThis(),
+        primaryKey: jest.fn().mockReturnThis(),
+        autoIncrement: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -52,6 +151,8 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
           get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -66,6 +167,8 @@ jest.mock("../Column/Double/DoubleColumn", () => {
           get: jest.fn().mockReturnValue("`balance` DECIMAL")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -83,6 +186,8 @@ jest.mock("../Column/String/StringColumn", () => {
           defaultName: jest.fn().mockReturnThis(),
           get: jest.fn().mockReturnValue("INDEX `test_table_name_index` (`name`)")
         }),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -97,6 +202,8 @@ jest.mock("../Column/Enum/EnumColumn", () => {
           get: jest.fn().mockReturnValue("`status` ENUM('active', 'inactive')")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -111,6 +218,8 @@ jest.mock("../Column/Date/DateColumn", () => {
           get: jest.fn().mockReturnValue("`dateOfBirth` DATE")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -125,6 +234,7 @@ jest.mock("../Column/Time/TimeColumn", () => {
           get: jest.fn().mockReturnValue("`start` TIME")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -139,6 +249,8 @@ jest.mock("../Column/DateTime/DateTimeColumn", () => {
           get: jest.fn().mockReturnValue("`created` DATETIME")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+        index: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -153,6 +265,52 @@ jest.mock("../Column/Blob/BlobColumn", () => {
           get: jest.fn().mockReturnValue("`imageContent` BLOB")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Blob/TinyBlobColumn", () => {
+  return {
+    TinyBlobColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("imageContent"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`imageContent` TINYBLOB")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Blob/MediumBlobColumn", () => {
+  return {
+    MediumBlobColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("imageContent"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`imageContent` MEDIUMBLOB")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Blob/LongBlobColumn", () => {
+  return {
+    LongBlobColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("imageContent"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`imageContent` LONGBLOB")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis(),
       };
     })
   };
@@ -179,6 +337,7 @@ describe("Table", () => {
     it("correctly initializes properties", () => {
       expect(table).toHaveProperty("name", "test_table");
       expect(table).toHaveProperty("connection", mockConnection);
+      expect(table).toHaveProperty('columns', []);
       expect(table).toHaveProperty('columnAdditions', []);
       expect(table).toHaveProperty('columnModifications', []);
       expect(table).toHaveProperty('tableModifications', []);
@@ -201,7 +360,7 @@ describe("Table", () => {
       const operations = [];
       const table = new Table("test_table", mockConnection, operations, true);
       table.date("dateOfBirth");
-      expect(table['columnAdditions'].length).toBe(1);
+      expect(table['columns'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `dateOfBirth` DATE;");
     });
@@ -209,9 +368,8 @@ describe("Table", () => {
     it("default operation adds column to existing table", async () => {
       const operations = [];
       table = new Table("test_table", mockConnection, operations, true);
-      table
-        .int("age")
-        .string("name");
+      table.int("age");
+      table.string("name");
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`);");
     });
@@ -220,171 +378,211 @@ describe("Table", () => {
   
   describe("id", () => {
 
-    it("adds a column addition that creates an int column and returns the table instance", async () => {
+    it("adds an int column and returns it", async () => {
       const result = table.id();
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(IntColumn).toHaveBeenCalledWith("id", {
-        autoIncrement: true,
-        default:       undefined,
-        index:         false,
-        nullable:      false,
-        primaryKey:    true,
-        type:          IntColumnTypeEnum.INT,
-        unsigned:      true,
-        zeroFill:      false
-      });
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(result.unsigned).toHaveBeenCalledTimes(1);
+      expect(result.autoIncrement).toHaveBeenCalledTimes(1);
+      expect(result.primaryKey).toHaveBeenCalledTimes(1);
+      expect(IntColumn).toHaveBeenCalledWith("id");
     });
 
-    it("adds a column addition that creates an int column with the specified name and returns the table instance", async () => {
+    it("adds an int column with the specified name and returns it", async () => {
       const result = table.id("userId");
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(IntColumn).toHaveBeenCalledWith("userId", {
-        autoIncrement: true,
-        default:       undefined,
-        index:         false,
-        nullable:      false,
-        primaryKey:    true,
-        type:          IntColumnTypeEnum.INT,
-        unsigned:      true,
-        zeroFill:      false
-      });
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(IntColumn).toHaveBeenCalledWith("userId");
     });
 
   });
 
   describe("int", () => {
 
-    it("adds an operation that creates an int column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.int("age", options);
-      expect(result).toBe(table);
-      expect(IntColumn).toHaveBeenCalledWith("age", options);
-      expect(table['columnAdditions'].length).toBe(1);
+    it("adds an int column and returns it", async () => {
+      const result = table.int("age").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(IntColumn).toHaveBeenCalledWith("age");
+    });
+
+  });
+
+  describe("tinyint", () => {
+
+    it("adds an tinyint column and returns it", async () => {
+      const result = table.tinyint("age").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(TinyIntColumn).toHaveBeenCalledWith("age");
+    });
+
+  });
+
+  describe("smallint", () => {
+
+    it("adds an smallint column and returns it", async () => {
+      const result = table.smallint("age").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(SmallIntColumn).toHaveBeenCalledWith("age");
+    });
+
+  });
+
+  describe("mediumint", () => {
+
+    it("adds an mediumint column and returns it", async () => {
+      const result = table.mediumint("age").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(MediumIntColumn).toHaveBeenCalledWith("age");
+    });
+
+  });
+
+  describe("bigint", () => {
+
+    it("adds an bigint column and returns it", async () => {
+      const result = table.bigint("age").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(BigIntColumn).toHaveBeenCalledWith("age");
     });
 
   });
 
   describe("decimal", () => {
 
-    it("adds an operation that creates a decimal column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.decimal("balance", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(DecimalColumn).toHaveBeenCalledWith("balance", options);
+    it("adds a decimal column and returns it", async () => {
+      const result = table.decimal("balance").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(DecimalColumn).toHaveBeenCalledWith("balance", 8, 2);
     });
 
   });
 
   describe("double", () => {
 
-    it("adds an operation that creates a double column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.double("balance", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(DoubleColumn).toHaveBeenCalledWith("balance", options);
+    it("adds a double column and returns it", async () => {
+      const result = table.double("balance").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(DoubleColumn).toHaveBeenCalledWith("balance", undefined, undefined);
+    });
+
+    it("adds a double column with precision and scale", async () => {
+      const result = table.double("balance", 10, 2).nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(DoubleColumn).toHaveBeenCalledWith("balance", 10, 2);
     });
 
   });
 
   describe("string", () => {
 
-    it("adds an operation that creates a string column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.string("name", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(StringColumn).toHaveBeenCalledWith("name", options);
+    it("adds a string column and returns it", async () => {
+      const result = table.string("name").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(StringColumn).toHaveBeenCalledWith("name", 255);
+    });
+
+    it("adds a string column with length and returns it", async () => {
+      const result = table.string("name", 200).nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(StringColumn).toHaveBeenCalledWith("name", 200);
     });
 
   });
 
   describe("enum", () => {
 
-    it("adds an operation that creates an enum column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.enum("status", [ "active", "inactive" ], options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(EnumColumn).toHaveBeenCalledWith("status", [ "active", "inactive" ], options);
+    it("adds an enum column and it", async () => {
+      const result = table.enum("status", [ "active", "inactive" ]).nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(EnumColumn).toHaveBeenCalledWith("status", [ "active", "inactive" ]);
     });
 
   });
 
   describe("date", () => {
 
-    it("adds an operation that creates a date column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.date("dateOfBirth", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(DateColumn).toHaveBeenCalledWith("dateOfBirth", options);
+    it("adds a date column and returns it", async () => {
+      const result = table.date("dateOfBirth").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(DateColumn).toHaveBeenCalledWith("dateOfBirth");
     });
 
   });
 
   describe("time", () => {
 
-    it("adds an operation that creates a time column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.time("startTime", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(TimeColumn).toHaveBeenCalledWith("startTime", options);
+    it("adds a time column and returns it", async () => {
+      const result = table.time("startTime").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(TimeColumn).toHaveBeenCalledWith("startTime");
     });
 
   });
 
   describe("datetime", () => {
 
-    it("adds an operation that creates a datetime column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.datetime("created", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(DateTimeColumn).toHaveBeenCalledWith("created", options);
+    it("adds a datetime column and returns it", async () => {
+      const result = table.datetime("created").nullable().index();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(DateTimeColumn).toHaveBeenCalledWith("created");
     });
 
   });
 
   describe("blob", () => {
 
-    it("adds an operation that creates a blob column and returns the table instance", async () => {
-      const options = {
-        nullable: true,
-        index:    true
-      };
-      const result = table.blob("image", options);
-      expect(table['columnAdditions'].length).toBe(1);
-      expect(result).toBe(table);
-      expect(BlobColumn).toHaveBeenCalledWith("image", options);
+    it("adds a blob column and returns it", async () => {
+      const result = table.blob("image").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(BlobColumn).toHaveBeenCalledWith("image");
+    });
+
+  });
+
+  describe("tinyblob", () => {
+
+    it("adds a tinyblob column and returns it", async () => {
+      const result = table.tinyblob("image").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(TinyBlobColumn).toHaveBeenCalledWith("image");
+    });
+
+  });
+
+  describe("mediumblob", () => {
+
+    it("adds a tinyblob column and returns it", async () => {
+      const result = table.mediumblob("image").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(MediumBlobColumn).toHaveBeenCalledWith("image");
+    });
+
+  });
+
+  describe("longblob", () => {
+
+    it("adds a longblob column and returns it", async () => {
+      const result = table.longblob("image").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(LongBlobColumn).toHaveBeenCalledWith("image");
     });
 
   });
@@ -522,21 +720,21 @@ describe("Table", () => {
   describe("getCreateTableQuery", () => {
   
     it("returns the create table query", () => {
-      const columnAdditions = [
+      const columns = [
         new IntColumn("age"),
         new StringColumn("name"),
         new DecimalColumn("balance")
       ];
-      const result = table['getCreateTableQuery'](columnAdditions, {});
+      const result = table['getCreateTableQuery'](columns, {});
       expect(result).toBe("CREATE TABLE `test_table` (`age` INT, `name` VARCHAR(255), `balance` DECIMAL(10, 2), INDEX `test_table_age_index` (`age`), INDEX `test_table_name_index` (`name`));");
     });
     
     it("returns the create table query with table options", () => {
-      const columnAdditions = [
+      const columns = [
         new IntColumn("age"),
         new StringColumn("name")
       ];
-      const result = table['getCreateTableQuery'](columnAdditions, {
+      const result = table['getCreateTableQuery'](columns, {
         encoding:  TableEncodingEnum.UTF8MB4,
         collation: TableCollationEnum.UTF8MB4_GENERAL_CI
       });
@@ -548,14 +746,14 @@ describe("Table", () => {
   describe("getAlterTableQuery", () => {
     
     it("returns the alter table query", () => {
-      const columnAdditions = [
+      const columns = [
         new IntColumn("age"),
         new StringColumn("name")
       ];
       const columnModifications = [
         new RenameColumnModification("oldName", "newName")
       ];
-      const result = table['getAlterTableQuery'](columnAdditions, columnModifications);
+      const result = table['getAlterTableQuery'](columns, columnModifications);
       expect(result).toBe("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`), RENAME COLUMN `oldName` TO `newName`;");
     });
     

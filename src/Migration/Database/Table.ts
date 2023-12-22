@@ -1,23 +1,13 @@
-import { IntColumnOptions } from "../Column/Int/IntColumnOptions";
 import { IntColumn } from "../Column/Int/IntColumn";
-import { IdColumn } from "../Column/Id/IdColumn";
 import { DecimalColumn } from "../Column/Decimal/DecimalColumn";
-import { DecimalColumnOptions } from "../Column/Decimal/DecimalColumnOptions";
 import { StringColumn } from "../Column/String/StringColumn";
-import { StringColumnOptions } from "../Column/String/StringColumnOptions";
 import { DateColumn } from "../Column/Date/DateColumn";
-import { DateColumnOptions } from "../Column/Date/DateColumnOptions";
 import { TimeColumn } from "../Column/Time/TimeColumn";
-import { TimeColumnOptions } from "../Column/Time/TimeColumnOptions";
 import { DateTimeColumn } from "../Column/DateTime/DateTimeColumn";
-import { DateTimeColumnOptions } from "../Column/DateTime/DateTimeColumnOptions";
-import { BlobColumnOptions } from "../Column/Blob/BlobColumnOptions";
 import { BlobColumn } from "../Column/Blob/BlobColumn";
-import { EnumColumnOptions } from "../Column/Enum/EnumColumnOptions";
 import { EnumColumn } from "../Column/Enum/EnumColumn";
 import { Connection } from "./Connection";
 import { ColumnInterface } from "../Column/ColumnInterface";
-import { DoubleColumnOptions } from "../Column/Double/DoubleColumnOptions";
 import { DoubleColumn } from "../Column/Double/DoubleColumn";
 import { TableEncodingEnum } from "./Enum/TableEncodingEnum";
 import { TableCollationEnum } from "./Enum/TableCollationEnum";
@@ -32,12 +22,19 @@ import { DropIndexModification } from "../Modification/DropIndex/DropIndexModifi
 import { SetNullableModification } from "../Modification/SetNullable/SetNullableModification";
 import { SetDefaultModification } from "../Modification/SetDefault/SetDefaultModification";
 import { DropTableModification } from "../Modification/DropTable/DropTableModification";
+import { TinyBlobColumn } from "../Column/Blob/TinyBlobColumn";
+import { MediumBlobColumn } from "../Column/Blob/MediumBlobColumn";
+import { LongBlobColumn } from "../Column/Blob/LongBlobColumn";
+import { SmallIntColumn } from "../Column/Int/SmallIntColumn";
+import { TinyIntColumn } from "../Column/Int/TinyIntColumn";
+import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
+import { BigIntColumn } from "../Column/Int/BigIntColumn";
 
 export class Table
 {
   private readonly name: string;
   private readonly connection: Connection;
-  private readonly columnAdditions: Array<ColumnInterface> = [];
+  private readonly columns: Array<ColumnInterface> = [];
   private readonly columnModifications: Array<ModificationInterface> = [];
   private readonly tableModifications: Array<ModificationInterface> = [];
   private tableExists: boolean;
@@ -64,15 +61,15 @@ export class Table
     
     operations.push(async () => {
       if (
-        this.columnAdditions.length === 0
+        this.columns.length === 0
         && this.columnModifications.length === 0
         && this.tableModifications.length === 0
       ) return;
       
       // Create query
-      if (!this.tableExists && this.columnAdditions.length > 0)
+      if (!this.tableExists && this.columns.length > 0)
       {
-        const createQuery = this.getCreateTableQuery(this.columnAdditions, tableOptions);
+        const createQuery = this.getCreateTableQuery(this.columns, tableOptions);
         
         if (createQuery)
         {
@@ -81,14 +78,14 @@ export class Table
           // Set the table exists flag
           this.tableExists = true;
           // Clear the column additions
-          this.columnAdditions.splice(0, this.columnAdditions.length);
+          this.columns.splice(0, this.columns.length);
         }
       }
       
       // Alter query
-      if (this.columnAdditions.length > 0 || this.columnModifications.length > 0)
+      if (this.columns.length > 0 || this.columnModifications.length > 0)
       {
-        const alterQuery = this.getAlterTableQuery(this.columnAdditions, this.columnModifications);
+        const alterQuery = this.getAlterTableQuery(this.columns, this.columnModifications);
         
         if (alterQuery)
         {
@@ -105,64 +102,126 @@ export class Table
     });
   }
 
-  public id(name: string = "id"): this
+  public id(name: string = "id"): IntColumn
   {
-    this.columnAdditions.push(new IdColumn(name));
-    return this;
+    const column = (new IntColumn(name))
+      .unsigned()
+      .autoIncrement()
+      .primaryKey();
+    this.columns.push(column);
+    return column;
   }
 
-  public int(name: string, options?: Partial<IntColumnOptions>): this
+  public int(name: string): IntColumn
   {
-    this.columnAdditions.push(new IntColumn(name, options));
-    return this;
+    const column = new IntColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
+  public tinyint(name: string): TinyIntColumn
+  {
+    const column = new TinyIntColumn(name);
+    this.columns.push(column);
+    return column;
   }
 
-  public decimal(name: string, options?: Partial<DecimalColumnOptions>): this
+  public smallint(name: string): SmallIntColumn
   {
-    this.columnAdditions.push(new DecimalColumn(name, options));
-    return this;
+    const column = new SmallIntColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
+  public mediumint(name: string): MediumIntColumn
+  {
+    const column = new MediumIntColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
+  public bigint(name: string): BigIntColumn
+  {
+    const column = new BigIntColumn(name);
+    this.columns.push(column);
+    return column;
   }
 
-  public double(name: string, options?: Partial<DoubleColumnOptions>): this
+  public decimal(name: string, precision: number = 8, scale: number = 2): DecimalColumn
   {
-    this.columnAdditions.push(new DoubleColumn(name, options));
-    return this;
+    const column = new DecimalColumn(name, precision, scale);
+    this.columns.push(column);
+    return column;
   }
 
-  public string(name: string, options?: Partial<StringColumnOptions>): this
+  public double(name: string, precision?: number, scale?: number): DoubleColumn
   {
-    this.columnAdditions.push(new StringColumn(name, options));
-    return this;
+    const column = new DoubleColumn(name, precision, scale);
+    this.columns.push(column);
+    return column;
   }
 
-  public enum(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>): this
+  public string(name: string, length: number = 255): StringColumn
   {
-    this.columnAdditions.push(new EnumColumn(name, values, options));
-    return this;
+    const column = new StringColumn(name, length);
+    this.columns.push(column);
+    return column;
   }
 
-  public date(name: string, options?: Partial<DateColumnOptions>): this
+  public enum(name: string, values: Array<string>): EnumColumn
   {
-    this.columnAdditions.push(new DateColumn(name, options));
-    return this;
+    const column = new EnumColumn(name, values);
+    this.columns.push(column);
+    return column;
   }
 
-  public time(name: string, options?: Partial<TimeColumnOptions>): this
+  public date(name: string): DateColumn
   {
-    this.columnAdditions.push(new TimeColumn(name, options));
-    return this;
+    const column = new DateColumn(name);
+    this.columns.push(column);
+    return column;
   }
 
-  public datetime(name: string, options?: Partial<DateTimeColumnOptions>): this
+  public time(name: string): TimeColumn
   {
-    this.columnAdditions.push(new DateTimeColumn(name, options));
-    return this;
+    const column = new TimeColumn(name);
+    this.columns.push(column);
+    return column;
   }
 
-  public blob(name: string, options?: Partial<BlobColumnOptions>): this
+  public datetime(name: string): DateTimeColumn
   {
-    this.columnAdditions.push(new BlobColumn(name, options));
-    return this;
+    const column = new DateTimeColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+
+  public blob(name: string): BlobColumn
+  {
+    const column = new BlobColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+
+  public tinyblob(name: string): TinyBlobColumn
+  {
+    const column = new TinyBlobColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+
+  public mediumblob(name: string): MediumBlobColumn
+  {
+    const column = new MediumBlobColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+
+  public longblob(name: string): LongBlobColumn
+  {
+    const column = new LongBlobColumn(name);
+    this.columns.push(column);
+    return column;
   }
   
   public renameColumn(currentName: string, newName: string): this
