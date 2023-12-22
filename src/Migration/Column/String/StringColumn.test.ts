@@ -1,5 +1,4 @@
 import { StringColumn } from "./StringColumn";
-import { StringColumnTypeEnum } from "./StringColumnTypeEnum";
 
 describe("StringColumn", () => {
   
@@ -8,91 +7,19 @@ describe("StringColumn", () => {
     it("initializes properties correctly with no options", () => {
       const stringColumn = new StringColumn("name");
       expect(stringColumn).toHaveProperty("name", "name");
-      expect(stringColumn).toHaveProperty("options", {
-        type: StringColumnTypeEnum.VARCHAR,
-        nullable: false,
-        primaryKey: false,
-        default: undefined,
-        length: 255,
-        index: false,
-        addAfter: undefined
-      });
+      expect(stringColumn).toHaveProperty("length", 255);
+      expect(stringColumn).toHaveProperty("options", {});
     });
     
     it("initializes properties correctly with options", () => {
-      const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
+      const stringColumn = new StringColumn("name", 200);
       expect(stringColumn).toHaveProperty("name", "name");
-      expect(stringColumn).toHaveProperty("options", {
-        type: StringColumnTypeEnum.VARCHAR,
-        nullable: true,
-        primaryKey: false,
-        default: undefined,
-        length: 255,
-        index: false,
-        addAfter: "otherColumn"
-      });
+      expect(stringColumn).toHaveProperty("length", 200);
+      expect(stringColumn).toHaveProperty("options", {});
     });
     
-    it("sets length to undefined if type is not VARCHAR", () => {
-      const stringColumn = new StringColumn(
-        "name",
-        {
-          type: StringColumnTypeEnum.MEDIUMTEXT,
-          nullable: true,
-          addAfter: "otherColumn"
-        }
-      );
-      expect(stringColumn).toHaveProperty("name", "name");
-      expect(stringColumn).toHaveProperty("options", {
-        type: StringColumnTypeEnum.MEDIUMTEXT,
-        nullable: true,
-        primaryKey: false,
-        default: undefined,
-        length: undefined,
-        index: false,
-        addAfter: "otherColumn"
-      });
-    });
-    
-    it("sets length if type is VARCHAR", () => {
-      const stringColumn = new StringColumn(
-        "name",
-        {
-          type: StringColumnTypeEnum.VARCHAR,
-          nullable: true,
-          addAfter: "otherColumn"
-        }
-      );
-      expect(stringColumn).toHaveProperty("name", "name");
-      expect(stringColumn).toHaveProperty("options", {
-        type: StringColumnTypeEnum.VARCHAR,
-        nullable: true,
-        primaryKey: false,
-        default: undefined,
-        length: 255,
-        index: false,
-        addAfter: "otherColumn"
-      });
-    });
-    
-    it("sets length if no type is passed", () => {
-      const stringColumn = new StringColumn(
-        "name",
-        {
-          nullable: true,
-          addAfter: "otherColumn"
-        }
-      );
-      expect(stringColumn).toHaveProperty("name", "name");
-      expect(stringColumn).toHaveProperty("options", {
-        type: StringColumnTypeEnum.VARCHAR,
-        nullable: true,
-        primaryKey: false,
-        default: undefined,
-        length: 255,
-        index: false,
-        addAfter: "otherColumn"
-      });
+    it("throws error if invalid value is passed", () => {
+      expect(() => new StringColumn("name", "string" as any)).toThrow(TypeError);
     });
     
   });
@@ -100,38 +27,108 @@ describe("StringColumn", () => {
   describe("getColumnDefinition", () => {
     
     it("returns the correct definition", async () => {
-      const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
+      const stringColumn = (new StringColumn("name"))
+        .nullable()
+        .after("otherColumn");
       const definition = stringColumn.getColumnDefinition().get();
       expect(definition).toEqual("`name` VARCHAR(255) NULL AFTER `otherColumn`");
     });
     
     it("returns the correct definition with length", async () => {
-      const stringColumn = new StringColumn(
-        "name",
-        {
-          type: StringColumnTypeEnum.VARCHAR,
-          nullable: true,
-          length: 50,
-          addAfter: "otherColumn"
-        }
-      );
+      const stringColumn = (new StringColumn("name", 50))
+        .nullable(true)
+        .after("otherColumn");
       const definition = stringColumn.getColumnDefinition().get();
       expect(definition).toEqual("`name` VARCHAR(50) NULL AFTER `otherColumn`");
     });
     
-    it("returns the correct definition with default value", async () => {
-      const stringColumn = new StringColumn(
-        "name",
-        {
-          type: StringColumnTypeEnum.TEXT,
-          length: 50,
-          nullable: true,
-          default: "default value",
-          addAfter: "otherColumn"
-        }
-      );
+    it("returns the correct definition with nullable not specified", () => {
+      const stringColumn = (new StringColumn("name")).after("otherColumn");
       const definition = stringColumn.getColumnDefinition().get();
-      expect(definition).toEqual("`name` TEXT NULL DEFAULT 'default value' AFTER `otherColumn`");
+      expect(definition).toEqual("`name` VARCHAR(255) NOT NULL AFTER `otherColumn`");
+    });
+    
+    it("returns the correct definition with default", () => {
+      const stringColumn = (new StringColumn("name"))
+        .default("test")
+        .after("otherColumn");
+      const definition = stringColumn.getColumnDefinition().get();
+      expect(definition).toEqual("`name` VARCHAR(255) NOT NULL DEFAULT 'test' AFTER `otherColumn`");
+    });
+    
+  });
+  
+  describe("nullable", () => {
+    
+    it("sets nullable option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.nullable();
+      expect(stringColumn).toHaveProperty("options.nullable", true);
+    });
+    
+    it("throws error if invalid value is passed", () => {
+      const stringColumn = new StringColumn("name");
+      expect(() => stringColumn.nullable("invalid" as any)).toThrow(TypeError);
+    });
+    
+  });
+  
+  describe("primaryKey", () => {
+    
+    it("sets primaryKey option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.primaryKey();
+      expect(stringColumn).toHaveProperty("options.primaryKey", true);
+    });
+    
+    it("throws error if invalid value is passed", () => {
+      const stringColumn = new StringColumn("name");
+      expect(() => stringColumn.primaryKey("invalid" as any)).toThrow(TypeError);
+    });
+    
+  });
+  
+  describe("default", () => {
+    
+    it("sets default option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.default("test");
+      expect(stringColumn).toHaveProperty("options.default", "test");
+    });
+    
+    it("throws error if invalid value is passed", () => {
+      const stringColumn = new StringColumn("name");
+      expect(() => stringColumn.default(123 as any)).toThrow(TypeError);
+    });
+    
+  });
+  
+  describe("index", () => {
+    
+    it("sets index option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.index();
+      expect(stringColumn).toHaveProperty("options.index", true);
+    });
+    
+    it("throws error if invalid value is passed", () => {
+      const stringColumn = new StringColumn("name");
+      expect(() => stringColumn.index("invalid" as any)).toThrow(TypeError);
+    });
+    
+  });
+  
+  describe("after", () => {
+    
+    it("sets after option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.after("otherColumn");
+      expect(stringColumn).toHaveProperty("options.after", "otherColumn");
+    });
+    
+    it("throws error if invalid value is passed", () => {
+      const stringColumn = new StringColumn("name");
+      expect(() => stringColumn.after(123 as any)).toThrow(TypeError);
     });
     
   });
@@ -139,13 +136,18 @@ describe("StringColumn", () => {
   describe("getIndexDefinition", () => {
     
     it("returns null if index is false", async () => {
-      const stringColumn = new StringColumn("name", { nullable: true, addAfter: "otherColumn" });
+      const stringColumn = (new StringColumn("name"))
+        .nullable()
+        .after("otherColumn");
       const definition = stringColumn.getIndexDefinition();
       expect(definition).toEqual(null);
     });
     
     it("returns the correct definition", async () => {
-      const stringColumn = new StringColumn("name", { nullable: true, index: true, addAfter: "otherColumn" });
+      const stringColumn = (new StringColumn("name"))
+        .nullable()
+        .index()
+        .after("otherColumn")
       const definition = stringColumn.getIndexDefinition().get();
       expect(definition).toEqual("INDEX (`name`)");
     });
