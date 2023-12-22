@@ -4,13 +4,14 @@ import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
 import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 import { IndexDefinition } from "../../Definition/IndexDefinition";
+import { ColumnTypeEnum } from "../ColumnTypeEnum";
 
 export class EnumColumn extends AbstractColumn implements ColumnInterface
 {
   private readonly values: Array<string>;
-  private readonly options: EnumColumnOptions;
+  private readonly options: EnumColumnOptions = {};
   
-  public constructor(name: string, values: Array<string>, options?: Partial<EnumColumnOptions>)
+  public constructor(name: string, values: Array<string>)
   {
     super(name);
     
@@ -26,36 +27,50 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       .validate(this.values);
     
     if (!valid) throw new TypeError(`Invalid ${this.constructor.name} values. ${message}`);
-    
-    this.options = {
-      nullable: false,
-      default: undefined,
-      index: false,
-      addAfter: undefined,
-      ...options
-    };
-    
+  }
+  
+  public nullable(nullable: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(nullable);
+    if (valid === false) throw new TypeError(`Invalid value passed to EnumColumn.nullable: ${message}`);
+    this.options.nullable = nullable;
+    return this;
+  }
+  
+  public default(value: string): this
+  {
+    const { valid, message } = Validators.string().validate(value);
     const valuesEnum = {};
     for (const value of this.values) valuesEnum[value] = value;
-    
-    this.validateOptions(
-      this.options,
-      {
-        nullable: Validators.boolean(),
-        default: Validators.enumValue(valuesEnum, { optional: true }),
-        index: Validators.boolean(),
-        addAfter: Validators.string({ optional: true })
-      }
-    );
+    const { valid: enumValueValid, message: enumValueMessage } = Validators.enumValue(valuesEnum).validate(value);
+    if (valid === false || enumValueValid === false) throw new TypeError(`Invalid value passed to EnumColumn.default: ${message || enumValueMessage}`);
+    this.options.default = value;
+    return this;
+  }
+  
+  public index(index: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(index);
+    if (valid === false) throw new TypeError(`Invalid value passed to EnumColumn.index: ${message}`);
+    this.options.index = index;
+    return this;
+  }
+  
+  public after(columnName: string): this
+  {
+    const { valid, message } = this.validateColumnName(columnName);
+    if (valid === false) throw new TypeError(`Invalid value passed to EnumColumn.after: ${message}`);
+    this.options.after = columnName;
+    return this;
   }
   
   public getColumnDefinition(): ColumnDefinition
   {
     return ColumnDefinition
-      .create(this.name, `ENUM('${this.values.join("', '")}')`)
+      .create(this.name, `${ColumnTypeEnum.ENUM}('${this.values.join("', '")}')`)
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
-      .after(this.options.addAfter);
+      .after(this.options.after);
   }
   
   public getIndexDefinition(): IndexDefinition
