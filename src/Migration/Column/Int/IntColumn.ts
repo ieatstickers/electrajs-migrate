@@ -1,59 +1,91 @@
-import { IntColumnTypeEnum } from "./IntColumnTypeEnum";
 import { IntColumnOptions } from "./IntColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { Validators } from "@electra/utility";
 import { IndexDefinition } from "../../Definition/IndexDefinition";
 import { ColumnDefinition } from "../../Definition/ColumnDefinition";
+import { ColumnTypeEnum } from "../ColumnTypeEnum";
 
 export class IntColumn extends AbstractColumn implements ColumnInterface
 {
-  private readonly options: IntColumnOptions;
+  private readonly options: IntColumnOptions = {};
+  protected readonly type: string = ColumnTypeEnum.INT
   
-  public constructor(name: string, options?: Partial<IntColumnOptions>)
+  public nullable(nullable: boolean = true): this
   {
-    super(name);
-    
-    this.options = {
-      type: IntColumnTypeEnum.INT,
-      nullable: false,
-      default: undefined,
-      unsigned: false,
-      autoIncrement: false,
-      zeroFill: false,
-      primaryKey: false,
-      index: false,
-      addAfter: undefined,
-      ...options
-    };
-    
-    this.validateOptions(
-      this.options,
-      {
-        type: Validators.enumValue(IntColumnTypeEnum),
-        nullable: Validators.boolean(),
-        default: Validators.integer({ optional: true }),
-        unsigned: Validators.boolean(),
-        autoIncrement: Validators.boolean(),
-        zeroFill: Validators.boolean(),
-        primaryKey: Validators.boolean(),
-        index: Validators.boolean(),
-        addAfter: Validators.string({ optional: true })
-      }
-    );
+    const { valid, message } = Validators.boolean().validate(nullable);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.nullable: ${message}`);
+    this.options.nullable = nullable;
+    return this;
+  }
+  
+  public default(value: number): this
+  {
+    const { valid, message } = Validators.integer().validate(value);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.default: ${message}`);
+    this.options.default = value;
+    return this;
+  }
+  
+  public unsigned(unsigned: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(unsigned);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.unsigned: ${message}`);
+    this.options.unsigned = unsigned;
+    return this;
+  }
+  
+  public autoIncrement(autoIncrement: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(autoIncrement);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.autoIncrement: ${message}`);
+    this.options.autoIncrement = autoIncrement;
+    return this;
+  }
+  
+  public zeroFill(zeroFill: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(zeroFill);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.zeroFill: ${message}`);
+    this.options.zeroFill = zeroFill;
+    return this;
+  }
+  
+  public primaryKey(primaryKey: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(primaryKey);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.primaryKey: ${message}`);
+    this.options.primaryKey = primaryKey;
+    return this;
+  }
+  
+  public index(index: boolean = true): this
+  {
+    const { valid, message } = Validators.boolean().validate(index);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.index: ${message}`);
+    this.options.index = index;
+    return this;
+  }
+  
+  public after(columnName: string): this
+  {
+    const { valid, message } = this.validateColumnName(columnName);
+    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.after: ${message}`);
+    this.options.after = columnName;
+    return this;
   }
   
   public getColumnDefinition(): ColumnDefinition
   {
     return ColumnDefinition
-      .create(this.name, this.options.type)
+      .create(this.name, this.type)
       .nullable(this.options.nullable)
       .default(this.options.default)
       .unsigned(this.options.unsigned)
       .autoIncrement(this.options.autoIncrement)
       .zeroFill(this.options.zeroFill)
       .primaryKey(this.options.primaryKey)
-      .after(this.options.addAfter);
+      .after(this.options.after);
   }
   
   public getIndexDefinition(): IndexDefinition
