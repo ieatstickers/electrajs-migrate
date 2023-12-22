@@ -18,6 +18,9 @@ import { TinyIntColumn } from "../Column/Int/TinyIntColumn";
 import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
 import { BigIntColumn } from "../Column/Int/BigIntColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
+import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
+import { MediumTextColumn } from "../Column/Text/MediumTextColumn";
+import { LongTextColumn } from "../Column/Text/LongTextColumn";
 export declare class Table {
     private readonly name;
     private readonly connection;
@@ -36,6 +39,9 @@ export declare class Table {
     double(name: string, precision?: number, scale?: number): DoubleColumn;
     string(name: string, length?: number): StringColumn;
     text(name: string): TextColumn;
+    tinytext(name: string): TinyTextColumn;
+    mediumtext(name: string): MediumTextColumn;
+    longtext(name: string): LongTextColumn;
     enum(name: string, values: Array<string>): EnumColumn;
     date(name: string): DateColumn;
     time(name: string): TimeColumn;
