@@ -78,7 +78,7 @@ export class ColumnDefinition
   {
     let definition = `\`${this.name}\` ${this.type}`;
     if (this.options.unsigned === true) definition += " UNSIGNED";
-    if (typeof this.options.nullable === "boolean") definition += this.options.nullable ? " NULL" : " NOT NULL";
+    definition += this.options.nullable === true ? " NULL" : " NOT NULL";
     if (this.options.default !== undefined) definition += ` DEFAULT ${this.options.default}`;
     if (this.options.autoIncrement === true) definition += " AUTO_INCREMENT";
     if (this.options.zeroFill === true) definition += " ZEROFILL";

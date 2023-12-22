@@ -51,7 +51,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .default("value");
       expect(columnDefinition).toHaveProperty("options.default", "value");
-      expect(columnDefinition.get()).toEqual("`name` type DEFAULT value");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL DEFAULT value");
     });
     
     it("does not add DEFAULT to the definition when value is undefined", () => {
@@ -59,7 +59,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .default(undefined);
       expect(columnDefinition).toHaveProperty("options.default", undefined);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -71,7 +71,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .unsigned(true);
       expect(columnDefinition).toHaveProperty("options.unsigned", true);
-      expect(columnDefinition.get()).toEqual("`name` type UNSIGNED");
+      expect(columnDefinition.get()).toEqual("`name` type UNSIGNED NOT NULL");
     });
     
     it("does not add UNSIGNED to the definition when unsigned is false", () => {
@@ -79,7 +79,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .unsigned(false);
       expect(columnDefinition).toHaveProperty("options.unsigned", false);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -91,7 +91,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .autoIncrement(true);
       expect(columnDefinition).toHaveProperty("options.autoIncrement", true);
-      expect(columnDefinition.get()).toEqual("`name` type AUTO_INCREMENT");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL AUTO_INCREMENT");
     });
     
     it("does not add AUTO_INCREMENT to the definition when autoIncrement is false", () => {
@@ -99,7 +99,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .autoIncrement(false);
       expect(columnDefinition).toHaveProperty("options.autoIncrement", false);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -111,7 +111,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .zeroFill(true);
       expect(columnDefinition).toHaveProperty("options.zeroFill", true);
-      expect(columnDefinition.get()).toEqual("`name` type ZEROFILL");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL ZEROFILL");
     });
     
     it("does not add ZEROFILL to the definition when zeroFill is false", () => {
@@ -119,7 +119,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .zeroFill(false);
       expect(columnDefinition).toHaveProperty("options.zeroFill", false);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -131,7 +131,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .primaryKey(true);
       expect(columnDefinition).toHaveProperty("options.primaryKey", true);
-      expect(columnDefinition.get()).toEqual("`name` type PRIMARY KEY");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL PRIMARY KEY");
     });
     
     it("does not add PRIMARY KEY to the definition when primaryKey is false", () => {
@@ -139,7 +139,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .primaryKey(false);
       expect(columnDefinition).toHaveProperty("options.primaryKey", false);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -151,7 +151,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .after("value");
       expect(columnDefinition).toHaveProperty("options.after", "value");
-      expect(columnDefinition.get()).toEqual("`name` type AFTER `value`");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL AFTER `value`");
     });
     
     it("does not add AFTER to the definition when value is undefined", () => {
@@ -159,7 +159,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .after(undefined);
       expect(columnDefinition).toHaveProperty("options.after", undefined);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
@@ -171,7 +171,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .after(undefined);
       expect(columnDefinition).toHaveProperty("options.after", undefined);
-      expect(columnDefinition.get()).toEqual("`name` type");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
   });
