@@ -31,6 +31,7 @@ import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
 import { BigIntColumn } from "../Column/Int/BigIntColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
 import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
+import { MediumTextColumn } from "../Column/Text/MediumTextColumn";
 
 export class Table
 {
@@ -184,7 +185,13 @@ export class Table
     return column;
   }
   
-  // TODO: mediumtext
+  public mediumtext(name: string): MediumTextColumn
+  {
+    const column = new MediumTextColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
   // TODO: longtext
 
   public enum(name: string, values: Array<string>): EnumColumn

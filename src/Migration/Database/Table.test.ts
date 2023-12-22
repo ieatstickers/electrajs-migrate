@@ -21,6 +21,8 @@ import { TinyBlobColumn } from "../Column/Blob/TinyBlobColumn";
 import { MediumBlobColumn } from "../Column/Blob/MediumBlobColumn";
 import { LongBlobColumn } from "../Column/Blob/LongBlobColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
+import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
+import { MediumTextColumn } from "../Column/Text/MediumTextColumn";
 
 jest.mock("./Connection", () => {
   return {
@@ -201,6 +203,36 @@ jest.mock("../Column/Text/TextColumn", () => {
         getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
           get: jest.fn().mockReturnValue("`name` TEXT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis()
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Text/TinyTextColumn", () => {
+  return {
+    TinyTextColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("name"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`name` TINYTEXT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis()
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Text/MediumTextColumn", () => {
+  return {
+    MediumTextColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("name"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`name` MEDIUMTEXT")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis()
@@ -521,6 +553,28 @@ describe("Table", () => {
       expect(table['columns'].length).toBe(1);
       expect(result).toBe(table['columns'][0]);
       expect(TextColumn).toHaveBeenCalledWith("name");
+    });
+
+  });
+
+  describe("tinytext", () => {
+
+    it("adds a tinytext column and returns it", async () => {
+      const result = table.tinytext("name").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(TinyTextColumn).toHaveBeenCalledWith("name");
+    });
+
+  });
+
+  describe("mediumtext", () => {
+
+    it("adds a mediumtext column and returns it", async () => {
+      const result = table.mediumtext("name").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(MediumTextColumn).toHaveBeenCalledWith("name");
     });
 
   });
