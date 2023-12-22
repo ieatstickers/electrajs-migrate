@@ -23,6 +23,7 @@ import { LongBlobColumn } from "../Column/Blob/LongBlobColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
 import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
 import { MediumTextColumn } from "../Column/Text/MediumTextColumn";
+import { LongTextColumn } from "../Column/Text/LongTextColumn";
 
 jest.mock("./Connection", () => {
   return {
@@ -575,6 +576,17 @@ describe("Table", () => {
       expect(table['columns'].length).toBe(1);
       expect(result).toBe(table['columns'][0]);
       expect(MediumTextColumn).toHaveBeenCalledWith("name");
+    });
+
+  });
+
+  describe("longtext", () => {
+
+    it("adds a longtext column and returns it", async () => {
+      const result = table.longtext("name").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(LongTextColumn).toHaveBeenCalledWith("name");
     });
 
   });

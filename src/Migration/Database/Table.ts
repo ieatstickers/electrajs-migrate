@@ -32,6 +32,7 @@ import { BigIntColumn } from "../Column/Int/BigIntColumn";
 import { TextColumn } from "../Column/Text/TextColumn";
 import { TinyTextColumn } from "../Column/Text/TinyTextColumn";
 import { MediumTextColumn } from "../Column/Text/MediumTextColumn";
+import { LongTextColumn } from "../Column/Text/LongTextColumn";
 
 export class Table
 {
@@ -192,8 +193,13 @@ export class Table
     return column;
   }
   
-  // TODO: longtext
-
+  public longtext(name: string): LongTextColumn
+  {
+    const column = new LongTextColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
   public enum(name: string, values: Array<string>): EnumColumn
   {
     const column = new EnumColumn(name, values);
