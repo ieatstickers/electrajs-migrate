@@ -15,7 +15,7 @@ class TestColumn extends AbstractColumn
   
   public testValidateName(name: string): ValidatorResult
   {
-    return this.validateName(name);
+    return this.validateColumnName(name);
   }
   
   public testValidateOptions(options: any, schema: Schema): boolean
@@ -67,13 +67,13 @@ describe("AbstractColumn", () => {
     
   });
   
-  describe("validateName", () => {
+  describe("validateColumnName", () => {
     
-    it("validates a valid name", () => {
+    it("validates a valid column name", () => {
       expect(testColumn.testValidateName("validName")).toEqual({ valid: true, message: null, value: "validName" });
     });
     
-    it("validates an invalid name", () => {
+    it("validates an invalid column name", () => {
       expect(testColumn.testValidateName("")).toEqual({ valid: false, message: "Value must be at least 1 in length - string of length 0 provided", value: "" });
     });
     

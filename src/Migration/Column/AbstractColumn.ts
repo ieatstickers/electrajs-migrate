@@ -12,7 +12,7 @@ export abstract class AbstractColumn implements ColumnInterface
   public constructor(name: string)
   {
     this.name = name;
-    const { valid, message } = this.validateName(this.name);
+    const { valid, message } = this.validateColumnName(this.name);
     if (!valid) throw new TypeError(`Invalid ${this.constructor.name} name: ${message}`);
   }
   
@@ -28,7 +28,7 @@ export abstract class AbstractColumn implements ColumnInterface
     return this.name;
   }
   
-  protected validateName(name: string): ValidatorResult
+  protected validateColumnName(name: string): ValidatorResult
   {
     return Validators
       .all([
