@@ -1,11 +1,17 @@
-import { DoubleColumnOptions } from "./DoubleColumnOptions";
 import { ColumnInterface } from "../ColumnInterface";
 import { AbstractColumn } from "../AbstractColumn";
 import { ColumnDefinition } from "../../Definition/ColumnDefinition";
 import { IndexDefinition } from "../../Definition/IndexDefinition";
 export declare class DoubleColumn extends AbstractColumn implements ColumnInterface {
     private readonly options;
-    constructor(name: string, options?: Partial<DoubleColumnOptions>);
+    private readonly precision;
+    private readonly scale;
+    constructor(name: string, precision?: number, scale?: number);
+    nullable(nullable?: boolean): this;
+    default(value: number): this;
+    zeroFill(zeroFill?: boolean): this;
+    index(index?: boolean): this;
+    after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;
 }

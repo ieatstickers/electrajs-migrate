@@ -20,6 +20,7 @@ import { BigIntColumn } from "../Column/Int/BigIntColumn";
 import { TinyBlobColumn } from "../Column/Blob/TinyBlobColumn";
 import { MediumBlobColumn } from "../Column/Blob/MediumBlobColumn";
 import { LongBlobColumn } from "../Column/Blob/LongBlobColumn";
+import { TextColumn } from "../Column/Text/TextColumn";
 
 jest.mock("./Connection", () => {
   return {
@@ -188,6 +189,21 @@ jest.mock("../Column/String/StringColumn", () => {
         }),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+      };
+    })
+  };
+});
+
+jest.mock("../Column/Text/TextColumn", () => {
+  return {
+    TextColumn: jest.fn().mockImplementation(() => {
+      return {
+        getName: jest.fn().mockReturnValue("name"),
+        getColumnDefinition: jest.fn().mockReturnValue({
+          get: jest.fn().mockReturnValue("`name` TEXT")
+        }),
+        getIndexDefinition: jest.fn().mockReturnValue(null),
+        nullable: jest.fn().mockReturnThis()
       };
     })
   };
@@ -494,6 +510,17 @@ describe("Table", () => {
       expect(table['columns'].length).toBe(1);
       expect(result).toBe(table['columns'][0]);
       expect(StringColumn).toHaveBeenCalledWith("name", 200);
+    });
+
+  });
+
+  describe("text", () => {
+
+    it("adds a text column and returns it", async () => {
+      const result = table.text("name").nullable();
+      expect(table['columns'].length).toBe(1);
+      expect(result).toBe(table['columns'][0]);
+      expect(TextColumn).toHaveBeenCalledWith("name");
     });
 
   });

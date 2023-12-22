@@ -2,13 +2,14 @@ import { Schema } from "@electra/utility";
 import { ColumnInterface } from "./ColumnInterface";
 import { ColumnDefinition } from "../Definition/ColumnDefinition";
 import { IndexDefinition } from "../Definition/IndexDefinition";
+import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/ValidatorResult";
 export declare abstract class AbstractColumn implements ColumnInterface {
     protected name: string;
-    protected constructor(name: string);
+    constructor(name: string);
     abstract getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;
     getName(): string;
-    protected validateName(name: string): boolean;
+    protected validateColumnName(name: string): ValidatorResult;
     protected validateOptions(options: {
         [key: string]: any;
     }, schema: Schema): boolean;

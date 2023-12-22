@@ -1,10 +1,8 @@
 export type DecimalColumnOptions = {
-    nullable: boolean;
-    default: number;
-    unsigned: boolean;
-    zeroFill: boolean;
-    precision: number;
-    scale: number;
-    index: boolean;
-    addAfter: string;
+    nullable?: boolean;
+    default?: number;
+    unsigned?: boolean;
+    zeroFill?: boolean;
+    index?: boolean;
+    after?: string;
 };

@@ -29,6 +29,7 @@ import { SmallIntColumn } from "../Column/Int/SmallIntColumn";
 import { TinyIntColumn } from "../Column/Int/TinyIntColumn";
 import { MediumIntColumn } from "../Column/Int/MediumIntColumn";
 import { BigIntColumn } from "../Column/Int/BigIntColumn";
+import { TextColumn } from "../Column/Text/TextColumn";
 
 export class Table
 {
@@ -167,6 +168,17 @@ export class Table
     this.columns.push(column);
     return column;
   }
+  
+  public text(name: string): TextColumn
+  {
+    const column = new TextColumn(name);
+    this.columns.push(column);
+    return column;
+  }
+  
+  // TODO: tinytext
+  // TODO: mediumtext
+  // TODO: longtext
 
   public enum(name: string, values: Array<string>): EnumColumn
   {

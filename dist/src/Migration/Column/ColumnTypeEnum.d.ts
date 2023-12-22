@@ -1,0 +1,23 @@
+export declare enum ColumnTypeEnum {
+    BLOB = "BLOB",
+    TINYBLOB = "TINYBLOB",
+    MEDIUMBLOB = "MEDIUMBLOB",
+    LONGBLOB = "LONGBLOB",
+    DATE = "DATE",
+    DATETIME = "DATETIME",
+    DECIMAL = "DECIMAL",
+    DOUBLE = "DOUBLE",
+    ENUM = "ENUM",
+    INT = "INT",
+    TINYINT = "TINYINT",
+    SMALLINT = "SMALLINT",
+    MEDIUMINT = "MEDIUMINT",
+    BIGINT = "BIGINT",
+    CHAR = "CHAR",
+    VARCHAR = "VARCHAR",
+    TEXT = "TEXT",
+    TINYTEXT = "TINYTEXT",
+    MEDIUMTEXT = "MEDIUMTEXT",
+    LONGTEXT = "LONGTEXT",
+    TIME = "TIME"
+}
