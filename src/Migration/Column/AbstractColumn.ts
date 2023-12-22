@@ -3,15 +3,17 @@ import { ColumnInterface } from "./ColumnInterface";
 import { Log } from "../../Utility/Log/Log";
 import { ColumnDefinition } from "../Definition/ColumnDefinition";
 import { IndexDefinition } from "../Definition/IndexDefinition";
+import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/ValidatorResult";
 
 export abstract class AbstractColumn implements ColumnInterface
 {
   protected name: string;
   
-  protected constructor(name: string)
+  public constructor(name: string)
   {
     this.name = name;
-    this.validateName(this.name);
+    const { valid, message } = this.validateName(this.name);
+    if (!valid) throw new TypeError(`Invalid ${this.constructor.name} name: ${message}`);
   }
   
   public abstract getColumnDefinition(): ColumnDefinition;
@@ -26,17 +28,15 @@ export abstract class AbstractColumn implements ColumnInterface
     return this.name;
   }
   
-  protected validateName(name: string): boolean
+  protected validateName(name: string): ValidatorResult
   {
-    const { valid, message } = Validators
+    return Validators
       .all([
         Validators.string(),
         Validators.minLength(1),
         Validators.regex(/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/, 'A-z, 0-9 and/or _')
       ])
       .validate(name);
-    if (!valid) throw new TypeError(`Invalid ${this.constructor.name} name: ${message}`);
-    return true;
   }
   
   protected validateOptions(options: { [key: string]: any }, schema: Schema): boolean

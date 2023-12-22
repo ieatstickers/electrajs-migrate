@@ -2,6 +2,7 @@ import { AbstractColumn } from "./AbstractColumn";
 import { Schema, Validators } from "@electra/utility";
 import { Log } from "../../Utility/Log/Log";
 import { ColumnDefinition } from "../Definition/ColumnDefinition";
+import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/ValidatorResult";
 
 class TestColumn extends AbstractColumn
 {
@@ -12,7 +13,7 @@ class TestColumn extends AbstractColumn
   
   public getColumnDefinition(): ColumnDefinition { return ColumnDefinition.create("test", ""); }
   
-  public testValidateName(name: string): boolean
+  public testValidateName(name: string): ValidatorResult
   {
     return this.validateName(name);
   }
@@ -23,6 +24,16 @@ class TestColumn extends AbstractColumn
   }
 }
 
+class TestColumnInvalidName extends AbstractColumn
+{
+  constructor()
+  {
+    super("");
+  }
+  
+  public getColumnDefinition(): ColumnDefinition { return ColumnDefinition.create("test", ""); }
+}
+
 jest.mock("../../Utility/Log/Log");
 
 describe("AbstractColumn", () => {
@@ -30,6 +41,14 @@ describe("AbstractColumn", () => {
   
   beforeEach(() => {
     testColumn = new TestColumn();
+  });
+  
+  describe("constructor", () => {
+    
+    it("throws an error for an invalid name", () => {
+      expect(() => new TestColumnInvalidName()).toThrow(TypeError);
+    });
+    
   });
   
   describe("getIndexDefinition", () => {
@@ -51,11 +70,11 @@ describe("AbstractColumn", () => {
   describe("validateName", () => {
     
     it("validates a valid name", () => {
-      expect(testColumn.testValidateName("validName")).toBe(true);
+      expect(testColumn.testValidateName("validName")).toEqual({ valid: true, message: null, value: "validName" });
     });
     
-    it("throws an error for an invalid name", () => {
-      expect(() => testColumn.testValidateName("")).toThrow(TypeError);
+    it("validates an invalid name", () => {
+      expect(testColumn.testValidateName("")).toEqual({ valid: false, message: "Value must be at least 1 in length - string of length 0 provided", value: "" });
     });
     
   });
