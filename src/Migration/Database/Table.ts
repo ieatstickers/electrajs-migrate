@@ -77,7 +77,11 @@ export class Table
           return acc;
         }, { columnsToAdd: [], columnsToModify: [] });
       
-      await Promise.all(columnsToModify.map(column => column.hydrateExistingOptions(this.connection, column.getName(), this.name)));
+      await Promise.all(
+        columnsToModify.map((column: ColumnInterface) => {
+          return column.getColumnDefinition().hydrateExistingOptions(this.connection, column.getName(), this.name);
+        })
+      );
       
       // Create query
       if (!this.tableExists && columnsToAdd.length > 0)

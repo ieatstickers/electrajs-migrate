@@ -42,7 +42,8 @@ jest.mock("../Column/Int/IntColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`age` INT")
+          get: jest.fn().mockReturnValue("`age` INT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -65,7 +66,8 @@ jest.mock("../Column/Int/TinyIntColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`age` TINYINT")
+          get: jest.fn().mockReturnValue("`age` TINYINT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -88,7 +90,8 @@ jest.mock("../Column/Int/SmallIntColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`age` SMALLINT")
+          get: jest.fn().mockReturnValue("`age` SMALLINT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -111,7 +114,8 @@ jest.mock("../Column/Int/MediumIntColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`age` MEDIUMINT")
+          get: jest.fn().mockReturnValue("`age` MEDIUMINT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -134,7 +138,8 @@ jest.mock("../Column/Int/BigIntColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("age"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`age` BIGINT")
+          get: jest.fn().mockReturnValue("`age` BIGINT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -157,7 +162,8 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("balance"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)")
+          get: jest.fn().mockReturnValue("`balance` DECIMAL(10, 2)"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -174,7 +180,8 @@ jest.mock("../Column/Double/DoubleColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("balance"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`balance` DOUBLE")
+          get: jest.fn().mockReturnValue("`balance` DOUBLE"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -191,7 +198,8 @@ jest.mock("../Column/String/StringColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`name` VARCHAR(255)")
+          get: jest.fn().mockReturnValue("`name` VARCHAR(255)"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
@@ -212,7 +220,8 @@ jest.mock("../Column/Text/TextColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`name` TEXT")
+          get: jest.fn().mockReturnValue("`name` TEXT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -228,7 +237,8 @@ jest.mock("../Column/Text/TinyTextColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`name` TINYTEXT")
+          get: jest.fn().mockReturnValue("`name` TINYTEXT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -244,7 +254,8 @@ jest.mock("../Column/Text/MediumTextColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("name"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`name` MEDIUMTEXT")
+          get: jest.fn().mockReturnValue("`name` MEDIUMTEXT"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -260,7 +271,8 @@ jest.mock("../Column/Enum/EnumColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("status"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`status` ENUM('active', 'inactive')")
+          get: jest.fn().mockReturnValue("`status` ENUM('active', 'inactive')"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -277,7 +289,8 @@ jest.mock("../Column/Date/DateColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("dateOfBirth"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`dateOfBirth` DATE")
+          get: jest.fn().mockReturnValue("`dateOfBirth` DATE"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -296,7 +309,8 @@ jest.mock("../Column/Time/TimeColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("start"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`start` TIME")
+          get: jest.fn().mockReturnValue("`start` TIME"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -312,7 +326,8 @@ jest.mock("../Column/DateTime/DateTimeColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("created"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`created` DATETIME")
+          get: jest.fn().mockReturnValue("`created` DATETIME"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -329,7 +344,8 @@ jest.mock("../Column/Blob/BlobColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("imageContent"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`imageContent` BLOB")
+          get: jest.fn().mockReturnValue("`imageContent` BLOB"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -345,7 +361,8 @@ jest.mock("../Column/Blob/TinyBlobColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("imageContent"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`imageContent` TINYBLOB")
+          get: jest.fn().mockReturnValue("`imageContent` TINYBLOB"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -361,7 +378,8 @@ jest.mock("../Column/Blob/MediumBlobColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("imageContent"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`imageContent` MEDIUMBLOB")
+          get: jest.fn().mockReturnValue("`imageContent` MEDIUMBLOB"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
@@ -377,7 +395,8 @@ jest.mock("../Column/Blob/LongBlobColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("imageContent"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`imageContent` LONGBLOB")
+          get: jest.fn().mockReturnValue("`imageContent` LONGBLOB"),
+          hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
