@@ -5,10 +5,13 @@ import { IndexDefinition } from "../Definition/IndexDefinition";
 import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/ValidatorResult";
 export declare abstract class AbstractColumn implements ColumnInterface {
     protected name: string;
+    private columnExists;
     constructor(name: string);
     abstract getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;
     getName(): string;
+    exists(): boolean;
+    update(): this;
     protected validateColumnName(name: string): ValidatorResult;
     protected validateOptions(options: {
         [key: string]: any;

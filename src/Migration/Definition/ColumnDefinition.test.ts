@@ -64,6 +64,18 @@ describe("ColumnDefinition", () => {
   
   });
   
+  describe("dropDefault", () => {
+    
+      it("adds DROP DEFAULT to the definition when dropDefault is true", () => {
+        const columnDefinition = ColumnDefinition
+          .create("name", "type")
+          .dropDefault();
+        expect(columnDefinition).toHaveProperty("options.dropDefault", true);
+        expect(columnDefinition.get()).toEqual("`name` type NOT NULL DROP DEFAULT");
+      });
+
+  });
+  
   describe("unsigned", () => {
   
     it("adds UNSIGNED to the definition when unsigned is true", () => {
@@ -167,13 +179,97 @@ describe("ColumnDefinition", () => {
   describe("get", () => {
   
     it("returns the definition", () => {
-      const columnDefinition = ColumnDefinition
-        .create("name", "type")
-        .after(undefined);
-      expect(columnDefinition).toHaveProperty("options.after", undefined);
+      const columnDefinition = ColumnDefinition.create("name", "type");
       expect(columnDefinition.get()).toEqual("`name` type NOT NULL");
     });
   
+    it("returns the definition with default", () => {
+      const columnDefinition = ColumnDefinition
+        .create("name", "type")
+        .default("test");
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL DEFAULT test");
+    });
+  
+    it("returns the definition with null default", () => {
+      const columnDefinition = ColumnDefinition
+        .create("name", "type")
+        .default(null);
+      expect(columnDefinition.get()).toEqual("`name` type NOT NULL DEFAULT NULL");
+    });
+  
+  });
+  
+  describe("hydrateExistingOptions", () => {
+    
+    it("hydrates existing options", async () => {
+      // Mock the query method
+      const mockQuery = jest.fn().mockResolvedValue([
+        {
+          COLUMN_TYPE: "text",
+          IS_NULLABLE: "YES",
+          COLUMN_DEFAULT: null,
+          EXTRA: "auto_increment",
+          COLUMN_KEY: "PRI",
+        },
+      ]);
+ 
+      // Mock the Connection object
+      const mockConnection = {
+        query: mockQuery,
+      };
+      
+      const columnDefinition = ColumnDefinition.create("name", "type");
+      await columnDefinition.hydrateExistingOptions(mockConnection as any, "name", "table");
+      expect(columnDefinition).toHaveProperty("existingOptions.nullable", true);
+      expect(columnDefinition).toHaveProperty("existingOptions.default", null);
+      expect(columnDefinition).toHaveProperty("existingOptions.dropDefault", false);
+      expect(columnDefinition).toHaveProperty("existingOptions.unsigned", false);
+      expect(columnDefinition).toHaveProperty("existingOptions.autoIncrement", true);
+      expect(columnDefinition).toHaveProperty("existingOptions.zeroFill", false);
+      expect(columnDefinition).toHaveProperty("existingOptions.primaryKey", true);
+    });
+    
+    it("correctly hydrates existing options with default", async () => {
+      // result.COLUMN_DEFAULT === null && !result.IS_NULLABLE ? undefined : result.COLUMN_DEFAULT;
+      
+      // Mock the query method
+      const mockQuery = jest.fn().mockResolvedValue([
+        {
+          COLUMN_TYPE: "text",
+          IS_NULLABLE: "NO",
+          COLUMN_DEFAULT: null,
+          EXTRA: "auto_increment",
+          COLUMN_KEY: "PRI",
+        },
+      ]);
+      
+      // Mock the Connection object
+      const mockConnection = {
+        query: mockQuery,
+      };
+      
+      const columnDefinition = ColumnDefinition.create("name", "type");
+      await columnDefinition.hydrateExistingOptions(mockConnection as any, "name", "table");
+      
+      expect(columnDefinition).toHaveProperty("existingOptions.default", undefined);
+    });
+
+    it("throws error if column doesn't exist", async () => {
+      
+      // Mock the query method
+      const mockQuery = jest.fn().mockResolvedValue([]);
+
+      // Mock the Connection object
+      const mockConnection = {
+        query: mockQuery,
+      };
+      
+      const columnDefinition = ColumnDefinition.create("name", "type");
+      await expect(columnDefinition.hydrateExistingOptions(mockConnection as any, "table", "test_table"))
+        .rejects
+        .toThrow(`Column "table" does not exist in table "test_table"`);
+    });
+    
   });
   
 });

@@ -1,25 +1,32 @@
+import { Connection } from "../Database/Connection";
+
+type ColumnDefinitionOptions = {
+  nullable?: boolean;
+  default?: string | number;
+  dropDefault?: boolean;
+  unsigned?: boolean;
+  autoIncrement?: boolean;
+  zeroFill?: boolean;
+  primaryKey?: boolean;
+  after?: string;
+};
 
 export class ColumnDefinition
 {
   private readonly name: string;
   private readonly type: string;
-  private options: {
-    nullable?: boolean;
-    default?: string | number;
-    unsigned?: boolean;
-    autoIncrement?: boolean;
-    zeroFill?: boolean;
-    primaryKey?: boolean;
-    after?: string;
-  } = {
+  private options: ColumnDefinitionOptions = {
     nullable: undefined,
     default: undefined,
+    dropDefault: undefined,
     unsigned: undefined,
     autoIncrement: undefined,
     zeroFill: undefined,
     primaryKey: undefined,
     after: undefined
-  }
+  };
+  private existingType: string;
+  private existingOptions: ColumnDefinitionOptions = {};
   
   public constructor(name: string, type: string)
   {
@@ -41,6 +48,12 @@ export class ColumnDefinition
   public default(value: string | number): this
   {
     this.options.default = value;
+    return this;
+  }
+  
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
     return this;
   }
   
@@ -77,14 +90,61 @@ export class ColumnDefinition
   public get(): string
   {
     let definition = `\`${this.name}\` ${this.type}`;
-    if (this.options.unsigned === true) definition += " UNSIGNED";
-    definition += this.options.nullable === true ? " NULL" : " NOT NULL";
-    if (this.options.default !== undefined) definition += ` DEFAULT ${this.options.default}`;
-    if (this.options.autoIncrement === true) definition += " AUTO_INCREMENT";
-    if (this.options.zeroFill === true) definition += " ZEROFILL";
-    if (this.options.primaryKey === true) definition += " PRIMARY KEY";
+    
+    // Unsigned
+    const unsigned = typeof this.options.unsigned === "boolean" ? this.options.unsigned : this.existingOptions.unsigned;
+    if (unsigned === true) definition += " UNSIGNED";
+    
+    // Nullable
+    const nullable = typeof this.options.nullable === "boolean" ? this.options.nullable : this.existingOptions.nullable;
+    definition += nullable === true ? " NULL" : " NOT NULL";
+    
+    // Default
+    const defaultValue = this.options.default !== undefined ? this.options.default : this.existingOptions.default;
+    if (defaultValue === null) definition += " DEFAULT NULL";
+    else if (defaultValue !== undefined) definition += ` DEFAULT ${defaultValue}`
+    else if (this.options.dropDefault === true) definition += " DROP DEFAULT";
+    
+    // Auto increment
+    const autoIncrement = typeof this.options.autoIncrement === "boolean" ? this.options.autoIncrement : this.existingOptions.autoIncrement;
+    if (autoIncrement === true) definition += " AUTO_INCREMENT";
+    
+    // Zero fill
+    const zeroFill = typeof this.options.zeroFill === "boolean" ? this.options.zeroFill : this.existingOptions.zeroFill;
+    if (zeroFill === true) definition += " ZEROFILL";
+    
+    // Primary key
+    const primaryKey = typeof this.options.primaryKey === "boolean" ? this.options.primaryKey : this.existingOptions.primaryKey;
+    if (primaryKey === true) definition += " PRIMARY KEY";
+    
+    // After
     if (typeof this.options.after === "string") definition += ` AFTER \`${this.options.after}\``;
     return definition;
+  }
+  
+  public async hydrateExistingOptions(connection: Connection, column: string, table: string): Promise<void>
+  {
+    const [ result ] = await connection.query(`
+      SELECT
+        *
+      FROM
+        INFORMATION_SCHEMA.COLUMNS
+      WHERE
+        TABLE_NAME = \`${table}\`
+        AND COLUMN_NAME = \`${column}\`;
+    `);
+    
+    if (!result) throw new Error(`Column "${column}" does not exist in table "${table}"`);
+    
+    this.existingType = result.COLUMN_TYPE.split(" ").shift();
+    this.existingOptions.nullable = result.IS_NULLABLE === "YES";
+    this.existingOptions.default = result.COLUMN_DEFAULT === null && result.IS_NULLABLE === "NO" ? undefined : result.COLUMN_DEFAULT;
+    this.existingOptions.dropDefault = false;
+    this.existingOptions.unsigned = result.COLUMN_TYPE.includes("unsigned");
+    this.existingOptions.autoIncrement = result.EXTRA.includes("auto_increment");
+    this.existingOptions.zeroFill = result.COLUMN_TYPE.includes("zerofill");
+    this.existingOptions.primaryKey = result.COLUMN_KEY === "PRI";
+    
   }
   
 }

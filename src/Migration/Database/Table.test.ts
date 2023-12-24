@@ -53,6 +53,7 @@ jest.mock("../Column/Int/IntColumn", () => {
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -75,6 +76,7 @@ jest.mock("../Column/Int/TinyIntColumn", () => {
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -97,6 +99,7 @@ jest.mock("../Column/Int/SmallIntColumn", () => {
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -119,6 +122,7 @@ jest.mock("../Column/Int/MediumIntColumn", () => {
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -141,6 +145,7 @@ jest.mock("../Column/Int/BigIntColumn", () => {
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -157,6 +162,7 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -168,11 +174,12 @@ jest.mock("../Column/Double/DoubleColumn", () => {
       return {
         getName: jest.fn().mockReturnValue("balance"),
         getColumnDefinition: jest.fn().mockReturnValue({
-          get: jest.fn().mockReturnValue("`balance` DECIMAL")
+          get: jest.fn().mockReturnValue("`balance` DOUBLE")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -192,6 +199,8 @@ jest.mock("../Column/String/StringColumn", () => {
         }),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false),
+        update: jest.fn().mockReturnThis()
       };
     })
   };
@@ -206,7 +215,8 @@ jest.mock("../Column/Text/TextColumn", () => {
           get: jest.fn().mockReturnValue("`name` TEXT")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
-        nullable: jest.fn().mockReturnThis()
+        nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -221,7 +231,8 @@ jest.mock("../Column/Text/TinyTextColumn", () => {
           get: jest.fn().mockReturnValue("`name` TINYTEXT")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
-        nullable: jest.fn().mockReturnThis()
+        nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -236,7 +247,8 @@ jest.mock("../Column/Text/MediumTextColumn", () => {
           get: jest.fn().mockReturnValue("`name` MEDIUMTEXT")
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
-        nullable: jest.fn().mockReturnThis()
+        nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -253,6 +265,7 @@ jest.mock("../Column/Enum/EnumColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -269,6 +282,9 @@ jest.mock("../Column/Date/DateColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        update: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(true),
+        hydrateExistingOptions: jest.fn().mockResolvedValue(undefined)
       };
     })
   };
@@ -284,6 +300,7 @@ jest.mock("../Column/Time/TimeColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -300,6 +317,7 @@ jest.mock("../Column/DateTime/DateTimeColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -315,6 +333,7 @@ jest.mock("../Column/Blob/BlobColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -330,6 +349,7 @@ jest.mock("../Column/Blob/TinyBlobColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -345,6 +365,7 @@ jest.mock("../Column/Blob/MediumBlobColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -360,6 +381,7 @@ jest.mock("../Column/Blob/LongBlobColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
+        exists: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -387,8 +409,7 @@ describe("Table", () => {
       expect(table).toHaveProperty("name", "test_table");
       expect(table).toHaveProperty("connection", mockConnection);
       expect(table).toHaveProperty('columns', []);
-      expect(table).toHaveProperty('columnModifications', []);
-      expect(table).toHaveProperty('tableModifications', []);
+      expect(table).toHaveProperty('standaloneModifications', []);
       expect(table).toHaveProperty("tableExists", false);
       expect(operations.length).toBe(1);
     });
@@ -407,10 +428,10 @@ describe("Table", () => {
     it("does not add indexes if none set", async () => {
       const operations = [];
       const table = new Table("test_table", mockConnection, operations, true);
-      table.date("dateOfBirth");
+      table.double("balance");
       expect(table['columns'].length).toBe(1);
       await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `dateOfBirth` DATE;");
+      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `balance` DOUBLE;");
     });
 
     it("default operation adds column to existing table", async () => {
@@ -420,6 +441,17 @@ describe("Table", () => {
       table.string("name");
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`);");
+    });
+    
+    it("correctly sorts columns to add and columns to modify", async () => {
+      const operations = [];
+      table = new Table("test_table", mockConnection, operations, true);
+      jest.spyOn(table, 'getAlterTableQuery' as any);
+      const intColumn = new IntColumn("intColumn");
+      const existingColumn = (new DateColumn("exisingColumn")).index().update();
+      table['columns'].push(intColumn, existingColumn);
+      await operations[0]();
+      expect(table['getAlterTableQuery']).toHaveBeenCalledWith([ intColumn ], [ existingColumn ], []);
     });
     
   });
@@ -684,7 +716,7 @@ describe("Table", () => {
     it("adds an operation that renames a column and returns the table instance", async () => {
       const result = table.renameColumn("oldName", "newName");
       expect(result).toBe(table);
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` RENAME COLUMN `oldName` TO `newName`;");
     });
@@ -696,7 +728,7 @@ describe("Table", () => {
     it("adds an operation that drops a column and returns the table instance", async () => {
       const result = table.dropColumn("columnName");
       expect(result).toBe(table);
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` DROP COLUMN `columnName`;");
     });
@@ -708,15 +740,15 @@ describe("Table", () => {
     it("adds an operation that adds an index to a column and returns the table instance", async () => {
       const result = table.addIndex(["columnName"]);
       expect(result).toBe(table);
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD INDEX `test_table_columnname_index` (`columnName`);");
     });
-    
+
     it("adds type and name to index definition if provided", async () => {
       const result = table.addIndex(["columnName"], "test_index", IndexDefinitionTypeEnum.UNIQUE);
       expect(result).toBe(table);
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` ADD UNIQUE INDEX `test_index` (`columnName`);");
     })
@@ -727,7 +759,7 @@ describe("Table", () => {
 
     it("drops an index by name", async () => {
       const result = table.dropIndex("indexName");
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       expect(result).toBe(table);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` DROP INDEX `indexName`;");
@@ -735,7 +767,7 @@ describe("Table", () => {
 
     it("handles array of column names correctly", async () => {
       const result = table.dropIndex(["columnName", "anotherColumnName"]);
-      expect(table['columnModifications'].length).toBe(1);
+      expect(table['alterModifications'].length).toBe(1);
       expect(result).toBe(table);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` DROP INDEX `test_table_anothercolumnname_columnname_index`;");
@@ -748,7 +780,7 @@ describe("Table", () => {
     it("adds an operation that sets a column to nullable and returns the table instance when set to true", async () => {
       const result = table.setNullable("columnName", true);
       expect(result).toBe(table);
-      expect(result['columnModifications'].length).toBe(1);
+      expect(result['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` NULL;");
     });
@@ -756,7 +788,7 @@ describe("Table", () => {
     it("adds an operation that sets a column to not nullable and returns the table instance when set to false", async () => {
       const result = table.setNullable("columnName", false);
       expect(result).toBe(table);
-      expect(result['columnModifications'].length).toBe(1);
+      expect(result['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` NOT NULL;");
     });
@@ -768,7 +800,7 @@ describe("Table", () => {
     it("adds an operation that sets a column default non-string value and returns the table instance", async () => {
       const intResult = table.setDefault("columnName", 0);
       expect(intResult).toBe(table);
-      expect(intResult['columnModifications'].length).toBe(1);
+      expect(intResult['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query)
         .toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` DEFAULT 0;");
@@ -777,7 +809,7 @@ describe("Table", () => {
     it("adds an operation that sets a column default string value and returns the table instance", async () => {
       const intResult = table.setDefault("columnName", 'test');
       expect(intResult).toBe(table);
-      expect(intResult['columnModifications'].length).toBe(1);
+      expect(intResult['alterModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query)
         .toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` DEFAULT 'test';");
@@ -790,7 +822,7 @@ describe("Table", () => {
     it("drop method adds an operation that drops the table and returns the table instance", async () => {
       const result = table.drop();
       expect(result).toBe(table);
-      expect(result['tableModifications'].length).toBe(1);
+      expect(result['standaloneModifications'].length).toBe(1);
       await operations[0]();
       expect(mockConnection.query).toHaveBeenCalledWith("DROP TABLE IF EXISTS `test_table`;");
     });
@@ -843,14 +875,17 @@ describe("Table", () => {
         new StringColumn("name")
       ];
       const columnModifications = [
+        (new StringColumn("test"))
+      ];
+      const alterModifications = [
         new RenameColumnModification("oldName", "newName")
       ];
-      const result = table['getAlterTableQuery'](columns, columnModifications);
-      expect(result).toBe("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`), RENAME COLUMN `oldName` TO `newName`;");
+      const result = table['getAlterTableQuery'](columns, columnModifications, alterModifications);
+      expect(result).toBe("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`), MODIFY COLUMN `name` VARCHAR(255), RENAME COLUMN `oldName` TO `newName`;");
     });
     
     it("correctly handles no additions or modifications", () => {
-      const result = table['getAlterTableQuery']([], []);
+      const result = table['getAlterTableQuery']([], [], []);
       expect(result).toBe(null);
     });
     

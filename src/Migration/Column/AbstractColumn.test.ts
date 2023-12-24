@@ -67,6 +67,28 @@ describe("AbstractColumn", () => {
     
   });
   
+  describe("exists", () => {
+    
+    it("returns false", () => {
+      expect(testColumn.exists()).toBe(false);
+    });
+    
+  });
+  
+  describe("update", () => {
+    
+    it("returns the instance", () => {
+      expect(testColumn.update()).toBe(testColumn);
+    });
+    
+    it("sets columnExists to true", () => {
+      expect(testColumn.exists()).toBe(false);
+      testColumn.update();
+      expect(testColumn.exists()).toBe(true);
+    });
+    
+  });
+  
   describe("validateColumnName", () => {
     
     it("validates a valid column name", () => {

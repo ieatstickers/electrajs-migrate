@@ -39,8 +39,8 @@ export class Table
   private readonly name: string;
   private readonly connection: Connection;
   private readonly columns: Array<ColumnInterface> = [];
-  private readonly columnModifications: Array<ModificationInterface> = [];
-  private readonly tableModifications: Array<ModificationInterface> = [];
+  private readonly alterModifications: Array<ModificationInterface> = [];
+  private readonly standaloneModifications: Array<ModificationInterface> = [];
   private tableExists: boolean;
 
   public constructor(
@@ -66,14 +66,23 @@ export class Table
     operations.push(async () => {
       if (
         this.columns.length === 0
-        && this.columnModifications.length === 0
-        && this.tableModifications.length === 0
+        && this.alterModifications.length === 0
+        && this.standaloneModifications.length === 0
       ) return;
       
+      const { columnsToAdd, columnsToModify } = this
+        .columns
+        .reduce((acc, column) => {
+          column.exists() ? acc.columnsToModify.push(column) : acc.columnsToAdd.push(column);
+          return acc;
+        }, { columnsToAdd: [], columnsToModify: [] });
+      
+      await Promise.all(columnsToModify.map(column => column.hydrateExistingOptions(this.connection, column.getName(), this.name)));
+      
       // Create query
-      if (!this.tableExists && this.columns.length > 0)
+      if (!this.tableExists && columnsToAdd.length > 0)
       {
-        const createQuery = this.getCreateTableQuery(this.columns, tableOptions);
+        const createQuery = this.getCreateTableQuery(columnsToAdd, tableOptions);
         
         if (createQuery)
         {
@@ -82,14 +91,14 @@ export class Table
           // Set the table exists flag
           this.tableExists = true;
           // Clear the column additions
-          this.columns.splice(0, this.columns.length);
+          columnsToAdd.splice(0, columnsToAdd.length);
         }
       }
       
       // Alter query
-      if (this.columns.length > 0 || this.columnModifications.length > 0)
+      if (columnsToAdd.length > 0 || columnsToModify.length > 0 || this.alterModifications.length > 0)
       {
-        const alterQuery = this.getAlterTableQuery(this.columns, this.columnModifications);
+        const alterQuery = this.getAlterTableQuery(columnsToAdd, columnsToModify, this.alterModifications);
         
         if (alterQuery)
         {
@@ -97,9 +106,9 @@ export class Table
         }
       }
       
-      if (this.tableModifications.length > 0)
+      if (this.standaloneModifications.length > 0)
       {
-        const alterQuery = this.tableModifications.map(mod => mod.getModificationDefinition()).join("; ");
+        const alterQuery = this.standaloneModifications.map(mod => mod.getModificationDefinition()).join("; ");
         await this.connection.query(`${alterQuery};`);
       }
       
@@ -258,13 +267,13 @@ export class Table
   
   public renameColumn(currentName: string, newName: string): this
   {
-    this.columnModifications.push(new RenameColumnModification(currentName, newName));
+    this.alterModifications.push(new RenameColumnModification(currentName, newName));
     return this;
   }
   
   public dropColumn(name: string): this
   {
-    this.columnModifications.push(new DropColumnModification(name));
+    this.alterModifications.push(new DropColumnModification(name));
     return this;
   }
   
@@ -276,7 +285,7 @@ export class Table
       .columns(...columnNames);
     if (name) indexDefinition.name(name);
     if (type) indexDefinition.type(type);
-    this.columnModifications.push(new AddIndexModification(indexDefinition));
+    this.alterModifications.push(new AddIndexModification(indexDefinition));
     return this;
   }
   
@@ -286,25 +295,25 @@ export class Table
   {
     const [ first ] = args;
     const name = Array.isArray(first) ? this.getDefaultIndexName(...first) : first;
-    this.columnModifications.push(new DropIndexModification(name));
+    this.alterModifications.push(new DropIndexModification(name));
     return this;
   }
 
   public setNullable(columnName: string, nullable: boolean): this
   {
-    this.columnModifications.push(new SetNullableModification(columnName, nullable));
+    this.alterModifications.push(new SetNullableModification(columnName, nullable));
     return this;
   }
   
   public setDefault(columnName: string, defaultValue: string | number): this
   {
-    this.columnModifications.push(new SetDefaultModification(columnName, defaultValue));
+    this.alterModifications.push(new SetDefaultModification(columnName, defaultValue));
     return this;
   }
   
   public drop(): this
   {
-    this.tableModifications.push(new DropTableModification(this.name));
+    this.standaloneModifications.push(new DropTableModification(this.name));
     return this;
   }
   
@@ -318,6 +327,7 @@ export class Table
   {
     // Column definitions
     const columnDefinitions = columnAdditions.map(column => column.getColumnDefinition().get())
+    
     // Index definitions
     const indexDefinitions = columnAdditions
       .map(column => {
@@ -328,20 +338,31 @@ export class Table
           .get();
       })
       .filter(definition => definition != null);
+    
     // Combined definitions
     const allDefinitions = [ ...columnDefinitions, ...indexDefinitions ];
+    
     // Charset and collation
     let tableOptionsString = "";
     if (tableOptions.encoding) tableOptionsString += ` DEFAULT CHARACTER SET ${tableOptions.encoding}`;
     if (tableOptions.collation) tableOptionsString += ` DEFAULT COLLATE ${tableOptions.collation}`;
+    
+    // Build full query
     return `CREATE TABLE \`${this.name}\` (${allDefinitions.join(", ")})${tableOptionsString};`
   }
   
-  private getAlterTableQuery(columnAdditions: Array<ColumnInterface>, columnModifications: Array<ModificationInterface>): string
+  private getAlterTableQuery(
+    columnAdditions: Array<ColumnInterface>,
+    columnModifications: Array<ColumnInterface>,
+    alterModifications: Array<ModificationInterface>
+  ): string
   {
-    const columnDefinitions = columnAdditions.map((column) => {
+    // Columns to add
+    const addColumnDefinitions = columnAdditions.map((column) => {
       return `ADD COLUMN ${column.getColumnDefinition().get()}`;
     });
+    
+    // Index definitions
     const indexDefinitions = columnAdditions
       .map((column) => {
         const definition = column.getIndexDefinition();
@@ -350,9 +371,14 @@ export class Table
         return `ADD ${definition.get()}`;
       })
       .filter((definition) => definition != null);
-    const modificationDefinitions = columnModifications.map(mod => mod.getModificationDefinition());
     
-    const allDefinitions = [ ...columnDefinitions, ...indexDefinitions, ...modificationDefinitions ];
+    // Modifications
+    const modificationDefinitions = [
+      ...columnModifications.map(mod => `MODIFY COLUMN ${mod.getColumnDefinition().get()}`),
+      ...alterModifications.map(mod => mod.getModificationDefinition())
+    ];
+    
+    const allDefinitions = [ ...addColumnDefinitions, ...indexDefinitions, ...modificationDefinitions ];
     
     if (allDefinitions.length === 0) return null;
     

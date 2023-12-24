@@ -8,6 +8,7 @@ import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/Valid
 export abstract class AbstractColumn implements ColumnInterface
 {
   protected name: string;
+  private columnExists: boolean = false;
   
   public constructor(name: string)
   {
@@ -26,6 +27,17 @@ export abstract class AbstractColumn implements ColumnInterface
   public getName(): string
   {
     return this.name;
+  }
+  
+  public exists(): boolean
+  {
+    return this.columnExists;
+  }
+  
+  public update(): this
+  {
+    this.columnExists = true;
+    return this;
   }
   
   protected validateColumnName(name: string): ValidatorResult
