@@ -367,7 +367,7 @@ export class Table
     });
     
     // Index definitions
-    const indexDefinitions = columnAdditions
+    const indexDefinitions = [...columnAdditions, ...columnModifications]
       .map((column) => {
         const definition = column.getIndexDefinition();
         if (!definition) return null;
