@@ -94,7 +94,7 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
   
   public getIndexDefinition(): IndexDefinition
   {
-    console.log('IntColumn.getIndexDefinition', {
+    console.log('IntColumn.getIndexDefinition', this.name, {
       'this.options.index': this.options.index,
       'this.exists()': this.exists(),
       'this.options.dropIndex': this.options.dropIndex,
