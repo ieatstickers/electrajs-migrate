@@ -10,7 +10,8 @@ export declare class DoubleColumn extends AbstractColumn implements ColumnInterf
     nullable(nullable?: boolean): this;
     default(value: number): this;
     zeroFill(zeroFill?: boolean): this;
-    index(index?: boolean): this;
+    index(): this;
+    dropIndex(): this;
     after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;

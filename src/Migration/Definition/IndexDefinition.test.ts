@@ -27,10 +27,19 @@ describe("IndexDefinition", () => {
     
   });
   
+  describe("drop", () => {
+    
+    it("sets the dropIndex property", () => {
+      testIndexDefinition.columns('testColumn').drop();
+      expect(testIndexDefinition).toHaveProperty("dropIndex", true);
+      expect(testIndexDefinition.get()).toBe("DROP INDEX (`testColumn`)");
+    });
+    
+  });
+  
   describe("defaultName", () => {
     
     it("sets the default index name", () => {
-      console.log('testIndexDefinition', testIndexDefinition);
       testIndexDefinition.defaultName("testName");
       expect(testIndexDefinition).toHaveProperty("defaultIndexName", "testName");
       expect(() => testIndexDefinition.get()).toThrow("No columns defined for index");

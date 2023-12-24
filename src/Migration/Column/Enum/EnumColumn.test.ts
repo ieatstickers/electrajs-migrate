@@ -67,11 +67,14 @@ describe("EnumColumn", () => {
       expect(enumColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws an error when the value is invalid", () => {
-      expect(() => {
-        (new EnumColumn("status", [ "active", "inactive" ]))
-          .index("invalid" as any);
-      }).toThrow(TypeError);
+  });
+  
+  describe("dropIndex", () => {
+    
+    it("sets the dropIndex option correctly", () => {
+      const enumColumn = (new EnumColumn("status", [ "active", "inactive" ]))
+        .dropIndex();
+      expect(enumColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -122,6 +125,24 @@ describe("EnumColumn", () => {
         .after("otherColumn");
       const definition = enumColumn.getIndexDefinition();
       expect(definition).toEqual(null);
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new EnumColumn("status", [ "active", "inactive" ]))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new EnumColumn("status", [ "active", "inactive" ]))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
     });
     
     it("returns the correct index definition when index is true", async () => {

@@ -1,4 +1,5 @@
 import { DecimalColumn } from "./DecimalColumn";
+import { DateTimeColumn } from "../DateTime/DateTimeColumn";
 
 describe("DecimalColumn", () => {
   
@@ -118,17 +119,14 @@ describe("DecimalColumn", () => {
       expect(decimalColumn).toHaveProperty("options.index", true);
     });
     
-    it("sets index to false", async () => {
-      const decimalColumn = new DecimalColumn("balance");
-      decimalColumn.index(false);
-      expect(decimalColumn).toHaveProperty("options.index", false);
-    });
+  });
+  
+  describe("dropIndex", () => {
     
-    it("throws error when invalid value is passed", async () => {
+    it("sets dropIndex to true", async () => {
       const decimalColumn = new DecimalColumn("balance");
-      expect(() => {
-        decimalColumn.index("invalid" as any);
-      }).toThrow(TypeError);
+      decimalColumn.dropIndex();
+      expect(decimalColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -179,9 +177,26 @@ describe("DecimalColumn", () => {
     it("returns null when index is false", async () => {
       const decimalColumn = (new DecimalColumn("balance"))
         .nullable()
-        .after("otherColumn")
-        .index(false);
+        .after("otherColumn");
       const definition = decimalColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new DecimalColumn("balance"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new DecimalColumn("balance"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
       expect(definition).toBeNull();
     });
     

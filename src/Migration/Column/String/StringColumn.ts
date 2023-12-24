@@ -44,11 +44,15 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public index(index: boolean = true): this
+  public index(): this
   {
-    const { valid, message } = Validators.boolean().validate(index);
-    if (valid === false) throw new TypeError(`Invalid value passed to StringColumn.index: ${message}`);
-    this.options.index = index;
+    this.options.index = true;
+    return this;
+  }
+  
+  public dropIndex(): this
+  {
+    this.options.dropIndex = true;
     return this;
   }
   

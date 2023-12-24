@@ -50,9 +50,14 @@ describe("DateTimeColumn", () => {
       expect(datetimeColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws error if invalid value is passed", () => {
+  });
+  
+  describe("dropIndex", () => {
+    
+    it("sets dropIndex option correctly", () => {
       const datetimeColumn = new DateTimeColumn("created");
-      expect(() => datetimeColumn.index(123 as any)).toThrow(TypeError);
+      datetimeColumn.dropIndex();
+      expect(datetimeColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -118,6 +123,24 @@ describe("DateTimeColumn", () => {
       const definition = datetimeColumn.getIndexDefinition();
       expect(definition).toEqual(null);
       
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new DateTimeColumn("created"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new DateTimeColumn("created"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
     });
     
     it("returns correct definition when index is true", async () => {

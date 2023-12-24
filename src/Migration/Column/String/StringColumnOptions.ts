@@ -5,5 +5,6 @@ export type StringColumnOptions = {
   default?: string,
   length?: number,
   index?: boolean,
+  dropIndex?: boolean,
   after?: string
 };

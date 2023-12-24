@@ -5,11 +5,18 @@ export class IndexDefinition
   private indexName: string;
   private defaultIndexName: string;
   private indexColumns: Array<string> = [];
-  private indexType: IndexDefinitionTypeEnum = IndexDefinitionTypeEnum.INDEX;
+  private indexType: IndexDefinitionTypeEnum = IndexDefinitionTypeEnum.INDEX
+  private dropIndex: boolean = false;
   
   public static create(): IndexDefinition
   {
     return new IndexDefinition();
+  }
+  
+  public drop(drop: boolean = true): this
+  {
+    this.dropIndex = drop;
+    return this;
   }
   
   public defaultName(name: string): this
@@ -40,7 +47,9 @@ export class IndexDefinition
   {
     if (!this.indexColumns.length) throw new Error("No columns defined for index");
     const indexName = this.indexName || this.defaultIndexName;
-    let indexDefinition = indexName && this.indexType === IndexDefinitionTypeEnum.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
+    let indexDefinition = this.dropIndex
+      ? 'DROP INDEX'
+      : indexName && this.indexType === IndexDefinitionTypeEnum.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
     if (indexName) indexDefinition += ` \`${indexName}\``;
     indexDefinition += ` (${this.indexColumns.map(column => `\`${column}\``).join(", ")})`;
     return indexDefinition;

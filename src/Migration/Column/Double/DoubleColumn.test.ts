@@ -115,10 +115,19 @@ it("throws error when precision is invalid", () => {
       expect(doubleColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws error when index is invalid", () => {
-      expect(() => {
-        new DoubleColumn("balance").index("string" as any);
-      }).toThrow(TypeError);
+  });
+
+  describe("dropIndex", () => {
+    
+    it("returns itself", () => {
+      const doubleColumn = new DoubleColumn("balance");
+      expect(doubleColumn.dropIndex()).toBe(doubleColumn);
+    });
+    
+    it("sets dropIndex to true", () => {
+      const doubleColumn = new DoubleColumn("balance");
+      doubleColumn.dropIndex();
+      expect(doubleColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -177,9 +186,26 @@ it("throws error when precision is invalid", () => {
     it("returns null when index is false", async () => {
       const doubleColumn = (new DoubleColumn("balance"))
         .nullable()
-        .after("otherColumn")
-        .index(false);
+        .after("otherColumn");
       const definition = doubleColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new DoubleColumn("balance"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new DoubleColumn("balance"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
       expect(definition).toBeNull();
     });
     

@@ -4,7 +4,9 @@ export declare class IndexDefinition {
     private defaultIndexName;
     private indexColumns;
     private indexType;
+    private dropIndex;
     static create(): IndexDefinition;
+    drop(drop?: boolean): this;
     defaultName(name: string): this;
     name(name: string): this;
     columns(...columns: Array<string>): this;

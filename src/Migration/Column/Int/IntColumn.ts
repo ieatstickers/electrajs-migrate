@@ -59,11 +59,15 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public index(index: boolean = true): this
+  public index(): this
   {
-    const { valid, message } = Validators.boolean().validate(index);
-    if (valid === false) throw new TypeError(`Invalid value passed to IntColumn.index: ${message}`);
-    this.options.index = index;
+    this.options.index = true;
+    return this;
+  }
+  
+  public dropIndex(): this
+  {
+    this.options.dropIndex = true;
     return this;
   }
   
@@ -90,10 +94,19 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
   
   public getIndexDefinition(): IndexDefinition
   {
-    if (!this.options.index) return null;
+    if (
+      // No index and column doesn't exist yet
+      (!this.options.index && !this.exists())
+      // Not adding or dropping an index
+      || (!this.options.index && !this.options.dropIndex)
+    )
+    {
+      return null;
+    }
     
     return IndexDefinition
       .create()
-      .columns(this.name);
+      .columns(this.name)
+      .drop(this.options.dropIndex === true);
   }
 }

@@ -8,7 +8,8 @@ export declare class EnumColumn extends AbstractColumn implements ColumnInterfac
     constructor(name: string, values: Array<string>);
     nullable(nullable?: boolean): this;
     default(value: string): this;
-    index(index?: boolean): this;
+    index(): this;
+    dropIndex(): this;
     after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;

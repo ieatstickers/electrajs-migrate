@@ -11,7 +11,8 @@ export declare class DecimalColumn extends AbstractColumn implements ColumnInter
     default(value: number): DecimalColumn;
     unsigned(unsigned?: boolean): DecimalColumn;
     zeroFill(zeroFill?: boolean): DecimalColumn;
-    index(index?: boolean): DecimalColumn;
+    index(): DecimalColumn;
+    dropIndex(): DecimalColumn;
     after(columnName: string): DecimalColumn;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;

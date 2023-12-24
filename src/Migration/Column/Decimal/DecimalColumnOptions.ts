@@ -5,5 +5,6 @@ export type DecimalColumnOptions = {
   unsigned?: boolean,
   zeroFill?: boolean,
   index?: boolean,
+  dropIndex?: boolean,
   after?: string
 };

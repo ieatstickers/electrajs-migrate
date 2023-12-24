@@ -7,5 +7,6 @@ export type IntColumnOptions = {
   autoIncrement?: boolean,
   zeroFill?: boolean,
   index?: boolean,
+  dropIndex?: boolean,
   after?: string
 };

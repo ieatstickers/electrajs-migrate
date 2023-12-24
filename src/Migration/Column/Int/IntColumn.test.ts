@@ -1,4 +1,5 @@
 import { IntColumn } from "./IntColumn";
+import { DoubleColumn } from "../Double/DoubleColumn";
 
 describe("IntColumn", () => {
   
@@ -110,9 +111,14 @@ describe("IntColumn", () => {
       expect(intColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws error if invalid value is passed", () => {
+  });
+  
+  describe("dropIndex", () => {
+    
+    it("sets dropIndex option correctly", () => {
       const intColumn = new IntColumn("age");
-      expect(() => intColumn.index("invalid" as any)).toThrow(TypeError);
+      intColumn.dropIndex();
+      expect(intColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -157,6 +163,24 @@ describe("IntColumn", () => {
         .nullable()
         .after("otherColumn");
       const definition = intColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new IntColumn("age"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new IntColumn("age"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
       expect(definition).toBeNull();
     });
     

@@ -4,5 +4,6 @@ export type DoubleColumnOptions = {
   default?: number,
   zeroFill?: boolean,
   index?: boolean,
+  dropIndex?: boolean,
   after?: string
 };

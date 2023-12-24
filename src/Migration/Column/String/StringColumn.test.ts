@@ -111,9 +111,14 @@ describe("StringColumn", () => {
       expect(stringColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws error if invalid value is passed", () => {
+  });
+  
+  describe("dropIndex", () => {
+    
+    it("sets dropIndex option correctly", () => {
       const stringColumn = new StringColumn("name");
-      expect(() => stringColumn.index("invalid" as any)).toThrow(TypeError);
+      stringColumn.dropIndex();
+      expect(stringColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -141,6 +146,24 @@ describe("StringColumn", () => {
         .after("otherColumn");
       const definition = stringColumn.getIndexDefinition();
       expect(definition).toEqual(null);
+    });
+    
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const column = (new StringColumn("age"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const column = (new StringColumn("age"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = column.getIndexDefinition();
+      expect(definition).toBeNull();
     });
     
     it("returns the correct definition", async () => {

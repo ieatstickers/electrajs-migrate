@@ -6,7 +6,8 @@ export declare class DateColumn extends AbstractColumn implements ColumnInterfac
     private readonly options;
     nullable(nullable?: boolean): this;
     default(value: string): this;
-    index(index?: boolean): this;
+    index(): this;
+    dropIndex(): this;
     after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;

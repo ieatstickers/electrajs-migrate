@@ -65,9 +65,14 @@ describe("DateColumn", () => {
       expect(dateColumn).toHaveProperty("options.index", true);
     });
     
-    it("throws error if invalid value is passed", () => {
+  });
+  
+  describe("dropIndex", () => {
+    
+    it("sets dropIndex option correctly", () => {
       const dateColumn = new DateColumn("dateOfBirth");
-      expect(() => dateColumn.index("invalid" as any)).toThrow(TypeError);
+      dateColumn.dropIndex();
+      expect(dateColumn).toHaveProperty("options.dropIndex", true);
     });
     
   });
@@ -110,11 +115,29 @@ describe("DateColumn", () => {
       expect(definition).toBeNull();
     });
     
+    it("returns null when dropIndex option is true but column doesn't exist", async () => {
+      const dateColumn = (new DateColumn("dateOfBirth"))
+        .nullable(true)
+        .after("otherColumn")
+        .dropIndex();
+      const definition = dateColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
+    it("returns null when index and dropIndex options are both not set", async () => {
+      const dateColumn = (new DateColumn("dateOfBirth"))
+        .nullable(true)
+        .after("otherColumn")
+        .update();
+      const definition = dateColumn.getIndexDefinition();
+      expect(definition).toBeNull();
+    });
+    
     it("returns correct index definition", async () => {
       const dateColumn = (new DateColumn("dateOfBirth"))
         .nullable(true)
         .after("otherColumn")
-        .index(true);
+        .index();
       const definition = dateColumn.getIndexDefinition().get();
       expect(definition).toEqual("INDEX (`dateOfBirth`)");
     });
