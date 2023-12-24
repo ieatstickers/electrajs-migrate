@@ -130,8 +130,8 @@ export class ColumnDefinition
       FROM
         INFORMATION_SCHEMA.COLUMNS
       WHERE
-        TABLE_NAME = \`${table}\`
-        AND COLUMN_NAME = \`${column}\`;
+        TABLE_NAME = '${table}'
+        AND COLUMN_NAME = '${column}';
     `);
     
     if (!result) throw new Error(`Column "${column}" does not exist in table "${table}"`);
