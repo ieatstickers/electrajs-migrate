@@ -40,9 +40,9 @@ describe("IndexDefinition", () => {
   describe("drop", () => {
     
     it("sets the dropIndex property", () => {
-      testIndexDefinition.columns('testColumn').drop();
+      testIndexDefinition.name('test_index_name').columns('test').drop();
       expect(testIndexDefinition).toHaveProperty("dropIndex", true);
-      expect(testIndexDefinition.get()).toBe("DROP INDEX (`testColumn`)");
+      expect(testIndexDefinition.get()).toBe("INDEX `test_index_name`");
     });
     
   });
@@ -97,6 +97,10 @@ describe("IndexDefinition", () => {
     it("returns the index definition for UNIQUE", () => {
       testIndexDefinition.name("testName").type(IndexDefinitionTypeEnum.UNIQUE).columns("testColumn");
       expect(testIndexDefinition.get()).toBe("UNIQUE INDEX `testName` (`testColumn`)");
+    });
+    
+    it("throws an error if no name is defined and dropIndex is true", () => {
+      expect(() => testIndexDefinition.columns("test").drop().get()).toThrow("No index name defined for drop index");
     });
     
   });

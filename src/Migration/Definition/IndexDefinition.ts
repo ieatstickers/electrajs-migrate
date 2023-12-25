@@ -50,11 +50,12 @@ export class IndexDefinition
   
   public get(): string
   {
-    if (!this.indexColumns.length) throw new Error("No columns defined for index");
+    if (!this.isDrop() && !this.indexColumns.length) throw new Error("No columns defined for index");
     const indexName = this.indexName || this.defaultIndexName;
+    if (!indexName && this.isDrop()) throw new Error("No index name defined for drop index");
     let indexDefinition = indexName && this.indexType === IndexDefinitionTypeEnum.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
     if (indexName) indexDefinition += ` \`${indexName}\``;
-    indexDefinition += ` (${this.indexColumns.map(column => `\`${column}\``).join(", ")})`;
+    if (!this.isDrop()) indexDefinition += ` (${this.indexColumns.map(column => `\`${column}\``).join(", ")})`;
     return indexDefinition;
   }
 }
