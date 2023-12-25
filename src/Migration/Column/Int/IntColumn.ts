@@ -110,8 +110,6 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
       return null;
     }
     
-    console.log('IntColumn.getIndexDefinition', this.name, IndexDefinition.create().columns(this.name).drop(this.options.dropIndex === true).get())
-    
     return IndexDefinition
       .create()
       .columns(this.name)
