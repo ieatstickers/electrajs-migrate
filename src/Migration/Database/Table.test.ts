@@ -47,7 +47,8 @@ jest.mock("../Column/Int/IntColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)"),
+          isDrop: jest.fn().mockReturnValue(false)
         }),
         unsigned: jest.fn().mockReturnThis(),
         nullable: jest.fn().mockReturnThis(),
@@ -71,7 +72,8 @@ jest.mock("../Column/Int/TinyIntColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)"),
+          isDrop: jest.fn().mockReturnValue(false)
         }),
         unsigned: jest.fn().mockReturnThis(),
         nullable: jest.fn().mockReturnThis(),
@@ -95,14 +97,15 @@ jest.mock("../Column/Int/SmallIntColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)"),
+          isDrop: jest.fn().mockReturnValue(true)
         }),
         unsigned: jest.fn().mockReturnThis(),
         nullable: jest.fn().mockReturnThis(),
         primaryKey: jest.fn().mockReturnThis(),
         autoIncrement: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
-        exists: jest.fn().mockReturnValue(false)
+        exists: jest.fn().mockReturnValue(true)
       };
     })
   };
@@ -119,7 +122,8 @@ jest.mock("../Column/Int/MediumIntColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)"),
+          isDrop: jest.fn().mockReturnValue(false)
         }),
         unsigned: jest.fn().mockReturnThis(),
         nullable: jest.fn().mockReturnThis(),
@@ -143,7 +147,8 @@ jest.mock("../Column/Int/BigIntColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_age_index` (`age`)"),
+          isDrop: jest.fn().mockReturnValue(false)
         }),
         unsigned: jest.fn().mockReturnThis(),
         nullable: jest.fn().mockReturnThis(),
@@ -168,7 +173,8 @@ jest.mock("../Column/Decimal/DecimalColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
-        exists: jest.fn().mockReturnValue(false)
+        exists: jest.fn().mockReturnValue(false),
+        isDrop: jest.fn().mockReturnValue(false)
       };
     })
   };
@@ -203,7 +209,8 @@ jest.mock("../Column/String/StringColumn", () => {
         }),
         getIndexDefinition: jest.fn().mockReturnValue({
           defaultName: jest.fn().mockReturnThis(),
-          get: jest.fn().mockReturnValue("INDEX `test_table_name_index` (`name`)")
+          get: jest.fn().mockReturnValue("INDEX `test_table_name_index` (`name`)"),
+          isDrop: jest.fn().mockReturnValue(false)
         }),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
@@ -332,7 +339,7 @@ jest.mock("../Column/DateTime/DateTimeColumn", () => {
         getIndexDefinition: jest.fn().mockReturnValue(null),
         nullable: jest.fn().mockReturnThis(),
         index: jest.fn().mockReturnThis(),
-        exists: jest.fn().mockReturnValue(false)
+        exists: jest.fn().mockReturnValue(true)
       };
     })
   };
@@ -900,12 +907,17 @@ describe("Table", () => {
         new RenameColumnModification("oldName", "newName")
       ];
       const result = table['getAlterTableQuery'](columns, columnModifications, alterModifications);
-      expect(result).toBe("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`), MODIFY COLUMN `name` VARCHAR(255), RENAME COLUMN `oldName` TO `newName`;");
+      expect(result).toBe("ALTER TABLE `test_table` ADD COLUMN `age` INT, ADD COLUMN `name` VARCHAR(255), ADD INDEX `test_table_age_index` (`age`), ADD INDEX `test_table_name_index` (`name`), ADD INDEX `test_table_name_index` (`name`), MODIFY COLUMN `name` VARCHAR(255), RENAME COLUMN `oldName` TO `newName`;");
     });
     
     it("correctly handles no additions or modifications", () => {
       const result = table['getAlterTableQuery']([], [], []);
       expect(result).toBe(null);
+    });
+    
+    it("correctly handles dropping indexes", () => {
+      const result = table['getAlterTableQuery']([], [new SmallIntColumn('name')], []);
+      expect(result).toBe("ALTER TABLE `test_table` DROP INDEX `test_table_age_index` (`age`), MODIFY COLUMN `age` SMALLINT;");
     });
     
   });

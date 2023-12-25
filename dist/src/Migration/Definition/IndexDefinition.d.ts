@@ -6,6 +6,7 @@ export declare class IndexDefinition {
     private indexType;
     private dropIndex;
     static create(): IndexDefinition;
+    isDrop(): boolean;
     drop(drop?: boolean): this;
     defaultName(name: string): this;
     name(name: string): this;

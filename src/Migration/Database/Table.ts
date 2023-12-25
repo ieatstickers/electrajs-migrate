@@ -372,7 +372,7 @@ export class Table
         const definition = column.getIndexDefinition();
         if (!definition) return null;
         definition.defaultName(this.getDefaultIndexName(column.getName()))
-        return `ADD ${definition.get()}`;
+        return `${definition.isDrop() ? 'DROP' : 'ADD'} ${definition.get()}`;
       })
       .filter((definition) => definition != null);
     

@@ -27,6 +27,16 @@ describe("IndexDefinition", () => {
     
   });
   
+  describe("isDrop", () => {
+    
+    it("returns the dropIndex property", () => {
+      expect(testIndexDefinition.isDrop()).toBe(false);
+      testIndexDefinition.columns('testColumn').drop();
+      expect(testIndexDefinition.isDrop()).toBe(true);
+    });
+    
+  });
+  
   describe("drop", () => {
     
     it("sets the dropIndex property", () => {

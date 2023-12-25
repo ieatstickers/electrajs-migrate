@@ -13,6 +13,11 @@ export class IndexDefinition
     return new IndexDefinition();
   }
   
+  public isDrop(): boolean
+  {
+    return this.dropIndex;
+  }
+  
   public drop(drop: boolean = true): this
   {
     this.dropIndex = drop;
@@ -48,7 +53,7 @@ export class IndexDefinition
     if (!this.indexColumns.length) throw new Error("No columns defined for index");
     const indexName = this.indexName || this.defaultIndexName;
     let indexDefinition = this.dropIndex
-      ? 'DROP INDEX'
+      ? 'DROP INDEX' // TODO: Shouldn't add the DROP part from within the IndexDefinition in the same way we don't add the ADD part
       : indexName && this.indexType === IndexDefinitionTypeEnum.UNIQUE ? `${this.indexType} INDEX` : this.indexType;
     if (indexName) indexDefinition += ` \`${indexName}\``;
     indexDefinition += ` (${this.indexColumns.map(column => `\`${column}\``).join(", ")})`;
