@@ -42,6 +42,16 @@ describe("DateTimeColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault option correctly", () => {
+      const datetimeColumn = new DateTimeColumn("created");
+      datetimeColumn.dropDefault();
+      expect(datetimeColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("index", () => {
     
     it("sets index option correctly", () => {

@@ -44,6 +44,12 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
   public index(): this
   {
     this.options.index = true;
@@ -71,6 +77,7 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
       .nullable(this.options.nullable)
       .primaryKey(this.options.primaryKey)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
+      .dropDefault(this.options.dropDefault)
       .after(this.options.after);
   }
   

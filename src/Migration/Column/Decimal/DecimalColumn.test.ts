@@ -65,6 +65,16 @@ describe("DecimalColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault to true", async () => {
+      const decimalColumn = new DecimalColumn("balance");
+      decimalColumn.dropDefault();
+      expect(decimalColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("unsigned", () => {
     
     it("sets unsigned to true", async () => {

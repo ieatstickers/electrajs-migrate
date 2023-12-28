@@ -60,6 +60,12 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
   public zeroFill(zeroFill: boolean = true): this
   {
     const { valid, message } = Validators.boolean().validate(zeroFill);
@@ -101,6 +107,7 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
           ? this.options.default.toFixed(this.scale)
           : undefined
       )
+      .dropDefault(this.options.dropDefault)
       .zeroFill(this.options.zeroFill)
       .after(this.options.after);
   }

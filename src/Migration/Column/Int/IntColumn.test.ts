@@ -58,6 +58,16 @@ describe("IntColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault option correctly", () => {
+      const intColumn = new IntColumn("age");
+      intColumn.dropDefault();
+      expect(intColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("unsigned", () => {
     
     it("sets unsigned option correctly", () => {

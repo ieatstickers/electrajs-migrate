@@ -59,6 +59,16 @@ describe("EnumColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets the dropDefault option correctly", () => {
+      const enumColumn = (new EnumColumn("status", [ "active", "inactive" ]))
+        .dropDefault();
+      expect(enumColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("index", () => {
     
     it("sets the index option correctly", () => {

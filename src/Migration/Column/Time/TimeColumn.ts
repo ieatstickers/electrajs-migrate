@@ -27,6 +27,12 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
   public after(columnName: string): this
   {
     const { valid, message } = this.validateColumnName(columnName);
@@ -41,6 +47,7 @@ export class TimeColumn extends AbstractColumn implements ColumnInterface
       .create(this.name, ColumnTypeEnum.TIME)
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
+      .dropDefault(this.options.dropDefault)
       .after(this.options.after);
   }
 }

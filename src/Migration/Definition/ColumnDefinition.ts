@@ -51,9 +51,9 @@ export class ColumnDefinition
     return this;
   }
   
-  public dropDefault(): this
+  public dropDefault(dropDefault: boolean): this
   {
-    this.options.dropDefault = true;
+    this.options.dropDefault = dropDefault;
     return this;
   }
   

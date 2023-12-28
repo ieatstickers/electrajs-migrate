@@ -48,6 +48,12 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
   public index(): this
   {
     this.options.index = true;
@@ -74,6 +80,7 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
       .create(this.name, `${ColumnTypeEnum.ENUM}('${this.values.join("', '")}')`)
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
+      .dropDefault(this.options.dropDefault)
       .after(this.options.after);
   }
   

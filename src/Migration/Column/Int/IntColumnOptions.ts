@@ -3,6 +3,7 @@ export type IntColumnOptions = {
   nullable?: boolean;
   primaryKey?: boolean;
   default?: number,
+  dropDefault?: boolean,
   unsigned?: boolean,
   autoIncrement?: boolean,
   zeroFill?: boolean,

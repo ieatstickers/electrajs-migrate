@@ -103,6 +103,16 @@ describe("StringColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault option correctly", () => {
+      const stringColumn = new StringColumn("name");
+      stringColumn.dropDefault();
+      expect(stringColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("index", () => {
     
     it("sets index option correctly", () => {

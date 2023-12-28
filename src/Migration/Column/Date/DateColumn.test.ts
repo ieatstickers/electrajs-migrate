@@ -42,6 +42,16 @@ describe("DateColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault option correctly", () => {
+      const dateColumn = new DateColumn("dateOfBirth");
+      dateColumn.dropDefault();
+      expect(dateColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("after", () => {
     
     it("sets after option correctly", () => {

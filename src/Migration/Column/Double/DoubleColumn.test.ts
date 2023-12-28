@@ -81,6 +81,21 @@ it("throws error when precision is invalid", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("returns itself", () => {
+      const doubleColumn = new DoubleColumn("balance");
+      expect(doubleColumn.dropDefault()).toBe(doubleColumn);
+    });
+    
+    it("sets dropDefault to true", () => {
+      const doubleColumn = new DoubleColumn("balance");
+      doubleColumn.dropDefault();
+      expect(doubleColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("zeroFill", () => {
     
     it("returns itself", () => {

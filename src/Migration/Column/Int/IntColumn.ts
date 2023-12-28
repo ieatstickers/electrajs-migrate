@@ -27,6 +27,12 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
   public unsigned(unsigned: boolean = true): this
   {
     const { valid, message } = Validators.boolean().validate(unsigned);
@@ -85,6 +91,7 @@ export class IntColumn extends AbstractColumn implements ColumnInterface
       .create(this.name, this.type)
       .nullable(this.options.nullable)
       .default(this.options.default)
+      .dropDefault(this.options.dropDefault)
       .unsigned(this.options.unsigned)
       .autoIncrement(this.options.autoIncrement)
       .zeroFill(this.options.zeroFill)

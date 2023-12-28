@@ -69,7 +69,7 @@ describe("ColumnDefinition", () => {
       it("adds DROP DEFAULT to the definition when dropDefault is true", () => {
         const columnDefinition = ColumnDefinition
           .create("name", "type")
-          .dropDefault();
+          .dropDefault(true);
         expect(columnDefinition).toHaveProperty("options.dropDefault", true);
         expect(columnDefinition.get()).toEqual("`name` type NOT NULL DROP DEFAULT");
       });

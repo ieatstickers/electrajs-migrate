@@ -36,7 +36,7 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     }
   }
   
-  public nullable(nullable: boolean = true): DecimalColumn
+  public nullable(nullable: boolean = true): this
   {
     const { valid, message } = Validators.boolean().validate(nullable);
     if (valid === false) throw new TypeError(`Invalid value passed to DecimalColumn.nullable: ${message}`);
@@ -44,7 +44,7 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public default(value: number): DecimalColumn
+  public default(value: number): this
   {
     const { valid, message } = Validators.number().validate(value);
     if (valid === false) throw new TypeError(`Invalid value passed to DecimalColumn.default: ${message}`);
@@ -52,7 +52,13 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public unsigned(unsigned: boolean = true): DecimalColumn
+  public dropDefault(): this
+  {
+    this.options.dropDefault = true;
+    return this;
+  }
+  
+  public unsigned(unsigned: boolean = true): this
   {
     const { valid, message } = Validators.boolean().validate(unsigned);
     if (valid === false) throw new TypeError(`Invalid value passed to DecimalColumn.unsigned: ${message}`);
@@ -60,7 +66,7 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public zeroFill(zeroFill: boolean = true): DecimalColumn
+  public zeroFill(zeroFill: boolean = true): this
   {
     const { valid, message } = Validators.boolean().validate(zeroFill);
     if (valid === false) throw new TypeError(`Invalid value passed to DecimalColumn.zeroFill: ${message}`);
@@ -68,19 +74,19 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
     return this;
   }
   
-  public index(): DecimalColumn
+  public index(): this
   {
     this.options.index = true;
     return this;
   }
   
-  public dropIndex(): DecimalColumn
+  public dropIndex(): this
   {
     this.options.dropIndex = true;
     return this;
   }
   
-  public after(columnName: string): DecimalColumn
+  public after(columnName: string): this
   {
     const { valid, message } = this.validateColumnName(columnName);
     if (valid === false) throw new TypeError(`Invalid value passed to DecimalColumn.after: ${message}`);
@@ -98,6 +104,7 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
           ? this.options.default.toFixed(this.scale)
           : undefined
       )
+      .dropDefault(this.options.dropDefault)
       .unsigned(this.options.unsigned)
       .zeroFill(this.options.zeroFill)
       .after(this.options.after);

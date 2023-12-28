@@ -42,6 +42,16 @@ describe("TimeColumn", () => {
     
   });
   
+  describe("dropDefault", () => {
+    
+    it("sets dropDefault option correctly", () => {
+      const timeColumn = new TimeColumn("startTime");
+      timeColumn.dropDefault();
+      expect(timeColumn).toHaveProperty("options.dropDefault", true);
+    });
+    
+  });
+  
   describe("after", () => {
     
     it("sets after option correctly", () => {
