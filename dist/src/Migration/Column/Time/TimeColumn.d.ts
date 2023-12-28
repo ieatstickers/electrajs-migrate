@@ -5,6 +5,7 @@ export declare class TimeColumn extends AbstractColumn implements ColumnInterfac
     private readonly options;
     nullable(nullable?: boolean): this;
     default(value: string): this;
+    dropDefault(): this;
     after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
 }

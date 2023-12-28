@@ -7,13 +7,14 @@ export declare class DecimalColumn extends AbstractColumn implements ColumnInter
     private readonly precision;
     private readonly scale;
     constructor(name: string, precision?: number, scale?: number);
-    nullable(nullable?: boolean): DecimalColumn;
-    default(value: number): DecimalColumn;
-    unsigned(unsigned?: boolean): DecimalColumn;
-    zeroFill(zeroFill?: boolean): DecimalColumn;
-    index(): DecimalColumn;
-    dropIndex(): DecimalColumn;
-    after(columnName: string): DecimalColumn;
+    nullable(nullable?: boolean): this;
+    default(value: number): this;
+    dropDefault(): this;
+    unsigned(unsigned?: boolean): this;
+    zeroFill(zeroFill?: boolean): this;
+    index(): this;
+    dropIndex(): this;
+    after(columnName: string): this;
     getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;
 }

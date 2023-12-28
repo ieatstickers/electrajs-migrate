@@ -7,6 +7,7 @@ export declare class IntColumn extends AbstractColumn implements ColumnInterface
     protected readonly type: string;
     nullable(nullable?: boolean): this;
     default(value: number): this;
+    dropDefault(): this;
     unsigned(unsigned?: boolean): this;
     autoIncrement(autoIncrement?: boolean): this;
     zeroFill(zeroFill?: boolean): this;

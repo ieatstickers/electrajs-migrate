@@ -9,6 +9,7 @@ export declare class DoubleColumn extends AbstractColumn implements ColumnInterf
     constructor(name: string, precision?: number, scale?: number);
     nullable(nullable?: boolean): this;
     default(value: number): this;
+    dropDefault(): this;
     zeroFill(zeroFill?: boolean): this;
     index(): this;
     dropIndex(): this;

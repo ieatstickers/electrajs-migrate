@@ -6,6 +6,7 @@ export declare class DateTimeColumn extends AbstractColumn implements ColumnInte
     private readonly options;
     nullable(nullable?: boolean): this;
     default(value: string): this;
+    dropDefault(): this;
     index(): this;
     dropIndex(): this;
     after(columnName: string): this;

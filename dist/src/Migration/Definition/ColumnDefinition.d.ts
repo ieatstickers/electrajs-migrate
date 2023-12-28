@@ -9,7 +9,7 @@ export declare class ColumnDefinition {
     static create(name: string, type: string): ColumnDefinition;
     nullable(nullable: boolean): this;
     default(value: string | number): this;
-    dropDefault(): this;
+    dropDefault(dropDefault: boolean): this;
     unsigned(unsigned: boolean): this;
     autoIncrement(autoIncrement: boolean): this;
     zeroFill(zerofill: boolean): this;

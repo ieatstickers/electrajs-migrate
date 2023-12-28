@@ -10,6 +10,7 @@ export declare class StringColumn extends AbstractColumn implements ColumnInterf
     nullable(nullable?: boolean): this;
     primaryKey(primaryKey?: boolean): this;
     default(value: string): this;
+    dropDefault(): this;
     index(): this;
     dropIndex(): this;
     after(columnName: string): this;
