@@ -104,7 +104,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .autoIncrement(true);
       expect(columnDefinition).toHaveProperty("options.autoIncrement", true);
-      expect(columnDefinition.get()).toEqual("`name` type NOT NULL AUTO_INCREMENT");
+      expect(columnDefinition.get()).toEqual("`name` type AUTO_INCREMENT NOT NULL");
     });
     
     it("does not add AUTO_INCREMENT to the definition when autoIncrement is false", () => {
@@ -124,7 +124,7 @@ describe("ColumnDefinition", () => {
         .create("name", "type")
         .zeroFill(true);
       expect(columnDefinition).toHaveProperty("options.zeroFill", true);
-      expect(columnDefinition.get()).toEqual("`name` type NOT NULL ZEROFILL");
+      expect(columnDefinition.get()).toEqual("`name` type ZEROFILL NOT NULL");
     });
     
     it("does not add ZEROFILL to the definition when zeroFill is false", () => {

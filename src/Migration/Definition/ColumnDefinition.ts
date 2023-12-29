@@ -96,6 +96,14 @@ export class ColumnDefinition
     const unsigned = typeof this.options.unsigned === "boolean" ? this.options.unsigned : this.existingOptions.unsigned;
     if (unsigned === true) definition += " UNSIGNED";
     
+    // Auto increment
+    const autoIncrement = typeof this.options.autoIncrement === "boolean" ? this.options.autoIncrement : this.existingOptions.autoIncrement;
+    if (autoIncrement === true) definition += " AUTO_INCREMENT";
+    
+    // Zero fill
+    const zeroFill = typeof this.options.zeroFill === "boolean" ? this.options.zeroFill : this.existingOptions.zeroFill;
+    if (zeroFill === true) definition += " ZEROFILL";
+    
     // Nullable
     const nullable = typeof this.options.nullable === "boolean" ? this.options.nullable : this.existingOptions.nullable;
     definition += nullable === true ? " NULL" : " NOT NULL";
@@ -107,14 +115,6 @@ export class ColumnDefinition
       if (defaultValue === null && nullable === true) definition += " DEFAULT NULL";
       else if (defaultValue != null) definition += ` DEFAULT ${defaultValue}`
     }
-    
-    // Auto increment
-    const autoIncrement = typeof this.options.autoIncrement === "boolean" ? this.options.autoIncrement : this.existingOptions.autoIncrement;
-    if (autoIncrement === true) definition += " AUTO_INCREMENT";
-    
-    // Zero fill
-    const zeroFill = typeof this.options.zeroFill === "boolean" ? this.options.zeroFill : this.existingOptions.zeroFill;
-    if (zeroFill === true) definition += " ZEROFILL";
     
     // Primary key
     const primaryKey = typeof this.options.primaryKey === "boolean" ? this.options.primaryKey : this.existingOptions.primaryKey;
