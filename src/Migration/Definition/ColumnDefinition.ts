@@ -100,12 +100,16 @@ export class ColumnDefinition
     definition += nullable === true ? " NULL" : " NOT NULL";
     
     // Default
+    console.group('dropDefault');
+    console.log('this.options.dropDefault', this.options.dropDefault, typeof this.options.dropDefault);
     if (this.options.dropDefault !== true)
     {
       const defaultValue = this.options.default !== undefined ? this.options.default : this.existingOptions.default;
+      console.log('defaultValue', defaultValue, typeof defaultValue);
       if (defaultValue === null) definition += " DEFAULT NULL";
       else if (defaultValue !== undefined) definition += ` DEFAULT ${defaultValue}`
     }
+    console.groupEnd();
     
     // Auto increment
     const autoIncrement = typeof this.options.autoIncrement === "boolean" ? this.options.autoIncrement : this.existingOptions.autoIncrement;
