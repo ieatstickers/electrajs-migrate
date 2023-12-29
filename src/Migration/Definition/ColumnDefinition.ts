@@ -1,4 +1,5 @@
 import { Connection } from "../Database/Connection";
+import { ColumnTypeEnum } from "../Column/ColumnTypeEnum";
 
 type ColumnDefinitionOptions = {
   nullable?: boolean;
@@ -138,9 +139,22 @@ export class ColumnDefinition
     
     if (!result) throw new Error(`Column "${column}" does not exist in table "${table}"`);
     
+    const numericColumnTypes: Array<string> = [
+      ColumnTypeEnum.DECIMAL,
+      ColumnTypeEnum.DOUBLE,
+      ColumnTypeEnum.INT,
+      ColumnTypeEnum.TINYINT,
+      ColumnTypeEnum.SMALLINT,
+      ColumnTypeEnum.MEDIUMINT,
+      ColumnTypeEnum.BIGINT,
+    ];
+    const isNumericColumnType = numericColumnTypes.includes(this.type);
+    
     this.existingType = result.COLUMN_TYPE.split(" ").shift();
     this.existingOptions.nullable = result.IS_NULLABLE === "YES";
-    this.existingOptions.default = result.COLUMN_DEFAULT === null && result.IS_NULLABLE === "NO" ? undefined : result.COLUMN_DEFAULT;
+    this.existingOptions.default = result.COLUMN_DEFAULT === null && result.IS_NULLABLE === "NO"
+      ? undefined
+      : isNumericColumnType || result.COLUMN_DEFAULT == null ? result.COLUMN_DEFAULT : `'${result.COLUMN_DEFAULT}'`;
     this.existingOptions.dropDefault = false;
     this.existingOptions.unsigned = result.COLUMN_TYPE.includes("unsigned");
     this.existingOptions.autoIncrement = result.EXTRA.includes("auto_increment");

@@ -231,8 +231,6 @@ describe("ColumnDefinition", () => {
     });
     
     it("correctly hydrates existing options with default", async () => {
-      // result.COLUMN_DEFAULT === null && !result.IS_NULLABLE ? undefined : result.COLUMN_DEFAULT;
-      
       // Mock the query method
       const mockQuery = jest.fn().mockResolvedValue([
         {
@@ -253,6 +251,54 @@ describe("ColumnDefinition", () => {
       await columnDefinition.hydrateExistingOptions(mockConnection as any, "name", "table");
       
       expect(columnDefinition).toHaveProperty("existingOptions.default", undefined);
+    });
+    
+    it("correctly handles numeric defaults", async () => {
+      // Mock the query method
+      const mockQuery = jest.fn().mockResolvedValue([
+        {
+          COLUMN_TYPE: "text",
+          IS_NULLABLE: "NO",
+          COLUMN_DEFAULT: 123,
+          EXTRA: "auto_increment",
+          COLUMN_KEY: "PRI",
+        },
+      ]);
+      
+      // Mock the Connection object
+      const mockConnection = {
+        query: mockQuery,
+      };
+      
+      const columnDefinition = ColumnDefinition.create("name", "INT");
+      await columnDefinition.hydrateExistingOptions(mockConnection as any, "name", "table");
+      
+      
+      expect(columnDefinition).toHaveProperty("existingOptions.default", 123);
+    });
+    
+    it("correctly handles non-numeric defaults", async () => {
+      // Mock the query method
+      const mockQuery = jest.fn().mockResolvedValue([
+        {
+          COLUMN_TYPE: "text",
+          IS_NULLABLE: "NO",
+          COLUMN_DEFAULT: 'default_value',
+          EXTRA: "auto_increment",
+          COLUMN_KEY: "PRI",
+        },
+      ]);
+      
+      // Mock the Connection object
+      const mockConnection = {
+        query: mockQuery,
+      };
+      
+      const columnDefinition = ColumnDefinition.create("name", "VARCHAR");
+      await columnDefinition.hydrateExistingOptions(mockConnection as any, "name", "table");
+      
+      
+      expect(columnDefinition).toHaveProperty("existingOptions.default", `'default_value'`);
     });
 
     it("throws error if column doesn't exist", async () => {
