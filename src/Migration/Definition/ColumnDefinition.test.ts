@@ -194,8 +194,9 @@ describe("ColumnDefinition", () => {
     it("returns the definition with null default", () => {
       const columnDefinition = ColumnDefinition
         .create("name", "type")
+        .nullable(true)
         .default(null);
-      expect(columnDefinition.get()).toEqual("`name` type NOT NULL DEFAULT NULL");
+      expect(columnDefinition.get()).toEqual("`name` type NULL DEFAULT NULL");
     });
   
   });
