@@ -103,7 +103,10 @@ export class ColumnDefinition
     // Default
     if (this.options.dropDefault !== true)
     {
+      console.log('this.options.default', this.options.default, typeof this.options.default);
+      console.log('this.existingOptions.default', this.existingOptions.default, typeof this.existingOptions.default);
       const defaultValue = this.options.default !== undefined ? this.options.default : this.existingOptions.default;
+      console.log('defaultValue', defaultValue, typeof defaultValue);
       if (defaultValue === null) definition += " DEFAULT NULL";
       else if (defaultValue !== undefined) definition += ` DEFAULT ${defaultValue}`
     }
@@ -160,6 +163,8 @@ export class ColumnDefinition
     this.existingOptions.autoIncrement = result.EXTRA.includes("auto_increment");
     this.existingOptions.zeroFill = result.COLUMN_TYPE.includes("zerofill");
     this.existingOptions.primaryKey = result.COLUMN_KEY === "PRI";
+    
+    console.log('this.existingOptions', this.existingOptions);
     
   }
   
