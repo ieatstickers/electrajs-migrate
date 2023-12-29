@@ -147,6 +147,8 @@ export class ColumnDefinition
     this.existingOptions.zeroFill = result.COLUMN_TYPE.includes("zerofill");
     this.existingOptions.primaryKey = result.COLUMN_KEY === "PRI";
     
+    console.log('exisingOptions', result.COLUMN_DEFAULT, this.existingOptions);
+    
   }
   
 }
