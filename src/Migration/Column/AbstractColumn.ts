@@ -9,6 +9,7 @@ export abstract class AbstractColumn implements ColumnInterface
 {
   protected name: string;
   private columnExists: boolean = false;
+  protected columnDefinition: ColumnDefinition;
   
   public constructor(name: string)
   {

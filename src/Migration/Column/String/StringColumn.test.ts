@@ -56,6 +56,22 @@ describe("StringColumn", () => {
       expect(definition).toEqual("`name` VARCHAR(255) NOT NULL DEFAULT 'test' AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const stringColumn = new StringColumn("name");
+      expect(stringColumn.getColumnDefinition()).toBe(stringColumn.getColumnDefinition());
+    });
+    
+    it("always returns the latest options", () => {
+      const stringColumn = (new StringColumn("name"))
+        .nullable()
+        .after("otherColumn");
+      const definition1 = stringColumn.getColumnDefinition();
+      stringColumn.default("test");
+      const definition2 = stringColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`name` VARCHAR(255) NULL DEFAULT 'test' AFTER `otherColumn`");
+      expect(definition2.get()).toEqual("`name` VARCHAR(255) NULL DEFAULT 'test' AFTER `otherColumn`");
+    });
+    
   });
   
   describe("nullable", () => {

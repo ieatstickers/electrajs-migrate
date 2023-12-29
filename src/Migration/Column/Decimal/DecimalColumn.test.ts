@@ -179,6 +179,22 @@ describe("DecimalColumn", () => {
       const definition = decimalColumn.getColumnDefinition().get();
       expect(definition).toEqual("`balance` DECIMAL(8, 2) NOT NULL AFTER `otherColumn`");
     })
+    
+    it("returns the same instance when called multiple times", () => {
+      const decimalColumn = (new DecimalColumn("balance")).after("otherColumn").nullable();
+      const definition1 = decimalColumn.getColumnDefinition();
+      const definition2 = decimalColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const decimalColumn = (new DecimalColumn("balance")).after("otherColumn").nullable();
+      const definition1 = decimalColumn.getColumnDefinition();
+      decimalColumn.nullable(false);
+      const definition2 = decimalColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`balance` DECIMAL(8, 2) NOT NULL AFTER `otherColumn`");
+      expect(definition2.get()).toEqual("`balance` DECIMAL(8, 2) NOT NULL AFTER `otherColumn`");
+    });
   
   });
   

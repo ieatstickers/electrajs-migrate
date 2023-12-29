@@ -6,6 +6,7 @@ import { ValidatorResult } from "@electra/utility/dist/src/Validators/Type/Valid
 export declare abstract class AbstractColumn implements ColumnInterface {
     protected name: string;
     private columnExists;
+    protected columnDefinition: ColumnDefinition;
     constructor(name: string);
     abstract getColumnDefinition(): ColumnDefinition;
     getIndexDefinition(): IndexDefinition;

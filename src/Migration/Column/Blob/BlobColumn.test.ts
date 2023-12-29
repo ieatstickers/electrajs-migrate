@@ -59,5 +59,26 @@ describe("BlobColumn", () => {
       expect(definition).toEqual("`imageContent` BLOB NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const blobColumn = (new BlobColumn("imageContent"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = blobColumn.getColumnDefinition();
+      const definition2 = blobColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const blobColumn = (new BlobColumn("imageContent"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = blobColumn.getColumnDefinition();
+      blobColumn.nullable(false);
+      blobColumn.after("anotherColumn");
+      const definition2 = blobColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`imageContent` BLOB NOT NULL AFTER `anotherColumn`");
+      expect(definition2.get()).toEqual("`imageContent` BLOB NOT NULL AFTER `anotherColumn`");
+    });
+    
   });
 });

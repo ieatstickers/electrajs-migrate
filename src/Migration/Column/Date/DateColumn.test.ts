@@ -113,6 +113,26 @@ describe("DateColumn", () => {
       expect(definition).toEqual("`dateOfBirth` DATE NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const dateColumn = (new DateColumn("dateOfBirth"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = dateColumn.getColumnDefinition();
+      const definition2 = dateColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const dateColumn = (new DateColumn("dateOfBirth"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = dateColumn.getColumnDefinition();
+      dateColumn.nullable(false);
+      const definition2 = dateColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`dateOfBirth` DATE NOT NULL AFTER `otherColumn`");
+      expect(definition2.get()).toEqual("`dateOfBirth` DATE NOT NULL AFTER `otherColumn`");
+    });
+    
   });
   
   describe("getIndexDefinition", () => {

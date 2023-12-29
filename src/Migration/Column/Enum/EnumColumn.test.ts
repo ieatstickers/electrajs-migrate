@@ -125,6 +125,26 @@ describe("EnumColumn", () => {
       expect(definition).toEqual("`status` ENUM('active', 'inactive') NULL DEFAULT 'active' AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const enumColumn = (new EnumColumn("status", [ "active", "inactive" ]))
+        .nullable()
+        .after("otherColumn");
+      const definition1 = enumColumn.getColumnDefinition();
+      const definition2 = enumColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const enumColumn = (new EnumColumn("status", [ "active", "inactive" ]))
+        .nullable()
+        .after("otherColumn");
+      const definition1 = enumColumn.getColumnDefinition();
+      enumColumn.default("active");
+      const definition2 = enumColumn.getColumnDefinition();
+      expect(definition1.get()).toBe("`status` ENUM('active', 'inactive') NULL DEFAULT 'active' AFTER `otherColumn`");
+      expect(definition2.get()).toBe("`status` ENUM('active', 'inactive') NULL DEFAULT 'active' AFTER `otherColumn`");
+    })
+    
   });
   
   describe("getIndexDefinition", () => {

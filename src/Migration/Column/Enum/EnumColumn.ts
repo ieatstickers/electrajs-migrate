@@ -76,8 +76,12 @@ export class EnumColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    return ColumnDefinition
-      .create(this.name, `${ColumnTypeEnum.ENUM}('${this.values.join("', '")}')`)
+    if (!this.columnDefinition)
+    {
+      this.columnDefinition = ColumnDefinition.create(this.name, `${ColumnTypeEnum.ENUM}('${this.values.join("', '")}')`);
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
       .dropDefault(this.options.dropDefault)

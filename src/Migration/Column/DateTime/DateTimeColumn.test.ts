@@ -121,6 +121,26 @@ describe("DateTimeColumn", () => {
       expect(definition).toEqual("`created` DATETIME NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const datetimeColumn = (new DateTimeColumn("created"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = datetimeColumn.getColumnDefinition();
+      const definition2 = datetimeColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const datetimeColumn = (new DateTimeColumn("created"))
+        .nullable(true)
+        .after("otherColumn");
+      const definition1 = datetimeColumn.getColumnDefinition();
+      datetimeColumn.nullable(false);
+      const definition2 = datetimeColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`created` DATETIME NOT NULL AFTER `otherColumn`");
+      expect(definition2.get()).toEqual("`created` DATETIME NOT NULL AFTER `otherColumn`");
+    });
+    
   });
   
   describe("getIndexDefinition", () => {

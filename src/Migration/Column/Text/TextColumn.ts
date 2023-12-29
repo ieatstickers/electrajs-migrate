@@ -28,8 +28,12 @@ export class TextColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    return ColumnDefinition
-      .create(this.name, this.type)
+    if (!this.columnDefinition)
+    {
+      this.columnDefinition = ColumnDefinition.create(this.name, this.type);
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .after(this.options.after);
   }

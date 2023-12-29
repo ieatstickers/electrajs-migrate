@@ -28,6 +28,21 @@ describe("TextColumn", () => {
       expect(definition).toEqual("`name` TEXT NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const textColumn = (new TextColumn("name")).nullable();
+      expect(textColumn.getColumnDefinition()).toBe(textColumn.getColumnDefinition());
+    });
+    
+    it("always returns the latest options", () => {
+      const textColumn = (new TextColumn("name")).nullable();
+      const definition1 = textColumn.getColumnDefinition();
+      textColumn.nullable(false);
+      const definition2 = textColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`name` TEXT NOT NULL");
+      expect(definition2.get()).toEqual("`name` TEXT NOT NULL");
+      
+    });
+    
   });
   
   describe("nullable", () => {

@@ -96,11 +96,17 @@ export class DoubleColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    const type = this.precision != null && this.scale != null
-      ? `${ColumnTypeEnum.DOUBLE}(${this.precision}, ${this.scale})`
-      : ColumnTypeEnum.DOUBLE;
-    return ColumnDefinition
-      .create(this.name, type)
+    if (!this.columnDefinition)
+    {
+      const type = this.precision != null && this.scale != null
+        ? `${ColumnTypeEnum.DOUBLE}(${this.precision}, ${this.scale})`
+        : ColumnTypeEnum.DOUBLE;
+      
+      this.columnDefinition = ColumnDefinition
+        .create(this.name, type)
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .default(
         typeof this.options.default === "number"

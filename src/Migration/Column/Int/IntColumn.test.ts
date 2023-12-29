@@ -164,6 +164,20 @@ describe("IntColumn", () => {
       expect(definition).toEqual("`age` INT NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const intColumn = new IntColumn("age");
+      expect(intColumn.getColumnDefinition()).toBe(intColumn.getColumnDefinition());
+    });
+    
+    it("always returns the latest options", () => {
+      const intColumn = (new IntColumn("age")).nullable();
+      const definition1 = intColumn.getColumnDefinition();
+      intColumn.nullable(false);
+      const definition2 = intColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`age` INT NOT NULL");
+      expect(definition2.get()).toEqual("`age` INT NOT NULL");
+    });
+    
   });
   
   describe("getIndexDefinition", () => {

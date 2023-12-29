@@ -193,6 +193,22 @@ it("throws error when precision is invalid", () => {
       const definition = doubleColumn.getColumnDefinition().get();
       expect(definition).toEqual("`balance` DOUBLE(10, 2) NOT NULL DEFAULT 0.00");
     });
+    
+    it("returns the same instance when called multiple times", () => {
+      const doubleColumn = (new DoubleColumn("balance")).after("otherColumn").nullable();
+      const definition1 = doubleColumn.getColumnDefinition();
+      const definition2 = doubleColumn.getColumnDefinition();
+      expect(definition1).toBe(definition2);
+    });
+    
+    it("always returns the latest options", () => {
+      const doubleColumn = (new DoubleColumn("balance")).after("otherColumn").nullable();
+      const definition1 = doubleColumn.getColumnDefinition();
+      doubleColumn.nullable(false);
+      const definition2 = doubleColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`balance` DOUBLE NOT NULL AFTER `otherColumn`");
+      expect(definition2.get()).toEqual("`balance` DOUBLE NOT NULL AFTER `otherColumn`");
+    });
   
   });
   

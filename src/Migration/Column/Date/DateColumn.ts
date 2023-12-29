@@ -56,8 +56,12 @@ export class DateColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    return ColumnDefinition
-      .create(this.name, ColumnTypeEnum.DATE)
+    if (!this.columnDefinition)
+    {
+      this.columnDefinition = ColumnDefinition.create(this.name, ColumnTypeEnum.DATE);
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .default(this.options.default ? `'${this.options.default}'` : undefined)
       .dropDefault(this.options.dropDefault)

@@ -96,8 +96,12 @@ export class DecimalColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    return ColumnDefinition
-      .create(this.name, `${ColumnTypeEnum.DECIMAL}(${this.precision}, ${this.scale})`)
+    if (!this.columnDefinition)
+    {
+      this.columnDefinition = ColumnDefinition.create(this.name, `${ColumnTypeEnum.DECIMAL}(${this.precision}, ${this.scale})`);
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .default(
         typeof this.options.default === "number"

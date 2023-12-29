@@ -72,8 +72,12 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
   
   public getColumnDefinition(): ColumnDefinition
   {
-    return ColumnDefinition
-      .create(this.name, `${this.type}(${this.length})`)
+    if(!this.columnDefinition)
+    {
+      this.columnDefinition = ColumnDefinition.create(this.name, `${this.type}(${this.length})`);
+    }
+    
+    return this.columnDefinition
       .nullable(this.options.nullable)
       .primaryKey(this.options.primaryKey)
       .default(this.options.default ? `'${this.options.default}'` : undefined)

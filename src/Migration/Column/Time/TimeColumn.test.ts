@@ -92,5 +92,19 @@ describe("TimeColumn", () => {
       expect(definition).toEqual("`startTime` TIME NOT NULL AFTER `otherColumn`");
     });
     
+    it("returns the same instance when called multiple times", () => {
+      const timeColumn = new TimeColumn("startTime");
+      expect(timeColumn.getColumnDefinition()).toBe(timeColumn.getColumnDefinition());
+    });
+    
+    it("always returns the latest options", () => {
+      const timeColumn = (new TimeColumn("startTime")).nullable();
+      const definition1 = timeColumn.getColumnDefinition();
+      timeColumn.nullable(false);
+      const definition2 = timeColumn.getColumnDefinition();
+      expect(definition1.get()).toEqual("`startTime` TIME NOT NULL");
+      expect(definition2.get()).toEqual("`startTime` TIME NOT NULL");
+    });
+    
   });
 });
