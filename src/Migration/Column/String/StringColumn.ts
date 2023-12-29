@@ -87,10 +87,19 @@ export class StringColumn extends AbstractColumn implements ColumnInterface
   
   public getIndexDefinition(): IndexDefinition
   {
-    if (!this.options.index) return null;
+    if (
+      // No index and column doesn't exist yet
+      (!this.options.index && !this.exists())
+      // Not adding or dropping an index
+      || (!this.options.index && !this.options.dropIndex)
+    )
+    {
+      return null;
+    }
     
     return IndexDefinition
       .create()
-      .columns(this.name);
+      .columns(this.name)
+      .drop(this.options.dropIndex === true);
   }
 }
