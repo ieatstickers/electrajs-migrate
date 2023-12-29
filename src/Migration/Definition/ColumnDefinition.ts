@@ -104,6 +104,8 @@ export class ColumnDefinition
     console.log('this.options.dropDefault', this.options.dropDefault, typeof this.options.dropDefault);
     if (this.options.dropDefault !== true)
     {
+      console.log('this.existingOptions.default', this.existingOptions.default, typeof this.existingOptions.default);
+      console.log('this.options.default', this.options.default, typeof this.options.default);
       const defaultValue = this.options.default !== undefined ? this.options.default : this.existingOptions.default;
       console.log('defaultValue', defaultValue, typeof defaultValue);
       if (defaultValue === null) definition += " DEFAULT NULL";
