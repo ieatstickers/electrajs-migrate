@@ -801,48 +801,6 @@ describe("Table", () => {
 
   });
 
-  describe("setNullable", () => {
-
-    it("adds an operation that sets a column to nullable and returns the table instance when set to true", async () => {
-      const result = table.setNullable("columnName", true);
-      expect(result).toBe(table);
-      expect(result['alterModifications'].length).toBe(1);
-      await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` NULL;");
-    });
-
-    it("adds an operation that sets a column to not nullable and returns the table instance when set to false", async () => {
-      const result = table.setNullable("columnName", false);
-      expect(result).toBe(table);
-      expect(result['alterModifications'].length).toBe(1);
-      await operations[0]();
-      expect(mockConnection.query).toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` NOT NULL;");
-    });
-
-  });
-
-  describe("setDefault", () => {
-
-    it("adds an operation that sets a column default non-string value and returns the table instance", async () => {
-      const intResult = table.setDefault("columnName", 0);
-      expect(intResult).toBe(table);
-      expect(intResult['alterModifications'].length).toBe(1);
-      await operations[0]();
-      expect(mockConnection.query)
-        .toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` DEFAULT 0;");
-    });
-
-    it("adds an operation that sets a column default string value and returns the table instance", async () => {
-      const intResult = table.setDefault("columnName", 'test');
-      expect(intResult).toBe(table);
-      expect(intResult['alterModifications'].length).toBe(1);
-      await operations[0]();
-      expect(mockConnection.query)
-        .toHaveBeenCalledWith("ALTER TABLE `test_table` MODIFY COLUMN `columnName` DEFAULT 'test';");
-    });
-
-  });
-
   describe("drop", () => {
 
     it("drop method adds an operation that drops the table and returns the table instance", async () => {

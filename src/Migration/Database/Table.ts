@@ -303,18 +303,6 @@ export class Table
     return this;
   }
 
-  public setNullable(columnName: string, nullable: boolean): this
-  {
-    this.alterModifications.push(new SetNullableModification(columnName, nullable));
-    return this;
-  }
-  
-  public setDefault(columnName: string, defaultValue: string | number): this
-  {
-    this.alterModifications.push(new SetDefaultModification(columnName, defaultValue));
-    return this;
-  }
-  
   public drop(): this
   {
     this.standaloneModifications.push(new DropTableModification(this.name));
