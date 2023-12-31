@@ -416,8 +416,6 @@ Table of contents:
   - [renameColumn](#renamecolumn)
   - [addIndex](#addindex)
   - [dropIndex](#dropindex)
-  - [setNullable](#setnullable)
-  - [setDefault](#setdefault)
   - [drop](#drop)
 
 ## MySql
@@ -960,50 +958,6 @@ mysql
   .table("users")
   .dropIndex(["columnName"])
 ```
-
-### setNullable
-
-The `setNullable` method is used to set whether a column value can be null.
-
-#### Parameters
-
-- `name: string`: The name of the column
-- `nullable: boolean`: Whether the column can be null
-
-#### Returns
-
-- An instance of the `Table` class
-
-#### Example
-
-```js
-mysql
-  .database("app")
-  .table("users")
-  .setNullable("name", true)
-```
-
-### setDefault
-
-The `setDefault` method is used to set the default value of a column.
-
-#### Parameters
-
-- `name: string`: The name of the column
-
-#### Returns
-
-- An instance of the `Table` class
-
-#### Example
-
-```js
-mysql
-  .database("app")
-  .table("users")
-  .setDefault("name", "John Doe")
-```
-
 ### drop
 
 The `drop` method is used to drop the table from the database.
