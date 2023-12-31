@@ -1632,6 +1632,200 @@ const table = mysql.database("app").create("users");
 table.enum("role", ["admin", "user"]).nullable().after("name");
 ```
 
+## IntColumn
+
+An `IntColumn` class instance is returned by the `int` method of the `Table` class. It represents an `INT` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("age").nullable();
+```
+
+### default
+
+The `default` method is used to set the default value of the column.
+
+#### Parameters
+
+- `value: string`: The default value of the column
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("age").default("0");
+```
+
+### dropDefault
+
+The `dropDefault` method is used to drop the default value of the column, if one has been set.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.int("age").dropDefault();
+```
+
+### index
+
+The `index` method is used to add an index to the column. A name for the index will be generated automatically.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.int("age").index();
+```
+
+### dropIndex
+
+The `dropIndex` method is used to drop the index from the column.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.int("age").dropIndex();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("age").nullable().after("name");
+```
+
+### unsigned
+
+The `unsigned` method is used to set whether the column can be negative.
+
+#### Parameters
+
+- `unsigned?: boolean`: Whether the column can be negative. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("age").unsigned();
+```
+
+### zeroFill
+
+The `zeroFill` method is used to set whether the column should be zero filled.
+
+#### Parameters
+
+- `zeroFill?: boolean`: Whether the column should be zero filled. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("age").zeroFill();
+```
+
+### autoIncrement
+
+The `autoIncrement` method is used to set whether the column should auto increment.
+
+#### Parameters
+
+- `autoIncrement?: boolean`: Whether the column should auto increment. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("test").autoIncrement();
+```
+
+### primaryKey
+
+The `primaryKey` method is used to set whether the column should be the primary key.
+
+#### Parameters
+
+- `primaryKey?: boolean`: Whether the column should be the primary key. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `IntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.int("test").primaryKey();
+```
+
+## TinyIntColumn
+
+The `TinyIntColumn` class is returned by the `tinyint` method of the `Table` class. It represents a `TINYINT` column in the table and provides all the same methods as the `IntColumn` class.
+
+## MediumIntColumn
+
+The `MediumIntColumn` class is returned by the `mediumint` method of the `Table` class. It represents a `MEDIUMINT` column in the table and provides all the same methods as the `IntColumn` class.
+
+## BigIntColumn
+
+The `BigIntColumn` class is returned by the `bigint` method of the `Table` class. It represents a `BIGINT` column in the table and provides all the same methods as the `IntColumn` class.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
