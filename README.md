@@ -1830,6 +1830,131 @@ The `MediumIntColumn` class is returned by the `mediumint` method of the `Table`
 
 The `BigIntColumn` class is returned by the `bigint` method of the `Table` class. It represents a `BIGINT` column in the table and provides all the same methods as the `IntColumn` class.
 
+## StringColumn
+
+A `StringColumn` class instance is returned by the `string` method of the `Table` class. It represents a `VARCHAR` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.string("name").nullable();
+```
+
+### default
+
+The `default` method is used to set the default value of the column.
+
+#### Parameters
+
+- `value: string`: The default value of the column
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.string("name").default("John Doe");
+```
+
+### dropDefault
+
+The `dropDefault` method is used to drop the default value of the column, if one has been set.
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.string("name").dropDefault();
+```
+
+### index
+
+The `index` method is used to add an index to the column. A name for the index will be generated automatically.
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.string("name").index();
+```
+
+### dropIndex
+
+The `dropIndex` method is used to drop the index from the column.
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.string("name").dropIndex();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.string("name").nullable().after("id");
+```
+
+### primaryKey
+
+The `primaryKey` method is used to set whether the column should be the primary key.
+
+#### Parameters
+
+- `primaryKey?: boolean`: Whether the column should be the primary key. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `StringColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.string("name").primaryKey();
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
