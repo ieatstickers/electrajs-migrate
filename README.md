@@ -781,31 +781,20 @@ table.datetime("created");
 
 ### blob
 
-The `blob` method is used to create a blob column. By default, the column type will be `BLOB` but this can be changed to another blob type using the `type` option.
+The `blob` method is used to create a blob column.
 
 #### Parameters
 
 - `name: string`: The name of the column
-- `options?`: An object containing the column options
-  - `type: BlobColumnTypeEnum`: The type of the column. Defaults to `BlobColumnTypeEnum.BLOB`.
-  - `nullable: boolean`: Whether the column can be null. Defaults to `false`.
-  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `BlobColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .blob(
-    "avatar", 
-    {
-      nullable: true
-    }
-  )
+const table = mysql.database("app").create("users");
+table.blob("avatar");
 ```
 
 ### renameColumn
