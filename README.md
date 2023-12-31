@@ -999,6 +999,44 @@ mysql
   .drop()
 ```
 
+## BlobColumn
+
+The `BlobColumn` class is returned by the `blob` method of the `Table` class. It represents a `BLOB` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether or not the column can be null.
+
+#### Parameters
+- `nullable?: boolean`: Whether or not the column can be null. Defaults to `true`.
+
+#### Returns
+- The same instance of the `BlobColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.blob().nullable();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+- The same instance of the `BlobColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.blob().nullable().after("name");
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
