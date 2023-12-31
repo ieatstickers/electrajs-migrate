@@ -1257,6 +1257,150 @@ const table = mysql.database("app").create("users");
 table.datetime("deleted").nullable().after("name");
 ```
 
+## DecimalColumn
+
+A `DecimalColumn` class instance is returned by the `decimal` method of the `Table` class. It represents a `DECIMAL` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.decimal("balance").nullable();
+```
+
+### default
+
+The `default` method is used to set the default value of the column.
+
+#### Parameters
+
+- `value: string`: The default value of the column
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.decimal("balance").default("0.00");
+```
+
+### dropDefault
+
+The `dropDefault` method is used to drop the default value of the column, if one has been set.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.decimal("balance").dropDefault();
+```
+
+### index
+
+The `index` method is used to add an index to the column. A name for the index will be generated automatically.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.decimal("balance").index();
+```
+
+### dropIndex
+
+The `dropIndex` method is used to drop the index from the column.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.decimal("balance").dropIndex();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.decimal("balance").nullable().after("name");
+```
+
+### unsigned
+
+The `unsigned` method is used to set whether the column can be negative.
+
+#### Parameters
+
+- `unsigned?: boolean`: Whether the column can be negative. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.decimal("balance").unsigned();
+```
+
+### zeroFill
+
+The `zeroFill` method is used to set whether the column should be zero filled.
+
+#### Parameters
+
+- `zeroFill?: boolean`: Whether the column should be zero filled. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `DecimalColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.decimal("balance").zeroFill();
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
