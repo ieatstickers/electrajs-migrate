@@ -400,6 +400,10 @@ Table of contents:
   - [decimal](#decimal)
   - [double](#double)
   - [string](#string)
+  - [text](#text)
+  - [tinytext](#tinytext)
+  - [mediumtext](#mediumtext)
+  - [longtext](#longtext)
   - [enum](#enum)
   - [date](#date)
   - [time](#time)
@@ -633,6 +637,74 @@ The `string` method is used to create a `VARCHAR` column. By default, the column
 ```js
 const table = mysql.database("app").create("users");
 table.string("name", 200);
+```
+
+### text
+
+The `text` method is used to create a `TEXT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `TextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.text("content");
+```
+
+### tinytext
+
+The `tinytext` method is used to create a `TINYTEXT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `TinyTextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.tinytext("content");
+```
+
+### mediumtext
+
+The `mediumtext` method is used to create a `MEDIUMTEXT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `MediumTextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.mediumtext("content");
+```
+
+### longtext
+
+The `longtext` method is used to create a `LONGTEXT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `LongTextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.longtext("content");
 ```
 
 ### enum
