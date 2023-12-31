@@ -481,15 +481,13 @@ The `id` method is used to create an auto-incrementing primary key column.
 - `name?: string`: The name of the column. If no name is provided, the column will be named `id`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `IdColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .id()
+const table = mysql.database("app").create("users");
+table.id();
 ```
 
 ### int
