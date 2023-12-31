@@ -1151,6 +1151,112 @@ const table = mysql.database("app").create("users");
 table.date("deleted").nullable().after("name");
 ```
 
+## DateTimeColumn
+
+A `DateTimeColumn` class instance is returned by the `datetime` method of the `Table` class. It represents a `DATETIME` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.datetime("deleted").nullable();
+```
+
+### default
+
+The `default` method is used to set the default value of the column.
+
+#### Parameters
+
+- `value: string`: The default value of the column (must be in the format YYYY-MM-DD HH:MM:SS)
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.datetime("deleted").default("2020-01-01 12:00:00");
+```
+
+### dropDefault
+
+The `dropDefault` method is used to drop the default value of the column, if one has been set.
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.datetime("deleted").dropDefault();
+```
+
+### index
+
+The `index` method is used to add an index to the column. A name for the index will be generated automatically.
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.datetime("deleted").index();
+```
+
+### dropIndex
+
+The `dropIndex` method is used to drop the index from the column.
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.datetime("deleted").dropIndex();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+
+- The same instance of the `DateTimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.datetime("deleted").nullable().after("name");
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
