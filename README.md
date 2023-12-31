@@ -417,6 +417,27 @@ Table of contents:
   - [addIndex](#addindex)
   - [dropIndex](#dropindex)
   - [drop](#drop)
+- [BlobColumn](#blobcolumn)
+- [TinyBlobColumn](#tinyblobcolumn)
+- [MediumBlobColumn](#mediumblobcolumn)
+- [LongBlobColumn](#longblobcolumn)
+- [DateColumn](#datecolumn)
+- [DateTimeColumn](#datetimecolumn)
+- [DecimalColumn](#decimalcolumn)
+- [DoubleColumn](#doublecolumn)
+- [EnumColumn](#enumcolumn)
+- [IdColumn](#idcolumn)
+- [IntColumn](#intcolumn)
+- [TinyIntColumn](#tinyintcolumn)
+- [SmallIntColumn](#smallintcolumn)
+- [MediumIntColumn](#mediumintcolumn)
+- [BigIntColumn](#bigintcolumn)
+- [StringColumn](#stringcolumn)
+- [TextColumn](#textcolumn)
+- [TinyTextColumn](#tinytextcolumn)
+- [MediumTextColumn](#mediumtextcolumn)
+- [LongTextColumn](#longtextcolumn)
+- [TimeColumn](#timecolumn)
 
 ## MySql
 
@@ -440,7 +461,6 @@ The `database` method is used to select a database to interact with. If the data
 ```typescript
 mysql.database("app")
 ```
-
 
 ## Database
 
