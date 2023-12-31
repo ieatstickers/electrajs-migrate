@@ -600,35 +600,21 @@ table.decimal("balance", 10, 2);
 
 ### double
 
-The `double` method is used to create a column with type `DOUBLE`. By default, the column type will be `DOUBLE` with no `precision` or `scale` but this can be changed using the `precision` and `scale` options. Please note that using `precision` and `scale` with the `DOUBLE` column type has been deprecated in MySQL itself and is not recommended, however it has been provided for backwards compatibility. It's also worth noting that when using the `precision` and `scale` options with a `DOUBLE` column, they are for display purposes only and don't actually add additional constraints to the column.
+The `double` method is used to create a column with type `DOUBLE`. By default, the column type will be `DOUBLE` with no `precision` or `scale` but this can be changed using the `precision` and `scale` arguments. Please note that using `precision` and `scale` with the `DOUBLE` column type has been deprecated in MySQL itself and is not recommended, however it has been provided for backwards compatibility. It's also worth noting that when using the `precision` and `scale` options with a `DOUBLE` column, they are for display purposes only and don't actually add additional constraints to the column.
 
 #### Parameters
 - `name: string`: The name of the column
-- `options?`: An object containing the column options
-  - `nullable?: boolean`: Whether the column can be null. Defaults to `false`.
-  - `default?: boolean`: The default value of the column. Defaults to `undefined`.
-  - `zeroFill?: boolean`: Whether the column is zero-filled. Defaults to `false`.
-  - `precision?: boolean`: The number of digits in the number. Defaults to `undefined`.
-  - `scale?: boolean`: The number of digits to the right of the decimal point. Defaults to `undefined`.
-  - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
-  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
+- `precision?: boolean`: The number of digits in the number. Defaults to `undefined`.
+- `scale?: boolean`: The number of digits to the right of the decimal point. Defaults to `undefined`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `DoubleColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .double(
-    "balance", 
-    {
-      nullable: true,
-      index: true
-    }
-  )
+const table = mysql.database("app").create("users");
+table.double("balance");
 ```
 
 ### string
