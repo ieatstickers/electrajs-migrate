@@ -899,7 +899,7 @@ mysql
 
 ### addIndex
 
-The `addIndex` method is used to add an index to a column in the table.
+The `addIndex` method is used to add an index to a table.
 
 #### Parameters
 
