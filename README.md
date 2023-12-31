@@ -1818,6 +1818,10 @@ table.int("test").primaryKey();
 
 The `TinyIntColumn` class is returned by the `tinyint` method of the `Table` class. It represents a `TINYINT` column in the table and provides all the same methods as the `IntColumn` class.
 
+## SmallIntColumn
+
+The `SmallIntColumn` class is returned by the `smallint` method of the `Table` class. It represents a `SMALLINT` column in the table and provides all the same methods as the `IntColumn` class.
+
 ## MediumIntColumn
 
 The `MediumIntColumn` class is returned by the `mediumint` method of the `Table` class. It represents a `MEDIUMINT` column in the table and provides all the same methods as the `IntColumn` class.
