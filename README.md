@@ -393,6 +393,10 @@ Table of contents:
 - [Table](#table-1)
   - [id](#id)
   - [int](#int)
+  - [tinyint](#tinyint)
+  - [smallint](#smallint)
+  - [mediumint](#mediumint)
+  - [bigint](#bigint)
   - [decimal](#decimal)
   - [double](#double)
   - [string](#string)
@@ -492,37 +496,87 @@ table.id();
 
 ### int
 
-The `int` method is used to create an integer column. By default, the column type will be `INT` but this can be changed to another integer type using the `type` option.
+The `int` method is used to create an `INT` column.
 
 #### Parameters
 - `name: string`: The name of the column
-- `options?`: An object containing the column options
-  - `type?: IntColumnTypeEnum`: The type of the column. Defaults to `IntColumnTypeEnum.INT`.
-  - `nullable?: boolean`: Whether the column can be null. Defaults to `false`.
-  - `primaryKey?: boolean`: Whether the column is a primary key. Defaults to `false`.
-  - `default?: number`: The default value of the column. Defaults to `undefined`.
-  - `unsigned?: boolean`: Whether the column is unsigned. Defaults to `false`.
-  - `autoIncrement?: boolean`: Whether the column is auto-incrementing. Defaults to `false`.
-  - `zeroFill?: boolean`: Whether the column is zero-filled. Defaults to `false`.
-  - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
-  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `IntColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .int(
-    "age", 
-    {
-      nullable: true,
-      index: true
-    }
-  )
+const table = mysql.database("app").create("users");
+table.int("age");
+```
+
+### tinyint
+
+The `tinyint` method is used to create an `TINYINT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `TinyIntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.tinyint("age");
+```
+
+### smallint
+
+The `smallint` method is used to create an `SMALLINT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `SmallIntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.smallint("age");
+```
+
+### mediumint
+
+The `mediumint` method is used to create an `MEDIUMINT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `MediumIntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.mediumint("age");
+```
+
+### bigint
+
+The `bigint` method is used to create an `BIGINT` column.
+
+#### Parameters
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `BigIntColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.bigint("age");
 ```
 
 ### decimal
