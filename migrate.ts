@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { StatusCommand } from "./src/Command/Status/StatusCommand";
 import { RunCommand } from "./src/Command/Run/RunCommand";
 import { RollbackCommand } from "./src/Command/Rollback/RollbackCommand";
+import { NewCommand } from "./src/Command/New/NewCommand";
 
 // Override file name to "migrate" regardless of whether we're running migrate-js or migrate-ts
 process.argv[1] = "migrate";
@@ -40,6 +41,17 @@ function dbAction(
       .name("Electra Migrate")
       .description("MySQL Migrations for Node.js Applications")
       .version(require('./package.json').version);
+    
+    // new
+    application
+      .command('new', 'Create a new migration')
+      .argument('<name>', 'The name of the migration')
+      .argument('[group]', 'The group to add the migration to')
+      .action(
+        dbAction(async (args) => {
+          await (new NewCommand(args['name'], args['group'])).execute()
+        })
+      );
     
     // status
     application

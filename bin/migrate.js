@@ -29,12 +29,12 @@
 
   if (containsTsMigrations)
   {
-    console.log(`Running migrate-ts.js...`, { containsTsMigrations });
+    process.env.MIGRATE_TS = 'true';
     await import("./migrate-ts.js");
   }
   else
   {
-    console.log(`Running migrate-js.js...`, { containsTsMigrations });
+    process.env.MIGRATE_TS = 'false';
     await import("./migrate-js.js");
   }
 

@@ -55,8 +55,6 @@ export declare class Table {
     addIndex(columnNames: Array<string>, name?: string, type?: IndexDefinitionTypeEnum): this;
     dropIndex(name: string): this;
     dropIndex(columnNames: Array<string>): this;
-    setNullable(columnName: string, nullable: boolean): this;
-    setDefault(columnName: string, defaultValue: string | number): this;
     drop(): this;
     private getDefaultIndexName;
     private getCreateTableQuery;

@@ -17,11 +17,11 @@
 
   if (packageJson.type === "module")
   {
-    console.log("Loading ES module...");
+    process.env.MIGRATE_JS_MODULE_TYPE = 'mjs';
     await import("../dist/migrate.mjs");
     return;
   }
 
-  console.log("Loading CommonJS module...");
+  process.env.MIGRATE_JS_MODULE_TYPE = 'cjs';
   await import("../dist/migrate.cjs");
 })();

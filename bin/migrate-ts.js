@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+console.log(process.argv);
 (async () => {
   const { spawnSync } = await import("child_process");
   const path = await import("path");

@@ -1,0 +1,14 @@
+const { AbstractMigration } = require("@electra/migrate");
+
+module.exports = class MigrationName extends AbstractMigration
+{
+  up(mysql)
+  {
+
+  }
+
+  down(mysql)
+  {
+
+  }
+}
