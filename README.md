@@ -2009,6 +2009,63 @@ The `MediumTextColumn` class is returned by the `mediumtext` method of the `Tabl
 
 The `LongTextColumn` class is returned by the `longtext` method of the `Table` class. It represents a `LONGTEXT` column in the table and provides all the same methods as the `TextColumn` class.
 
+## TimeColumn
+
+A `TimeColumn` class instance is returned by the `time` method of the `Table` class. It represents a `TIME` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `TimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.time("start").nullable();
+```
+
+### default
+
+The `default` method is used to set the default value of the column.
+
+#### Parameters
+
+- `value: string`: The default value of the column (must be in the format HH:MM:SS)
+
+#### Returns
+
+- The same instance of the `TimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.time("start").default("00:00:00");
+```
+
+### dropDefault
+
+The `dropDefault` method is used to drop the default value of the column, if one has been set.
+
+#### Returns
+
+- The same instance of the `TimeColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").table("users");
+table.time("start").dropDefault();
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
