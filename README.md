@@ -1037,6 +1037,18 @@ const table = mysql.database("app").create("users");
 table.blob().nullable().after("name");
 ```
 
+## TinyBlobColumn
+
+The `TinyBlobColumn` class is returned by the `tinyblob` method of the `Table` class. It represents a `TINYBLOB` column in the table and provides all the same methods as the `BlobColumn` class.
+
+## MediumBlobColumn
+
+The `MediumBlobColumn` class is returned by the `mediumblob` method of the `Table` class. It represents a `MEDIUMBLOB` column in the table and provides all the same methods as the `BlobColumn` class.
+
+## LongBlobColumn
+
+The `LongBlobColumn` class is returned by the `longblob` method of the `Table` class. It represents a `LONGBLOB` column in the table and provides all the same methods as the `BlobColumn` class.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
