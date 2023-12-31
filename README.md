@@ -581,38 +581,21 @@ table.bigint("age");
 
 ### decimal
 
-The `decimal` method is used to create a column with type `DECIMAL`. By default, the column type will be `DECIMAL(10, 2)` but this can be changed using the `precision` and `scale` options.
+The `decimal` method is used to create a column with type `DECIMAL`. By default, the column type will be `DECIMAL(8, 2)` but this can be changed using the `precision` and `scale` parameters.
 
 #### Parameters
 - `name: string`: The name of the column
-- `options?`: An object containing the column options
-  - `nullable?: boolean`: Whether the column can be null. Defaults to `false`.
-  - `default?: boolean`: The default value of the column. Defaults to `undefined`.
-  - `unsigned?: boolean`: Whether the column is unsigned. Defaults to `false`.
-  - `zeroFill?: boolean`: Whether the column is zero-filled. Defaults to `false`.
-  - `precision?: boolean`: The number of digits in the number. Defaults to `10`.
-  - `scale?: boolean`: The number of digits to the right of the decimal point. Defaults to `2`.
-  - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
-  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
+- `precision?: boolean`: The number of digits in the number. Defaults to `8`.
+- `scale?: boolean`: The number of digits to the right of the decimal point. Defaults to `2`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `DecimalColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .decimal(
-    "balance", 
-    {
-      nullable: true,
-      index: true,
-      precision: 10,
-      scale: 2
-    }
-  )
+const table = mysql.database("app").create("users");
+table.decimal("balance", 10, 2);
 ```
 
 ### double
