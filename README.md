@@ -409,6 +409,9 @@ Table of contents:
   - [time](#time)
   - [datetime](#datetime)
   - [blob](#blob)
+  - [tinyblob](#tinyblob)
+  - [mediumblob](#mediumblob)
+  - [longblob](#longblob)
   - [dropColumn](#dropcolumn)
   - [renameColumn](#renamecolumn)
   - [addIndex](#addindex)
@@ -795,6 +798,60 @@ The `blob` method is used to create a blob column.
 ```js
 const table = mysql.database("app").create("users");
 table.blob("avatar");
+```
+
+### tinyblob
+
+The `tinyblob` method is used to create a `TINYBLOB` column.
+
+#### Parameters
+
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `TinyBlobColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.tinyblob("avatar");
+```
+
+### mediumblob
+
+The `mediumblob` method is used to create a `MEDIUMBLOB` column.
+
+#### Parameters
+
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `MediumBlobColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.mediumblob("avatar");
+```
+
+### longblob
+
+The `longblob` method is used to create a `LONGBLOB` column.
+
+#### Parameters
+
+- `name: string`: The name of the column
+
+#### Returns
+- An instance of the `LongBlobColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.longblob("avatar");
 ```
 
 ### renameColumn
