@@ -1955,6 +1955,60 @@ const table = mysql.database("app").create("users");
 table.string("name").primaryKey();
 ```
 
+## TextColumn
+
+A `TextColumn` class instance is returned by the `text` method of the `Table` class. It represents a `TEXT` column in the table and provides methods for updating the column definition.
+
+### nullable
+
+The `nullable` method is used to set whether the column can be null.
+
+#### Parameters
+
+- `nullable?: boolean`: Whether the column can be null. Defaults to `true`.
+
+#### Returns
+
+- The same instance of the `TextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.text("content").nullable();
+```
+
+### after
+
+The `after` method is used to set the column that this column should appear after (only used when creating the column, not when updating it).
+
+#### Parameters
+
+- `columnName: string`: The name of the column that this column should appear after
+
+#### Returns
+
+- The same instance of the `TextColumn` class
+
+#### Example
+
+```js
+const table = mysql.database("app").create("users");
+table.text("content").nullable().after("id");
+```
+
+## TinyTextColumn
+
+The `TinyTextColumn` class is returned by the `tinytext` method of the `Table` class. It represents a `TINYTEXT` column in the table and provides all the same methods as the `TextColumn` class.
+
+## MediumTextColumn
+
+The `MediumTextColumn` class is returned by the `mediumtext` method of the `Table` class. It represents a `MEDIUMTEXT` column in the table and provides all the same methods as the `TextColumn` class.
+
+## LongTextColumn
+
+The `LongTextColumn` class is returned by the `longtext` method of the `Table` class. It represents a `LONGTEXT` column in the table and provides all the same methods as the `TextColumn` class.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
