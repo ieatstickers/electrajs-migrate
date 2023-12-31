@@ -93,15 +93,13 @@ export class MigrationName extends AbstractMigration
   async up(mysql) 
   {
     // Perform migration
-    mysql
-      .database("app")
-      .create("users")
-      .id()
-      .string("name")
-      .string("email")
-      .string("password")
-      .datetime("created")
-      .datetime("updated");
+    const table = mysql.database("app").create("users"); 
+    table.id();
+    table.string("name");
+    table.string("email");
+    table.string("password");
+    table.datetime("created");
+    table.datetime("updated");
   }
 
   async down(mysql) 
