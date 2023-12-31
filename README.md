@@ -619,36 +619,20 @@ table.double("balance");
 
 ### string
 
-The `string` method is used to create a string column. By default, the column type will be `VARCHAR(255)` but this can be changed using the `type` and `length` options.
+The `string` method is used to create a `VARCHAR` column. By default, the column type will be `VARCHAR(255)` but the length can be changed using the `length` argument.
 
 #### Parameters
 - `name: string`: The name of the column
-- `options?`: An object containing the column options
-  - `type?: StringColumnTypeEnum`: The type of the column. Defaults to `StringColumnTypeEnum.VARCHAR`.
-  - `nullable?: boolean`: Whether the column can be null. Defaults to `false`.
-  - `primaryKey?: boolean`: Whether the column is a primary key. Defaults to `false`.
-  - `default?: boolean`: The default value of the column. Defaults to `undefined`.
-  - `length?: boolean`: The length of the column. Defaults to `255` (if type supports length i.e. `CHAR` and `VARCHAR`).
-  - `index?: boolean`: Whether the column is indexed. Defaults to `false`.
-  - `addAfter?: string`: The name of the column to add this column after. Defaults to `undefined`.
+- `length?: boolean`: The length of the column. Defaults to `255`.
 
 #### Returns
-- An instance of the `Table` class
+- An instance of the `StringColumn` class
 
 #### Example
 
 ```js
-mysql
-  .database("app")
-  .create("users")
-  .string(
-    "name", 
-    {
-      nullable: true,
-      index: true,
-      length: 200
-    }
-  )
+const table = mysql.database("app").create("users");
+table.string("name", 200);
 ```
 
 ### enum
