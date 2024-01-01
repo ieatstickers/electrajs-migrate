@@ -4,5 +4,7 @@ export declare class NewCommand extends AbstractMigrateCommand {
     private readonly migrationDir;
     constructor(migrationName: string, migrationDir: string);
     execute(): Promise<void>;
-    private getCurrentDir;
+    private getTypeScriptTemplate;
+    private getMjsTemplate;
+    private getCjsMigrationTemplate;
 }

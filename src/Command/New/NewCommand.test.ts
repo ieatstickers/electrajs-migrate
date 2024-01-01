@@ -8,8 +8,17 @@ jest.mock("../../DI/Container");
 
 describe("NewCommand", () => {
   
-  describe("execute", () => {
+  describe("constructor", () => {
+    
+    it("initializes properties correctly", () => {
+      const newCommand = new NewCommand("CreateUsersTable", "app");
+      expect(newCommand).toHaveProperty("migrationName", "CreateUsersTable");
+      expect(newCommand).toHaveProperty("migrationDir", "app");
+    });
+    
+  });
   
+  describe("execute", () => {
   
   
   });
