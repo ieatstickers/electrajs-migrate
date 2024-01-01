@@ -7,12 +7,14 @@ export class NewCommand extends AbstractMigrateCommand
 {
   private readonly migrationName: string;
   private readonly migrationDir: string;
+  private readonly type: 'ts' | 'js';
   
-  public constructor(migrationName: string, migrationDir?: string)
+  public constructor(migrationName: string, migrationDir?: string, type?: 'ts' | 'js')
   {
     super();
     this.migrationName = migrationName;
     this.migrationDir = migrationDir;
+    this.type = type;
   }
   
   public async execute(): Promise<void>
@@ -38,7 +40,7 @@ export class NewCommand extends AbstractMigrateCommand
       return;
     }
     
-    const useTs = process.env.MIGRATE_TS === "true";
+    const useTs = this.type ? this.type === "ts" : process.env.MIGRATE_TS === "true";
     const jsModuleType = process.env.MIGRATE_JS_MODULE_TYPE || null;
     const template = this.getFileTemplate(useTs, jsModuleType);
     

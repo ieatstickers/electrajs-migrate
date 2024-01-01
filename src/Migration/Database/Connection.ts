@@ -19,7 +19,6 @@ export class Connection
   
   public async query(query: string, parameters: Array<any> = []): Promise<any>
   {
-    console.log("connection.query", query, parameters);
     const connection = await this.get();
     return connection.query(query, parameters);
   }

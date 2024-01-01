@@ -47,9 +47,19 @@ function dbAction(
       .command('new', 'Create a new migration')
       .argument('<name>', 'The name of the migration')
       .argument('[group]', 'The group to add the migration to')
+      .option('--ts', 'Create a TypeScript migration file')
+      .option('--js', 'Create a JavaScript migration file')
       .action(
-        dbAction(async (args) => {
-          await (new NewCommand(args['name'], args['group'])).execute()
+        dbAction(async (args, options) => {
+          
+          if (options.ts && options.js)
+          {
+            throw new Error('Cannot specify both --ts and --js');
+          }
+          
+          const type = options.ts ? 'ts' : options.js ? 'js' : undefined;
+          
+          await (new NewCommand(args['name'], args['group'], type)).execute()
         })
       );
     

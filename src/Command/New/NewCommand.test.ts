@@ -23,9 +23,10 @@ describe("NewCommand", () => {
   describe("constructor", () => {
     
     it("initializes properties correctly", () => {
-      const newCommand = new NewCommand("CreateUsersTable", "app");
+      const newCommand = new NewCommand("CreateUsersTable", "app", 'ts');
       expect(newCommand).toHaveProperty("migrationName", "CreateUsersTable");
       expect(newCommand).toHaveProperty("migrationDir", "app");
+      expect(newCommand).toHaveProperty("type", "ts");
     });
     
   });
@@ -131,7 +132,7 @@ describe("NewCommand", () => {
       expect(Log.green).toHaveBeenCalledTimes(1);
       expect(Log.green).toHaveBeenCalledWith("Created migration file: app/2024_01_01_000000_CreateUsersTable.ts");
       delete process.env.MIGRATE_TS;
-    })
+    });
     
     it("correctly writes a js migration file", async () => {
       const newCommand = new NewCommand("CreateUsersTable");
@@ -151,7 +152,26 @@ describe("NewCommand", () => {
       expect(Log.green).toHaveBeenCalledTimes(1);
       expect(Log.green).toHaveBeenCalledWith("Created migration file: app/2024_01_01_000000_CreateUsersTable.js");
       delete process.env.MIGRATE_TS;
-    })
+    });
+    
+    it("correctly uses the type option", async () => {
+      const newCommand = new NewCommand("CreateUsersTable", "app", 'js');
+      jest.spyOn(Container, 'getConfig').mockReturnValue({
+        migrationDirs: {
+          app: {
+            path: 'app'
+          }
+        }
+      } as any);
+      process.env.MIGRATE_TS = "true";
+      jest.spyOn(newCommand as any, 'getFileTemplate').mockReturnValue('template');
+      jest.spyOn(newCommand as any, 'getMigrationFileName').mockReturnValue('2024_01_01_000000_CreateUsersTable.js');
+      await newCommand.execute();
+      expect(newCommand['getFileTemplate']).toHaveBeenCalledWith(false, null);
+      expect(newCommand['getMigrationFileName']).toHaveBeenCalledWith('js');
+      expect(fs.promises.writeFile).toHaveBeenCalledWith('app/2024_01_01_000000_CreateUsersTable.js', 'template');
+      delete process.env.MIGRATE_TS;
+    });
   
   });
   
