@@ -80,6 +80,8 @@ Next you'll need to create migration files in the directories defined in your co
 
 Migration files must be `.js` or `.ts` files named in the following format: `YYYY_MM_DD_HHMMSS_MigrationName.[js|ts]`.
 
+See documentation for the `migrate new` command below to see how to generate a migration file. 
+
 ```js
 // 2023_12_06_194529_CreateUsersTable.js
 
@@ -168,6 +170,31 @@ Example output:
 
 ```bash
 Successfully rolled back 4 migrations
+```
+
+#### new
+
+The `new` command is used to generate a new migration file. It accepts the following parameters:
+
+- `name: string`: The first parameter is the name of the migration. This is required and will be used in the name of the migration file.
+- `group: string`: The second parameter is the name of the group to create the migration in. This must match the key of one of the groups defined in the configuration file. If there is only one group defined in the configuration file, this parameter is optional.
+
+```bash
+migrate new CreateUsersTable example_group
+```
+
+If any of the configured migration directories contain TypeScript files, then the generated migration file will default to a TypeScript file. Otherwise, it will be a JavaScript file. To override this behaviour, you can use the `--ts` or `--js` flags.
+
+The following command creates a TypeScript migration file, regardless of whether the configured migration directories contain TypeScript or JavaScript files:
+
+```bash
+migrate new CreateUsersTable example_group --ts
+```
+
+The following command creates a JavaScript migration file, regardless of whether the configured migration directories contain TypeScript or JavaScript files:
+
+```bash
+migrate new CreateUsersTable example_group --js
 ```
 
 #### help
