@@ -8,7 +8,7 @@ export class NewCommand extends AbstractMigrateCommand
   private readonly migrationName: string;
   private readonly migrationDir: string;
   
-  public constructor(migrationName: string, migrationDir: string)
+  public constructor(migrationName: string, migrationDir?: string)
   {
     super();
     this.migrationName = migrationName;
@@ -26,13 +26,13 @@ export class NewCommand extends AbstractMigrateCommand
       return;
     }
     
-    if (/[A-z]+/.test(this.migrationName) === false)
+    if (/^[A-Z|a-z]+$/.test(this.migrationName) === false)
     {
       Log.red(`Invalid migration name: ${this.migrationName}. Must be a string with no spaces.`);
       return;
     }
     
-    if (migrationDirKeys.length > 1 && migrationDirKeys.includes(this.migrationDir) === false)
+    if (this.migrationDir && migrationDirKeys.includes(this.migrationDir) === false)
     {
       Log.red(`Invalid migration directory: ${this.migrationDir}`);
       return;
@@ -40,26 +40,37 @@ export class NewCommand extends AbstractMigrateCommand
     
     const useTs = process.env.MIGRATE_TS === "true";
     const jsModuleType = process.env.MIGRATE_JS_MODULE_TYPE || null;
-    let template: string;
-    
-    if (useTs)
-    {
-      template = this.getTypeScriptTemplate();
-    }
-    else if (jsModuleType === 'mjs')
-    {
-      template = this.getMjsTemplate();
-    }
-    else
-    {
-      template = this.getCjsMigrationTemplate();
-    }
+    const template = this.getFileTemplate(useTs, jsModuleType);
     
     const fileContents = template
       .trim()
       .replace(/MigrationName/g, this.migrationName);
     
     const migrationDir = migrationDirs[this.migrationDir || migrationDirKeys[0]].path;
+    const migrationFilePath = `${migrationDir}/${this.getMigrationFileName(useTs ? 'ts' : 'js')}`;
+    
+    await fs.promises.writeFile(migrationFilePath, fileContents);
+    
+    Log.green(`Created migration file: ${migrationFilePath}`);
+  }
+  
+  private getFileTemplate(useTs: boolean, jsModuleType: string)
+  {
+    if (useTs)
+    {
+      return this.getTsMigrationTemplate();
+    }
+    
+    if (jsModuleType === 'mjs')
+    {
+      return this.getMjsMigrationTemplate();
+    }
+    
+    return this.getCjsMigrationTemplate();
+  }
+  
+  private getMigrationFileName(fileExtension: string)
+  {
     const now = new Date();
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
@@ -68,14 +79,11 @@ export class NewCommand extends AbstractMigrateCommand
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const timestampFileNamePrefix = `${year}_${month}_${day}_${hours}${minutes}${seconds}`;
-    const migrationFilePath = `${migrationDir}/${timestampFileNamePrefix}_${this.migrationName}.${useTs ? 'ts' : 'js'}`;
     
-    await fs.promises.writeFile(migrationFilePath, fileContents);
-    
-    Log.green(`Created migration file: ${migrationFilePath}`);
+    return `${timestampFileNamePrefix}_${this.migrationName}.${fileExtension}`;
   }
   
-  private getTypeScriptTemplate()
+  private getTsMigrationTemplate()
   {
     return `
 import { AbstractMigration, MySql } from "@electra/migrate";
@@ -95,7 +103,7 @@ export class MigrationName extends AbstractMigration
     `;
   }
   
-  private getMjsTemplate()
+  private getMjsMigrationTemplate()
   {
     return `
 import { AbstractMigration } from "@electra/migrate";
