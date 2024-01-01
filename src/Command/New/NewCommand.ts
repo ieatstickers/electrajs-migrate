@@ -55,7 +55,9 @@ export class NewCommand extends AbstractMigrateCommand
       template = this.getCjsMigrationTemplate();
     }
     
-    const fileContents = template.replace(/MigrationName/g, this.migrationName);
+    const fileContents = template
+      .trim()
+      .replace(/MigrationName/g, this.migrationName);
     
     const migrationDir = migrationDirs[this.migrationDir || migrationDirKeys[0]].path;
     const now = new Date();
@@ -76,61 +78,60 @@ export class NewCommand extends AbstractMigrateCommand
   private getTypeScriptTemplate()
   {
     return `
-      import { AbstractMigration, MySql } from "@electra/migrate";
+import { AbstractMigration, MySql } from "@electra/migrate";
 
-      export class MigrationName extends AbstractMigration
-      {
-        public up(mysql: MySql)
-        {
-      
-        }
-      
-        public down(mysql: MySql)
-        {
-        
-        }
-      }
+export class MigrationName extends AbstractMigration
+{
+  public up(mysql: MySql)
+  {
 
+  }
+
+  public down(mysql: MySql)
+  {
+  
+  }
+}
     `;
   }
   
   private getMjsTemplate()
   {
     return `
-      import { AbstractMigration } from "@electra/migrate";
+import { AbstractMigration } from "@electra/migrate";
 
-      export class MigrationName extends AbstractMigration
-      {
-        up(mysql)
-        {
-      
-        }
-      
-        down(mysql)
-        {
-      
-        }
-      }
+export class MigrationName extends AbstractMigration
+{
+  up(mysql)
+  {
+
+  }
+
+  down(mysql)
+  {
+
+  }
+}
     `;
   }
   
   private getCjsMigrationTemplate()
   {
     return `
-      const { AbstractMigration } = require("@electra/migrate");
+const { AbstractMigration } = require("@electra/migrate");
 
-      module.exports = class MigrationName extends AbstractMigration
-      {
-        up(mysql)
-        {
-      
-        }
-      
-        down(mysql)
-        {
-      
-        }
-      }
+module.exports = class MigrationName extends AbstractMigration
+{
+  up(mysql)
+  {
+
+  }
+
+  down(mysql)
+  {
+
+  }
+}
     `;
   }
 }
